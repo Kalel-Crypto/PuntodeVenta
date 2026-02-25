@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>mx.avanti.example</groupId>
+        <artifactId>desarrollo</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>vista</artifactId>
+    <packaging>war</packaging>
+    <name>vista Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+
+
+        <primefaces.version>14.0.0</primefaces.version>
+        <primefaces.extensions.version>14.0.0</primefaces.extensions.version>
+        <jakarta.ee.version>10.0.0</jakarta.ee.version>
+
+
+        <joda.time.version>2.12.5</joda.time.version>
+        <itext.version>8.0.2</itext.version>
+        <poi.version>5.2.4</poi.version>
+        <jfreechart.version>1.5.3</jfreechart.version>
+        <google.api.drive.version>v3-rev20230822-2.0.0</google.api.drive.version>
+        <google.api.client.version>2.2.0</google.api.client.version>
+        <google.oauth.client.version>1.34.1</google.oauth.client.version>
+        <commons.lang3.version>3.13.0</commons.lang3.version>
+        <commons.codec.version>1.16.0</commons.codec.version>
+        <commons.collections.version>4.4</commons.collections.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <logback.version>1.4.11</logback.version>
+    </properties>
+
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>primefaces</id>
+            <url>https://repository.primefaces.org</url>
+        </repository>
+    </repositories>
+
+
+    <dependencies>
+        <!-- Jakarta EE API -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>${jakarta.ee.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- PrimeFaces 14 -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>${primefaces.version}</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+
+
+        <!-- PrimeFaces Extensions 14 -->
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>${primefaces.extensions.version}</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.faces</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
+
+        <!-- Weld para CDI -->
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet-shaded</artifactId>
+            <version>5.1.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.avanti.example</groupId>
+            <artifactId>entidad</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>mx.avanti.example</groupId>
+            <artifactId>negocio</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>mx.avanti.example</groupId>
+            <artifactId>persistencia</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+    </dependencies>
+    <build>
+        <finalName>web</finalName>
+    </build>
+
+</project>

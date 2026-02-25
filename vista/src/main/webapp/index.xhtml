@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:panelGrid class="txt">
+            <f:facet name="header">  
+                <p:row>
+                    <p:column colspan="7"><p:graphicImage url="resources/user.png" class="logo"/></p:column>
+                </p:row>
+            </f:facet>
+            <p:row>
+                <p:column styleClass="celda">Nombre:</p:column>
+                <p:column><h:outputText value="#{loginUI.usuario.idAlumno.nombre}" /></p:column>
+            </p:row>
+            <p:row>
+                <p:column styleClass="celda">Apellido:</p:column>
+                <p:column><h:outputText value="#{loginUI.usuario.idAlumno.apellidos}" /></p:column>
+            </p:row>
+            <p:row>
+                <p:column styleClass="celda">Matricula:</p:column>
+                <p:column><h:outputText value="#{loginUI.usuario.idAlumno.matricula}" /></p:column>
+            </p:row>
+        </p:panelGrid>
+    </h:body>
+    <style>
+        .logo{
+            width: 170px;
+        }
+        .celda{
+            width: 25%;
+            background-color: #089b4d;
+            color:white;
+        }
+        .txt{
+                position: absolute;
+                top:0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 35%;
+                width: 25%;
+                padding: 25px;
+                margin: auto;
+                background: white;
+                border-radius: 5px;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            
+        }
+    </style>
+</html>
+
