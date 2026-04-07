@@ -11,7 +11,6 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
-import mx.desarrollo.entity.Usuario;
 
 import java.io.IOException;
 import java.io.Serializable;

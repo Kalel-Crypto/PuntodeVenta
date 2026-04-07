@@ -7,7 +7,6 @@ package helper;
 
 
 import mx.desarrollo.integration.ServiceFacadeLocator;
-import mx.desarrollo.entity.Usuario;
 
 import java.io.Serializable;
 

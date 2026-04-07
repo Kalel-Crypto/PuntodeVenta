@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>mx.avanti.example</groupId>
-    <artifactId>desarrollo</artifactId>
+    <artifactId>puntodeVenta</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
