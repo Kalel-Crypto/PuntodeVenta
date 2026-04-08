@@ -15,10 +15,9 @@ public class MovimientoInventario implements Serializable {
     @Column(name = "tipoMovimiento")
     private String tipo;
 
-    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha")
     private Date fecha;
 
-    private int cantidad;
 
     @ManyToOne
     @JoinColumn(name = "idProducto")
@@ -28,11 +27,14 @@ public class MovimientoInventario implements Serializable {
     @JoinColumn(name = "idusuario")
     private Usuario usuario;
 
+    @Column(name = "tipoMovimiento", nullable = false)
+    private tipoMovimiento movimiento;
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -52,11 +54,4 @@ public class MovimientoInventario implements Serializable {
         this.fecha = fecha;
     }
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
 }

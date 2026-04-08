@@ -9,32 +9,60 @@ public class DetalleVenta implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iddetalleVenta")
-    private int id;
+    private Integer id;
 
-    private int cantidad;
-    private double precioUnitario;
+    @Column(name = "idVenta", nullable = false)
+    private Integer idventa;
 
-    public int getId() {
+    @Column(name = "idProducto", nullable = false)
+    private Integer idProducto;
+
+    @Column(name = "precioUnitario", nullable = false)
+    private Double precioUnitario;
+
+    @Column(name = "cantidad", nullable = false)
+    private Integer cantidad;
+
+
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getCantidad() {
-        return cantidad;
+
+    public Integer getIdventa() {
+        return idventa;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setIdventa(Integer idventa) {
+        this.idventa = idventa;
     }
 
-    public double getPrecioUnitario() {
+    public Integer getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public Double getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(double precioUnitario) {
+    public void setPrecioUnitario(Double precioUnitario) {
         this.precioUnitario = precioUnitario;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 }

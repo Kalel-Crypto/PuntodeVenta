@@ -1,24 +1,30 @@
 package mx.puntodeventa.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+
 import java.io.Serializable;
 
 @Entity
 @Table(name = "proveedor")
-public class Proveedor implements Serializable {
+public class Proveedor{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idproveedor")
-    private int id;
+    private Integer id;
 
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
+    @Column(name = "contacto", nullable = false)
     private String contacto;
+
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
