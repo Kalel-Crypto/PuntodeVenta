@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Inventario</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; background-color: #f2f2f2; }
+        .contenedor { width: 90%; margin: 30px auto; background: white; padding: 20px; border-radius: 5px; box-shadow: 0px 0px 8px rgba(0,0,0,0.2); }
+        .acciones { text-align: center; margin-top: 15px; }
+        .btn-gray { background-color: #ddd !important; border: none !important; color: #333 !important; padding: 8px 15px; margin: 0 5px; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="contenedor">
+        <h2 style="text-align:center;">Gestión de Inventario</h2>
+
+        <h:form id="formInventario">
+            <!-- Barra de búsqueda -->
+            <div style="text-align:center; margin-bottom:20px;">
+                <p:inputText placeholder="Ingrese nombre o ID"
+                             value="#{InventarioBean.filtro}"
+                             style="width:300px; margin-right:10px;" />
+                <p:commandButton value="Buscar"
+                                 action="#{InventarioBean.buscarProducto()}"
+                                 update="tablaProductos"
+                                 styleClass="btn-gray" />
+            </div>
+
+            <!-- Tabla de productos -->
+            <p:dataTable id="tablaProductos" var="producto" value="#{inventarioBean.listaProductos}"
+                         emptyMessage="No hay productos registrados"
+                         style="margin:0 auto; width:100%; background-color:#fff; border:1px solid #ccc;"
+                         headerStyle="background-color:#eee; color:#333;">
+
+                <p:column headerText="Código">
+                    <h:outputText value="#{producto.codigo}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{producto.nombre}" />
+                </p:column>
+
+                <p:column headerText="Stock">
+                    <h:outputText value="#{producto.stock}" />
+                </p:column>
+
+                <p:column headerText="Precio">
+                    <h:outputText value="#{producto.precio}" />
+                </p:column>
+
+                <p:column headerText="Proveedor">
+                    <h:outputText value="#{producto.proveedor}" />
+                </p:column>
+            </p:dataTable>
+
+            <!-- Botones debajo de la tabla -->
+            <div class="acciones">
+                <p:commandButton value="Modificar"
+                                 action="#{inventarioBean.modificar}"
+                                 styleClass="btn-gray" />
+                <p:commandButton value="Eliminar"
+                                 action="#{inventarioBean.eliminar}"
+                                 styleClass="btn-gray" />
+            </div>
+        </h:form>
+    </div>
+</h:body>
+</html>
