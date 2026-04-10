@@ -23,6 +23,10 @@ public class Producto implements Serializable {
     private Proveedor proveedor;
 
 
+
+
+
+
     public int getId() {
         return id;
     }
@@ -48,4 +52,11 @@ public class Producto implements Serializable {
     }
 
 
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
 }
