@@ -8,8 +8,8 @@ public class VentaDAO {
 
     public void registrarVenta(Venta v, List<DetalleVenta> detalles) throws Exception {
 
-        String sqlVenta = "INSERT INTO venta(fecha, total, idusuario) VALUES(?,?,?)";
-        String sqlDetalle = "INSERT INTO detalle_venta(cantidad, precioUnitario, idventa, idproducto) VALUES(?,?,?,?)";
+        String sqlVenta = "INSERT INTO venta(idCaja, total) VALUES(?,?)";
+        String sqlDetalle = "INSERT INTO detalleventa(cantidad, precioUnitario, idVenta, idProducto) VALUES(?,?,?,?)";
 
         Connection con = ConnectionManager.getConnection();
 
@@ -17,9 +17,8 @@ public class VentaDAO {
             con.setAutoCommit(false);
 
             PreparedStatement psVenta = con.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS);
-            psVenta.setTimestamp(1, new Timestamp(v.getFecha().getTime()));
+            psVenta.setInt(1, v.getIdCaja());
             psVenta.setDouble(2, v.getTotal());
-            psVenta.setInt(3, v.getUsuario().getId());
             psVenta.executeUpdate();
 
             ResultSet rs = psVenta.getGeneratedKeys();
@@ -32,7 +31,7 @@ public class VentaDAO {
                 psDetalle.setInt(1, d.getCantidad());
                 psDetalle.setDouble(2, d.getPrecioUnitario());
                 psDetalle.setInt(3, ventaId);
-                psDetalle.setInt(4, d.getProducto().getId());
+                psDetalle.setInt(4, d.getIdProducto());
                 psDetalle.addBatch();
             }
 

@@ -22,11 +22,6 @@ public class Producto implements Serializable {
     @JoinColumn(name = "idproveedor")
     private Proveedor proveedor;
 
-
-
-
-
-
     public int getId() {
         return id;
     }

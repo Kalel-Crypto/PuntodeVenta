@@ -52,6 +52,24 @@ public class MovimientoInventario implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+
+
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 }

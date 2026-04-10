@@ -1,46 +1,53 @@
 import mx.puntodeventa.entity.Caja;
-
 import java.sql.*;
-import java.time.LocalDate;
 
 public class CajaDAO {
 
     public void abrirCaja(Caja c) throws Exception {
-        String sql = "INSERT INTO caja(fecha, totalVentas) VALUES(?,?)";
-        try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        String sql = "INSERT INTO caja(idUsuario) VALUES(?)";
 
-            ps.setDate(1, new java.sql.Date(c.getFecha().getTime()));
-            ps.setDouble(2, c.getTotalVentas());
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setInt(1, c.getIdUsuario());
             ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    c.setIdcaja(rs.getInt(1));
+                }
+            }
         }
     }
 
-    public Caja obtenerCajaHoy() throws Exception {
-        String sql = "SELECT * FROM caja WHERE fecha=?";
+    public Caja obtenerCajaPorId(int idcaja) throws Exception {
+        String sql = "SELECT idcaja, idUsuario FROM caja WHERE idcaja = ?";
+
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
-            ResultSet rs = ps.executeQuery();
+            ps.setInt(1, idcaja);
 
-            if (rs.next()) {
-                Caja c = new Caja();
-                c.setFecha(new java.util.Date(rs.getDate("fecha").getTime()));
-                c.setTotalVentas(rs.getDouble("totalVentas"));
-                return c;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Caja c = new Caja();
+                    c.setIdcaja(rs.getInt("idcaja"));
+                    c.setIdUsuario(rs.getInt("idUsuario"));
+                    return c;
+                }
             }
         }
         return null;
     }
 
-    public void actualizarTotal(double total) throws Exception {
-        String sql = "UPDATE caja SET totalVentas=? WHERE fecha=?";
+    public void actualizarUsuarioDeCaja(Caja c) throws Exception {
+        String sql = "UPDATE caja SET idUsuario = ? WHERE idcaja = ?";
+
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setDouble(1, total);
-            ps.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
+            ps.setInt(1, c.getIdUsuario());
+            ps.setInt(2, c.getIdcaja());
             ps.executeUpdate();
         }
     }

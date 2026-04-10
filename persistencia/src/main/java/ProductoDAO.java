@@ -7,53 +7,59 @@ import java.util.*;
 public class ProductoDAO {
 
     public void insertar(Producto p) throws Exception {
-        String sql = "INSERT INTO producto(nombre, precioUnitario, stock, fechaCaducidad, idproveedor) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO producto(nombre, precioUnitario, idProveedor) VALUES(?,?,?)";
+
         try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, p.getNombre());
             ps.setDouble(2, p.getPrecio());
-            ps.setInt(3, p.getStock());
-            ps.setInt(5, p.getProveedor().getId());
-
+            ps.setInt(3, p.getProveedor().getId());
             ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    p.setId(rs.getInt(1));
+                }
+            }
         }
     }
 
     public void actualizar(Producto p) throws Exception {
-        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, stock=?, fechaCaducidad=?, idproveedor=? WHERE idProducto=?";
+        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=? WHERE idProducto=?";
+
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, p.getNombre());
             ps.setDouble(2, p.getPrecio());
-            ps.setInt(3, p.getStock());
-            ps.setInt(5, p.getProveedor().getId());
-            ps.setInt(6, p.getId());
-
+            ps.setInt(3, p.getProveedor().getId());
+            ps.setInt(4, p.getId());
             ps.executeUpdate();
         }
     }
 
     public Producto obtener(int id) throws Exception {
-        String sql = "SELECT * FROM producto WHERE idProducto=?";
+        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto WHERE idProducto=?";
+
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                Producto p = new Producto();
-                p.setId(rs.getInt("idProducto"));
-                p.setNombre(rs.getString("nombre"));
-                p.setPrecio(rs.getDouble("precioUnitario"));
-                p.setStock(rs.getInt("stock"));
-                Proveedor prov = new Proveedor();
-                prov.setId(rs.getInt("idproveedor"));
-                p.setProveedor(prov);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Producto p = new Producto();
+                    p.setId(rs.getInt("idProducto"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setPrecio(rs.getDouble("precioUnitario"));
 
-                return p;
+                    Proveedor prov = new Proveedor();
+                    prov.setId(rs.getInt("idProveedor"));
+                    p.setProveedor(prov);
+
+                    return p;
+                }
             }
         }
         return null;
@@ -61,7 +67,7 @@ public class ProductoDAO {
 
     public List<Producto> listar() throws Exception {
         List<Producto> lista = new ArrayList<>();
-        String sql = "SELECT * FROM producto";
+        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto";
 
         try (Connection con = ConnectionManager.getConnection();
              Statement st = con.createStatement();
@@ -72,11 +78,9 @@ public class ProductoDAO {
                 p.setId(rs.getInt("idProducto"));
                 p.setNombre(rs.getString("nombre"));
                 p.setPrecio(rs.getDouble("precioUnitario"));
-                p.setStock(rs.getInt("stock"));
-                p.setFechaCaducidad(rs.getDate("fechaCaducidad"));
 
                 Proveedor prov = new Proveedor();
-                prov.setId(rs.getInt("idproveedor"));
+                prov.setId(rs.getInt("idProveedor"));
                 p.setProveedor(prov);
 
                 lista.add(p);
@@ -87,6 +91,7 @@ public class ProductoDAO {
 
     public void eliminar(int id) throws Exception {
         String sql = "DELETE FROM producto WHERE idProducto=?";
+
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 

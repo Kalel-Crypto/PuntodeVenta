@@ -1,5 +1,6 @@
 import mx.puntodeventa.entity.MovimientoInventario;
 import mx.puntodeventa.entity.Producto;
+import mx.puntodeventa.entity.Usuario;
 
 import java.sql.*;
 import java.util.*;
@@ -7,40 +8,51 @@ import java.util.*;
 public class MovimientoDAO {
 
     public void insertar(MovimientoInventario m) throws Exception {
-        String sql = "INSERT INTO inventariomovimientos(tipoMovimiento, fecha, cantidad, idProducto) VALUES(?,?,?,?)";
-        try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        String sql = "INSERT INTO inventariomovimientos(fecha, idUsuario, idProducto, tipoMovimiento) VALUES(?,?,?,?)";
 
-            ps.setString(1, m.getTipo());
-            ps.setDate(2, new java.sql.Date(m.getFecha().getTime()));
-            ps.setInt(3, m.getCantidad());
-            ps.setInt(4, m.getProducto().getId());
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setDate(1, new java.sql.Date(m.getFecha().getTime()));
+            ps.setInt(2, m.getUsuario().getId());
+            ps.setInt(3, m.getProducto().getId());
+            ps.setString(4, m.getTipo());
             ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    m.setId(rs.getInt(1));
+                }
+            }
         }
     }
 
     public List<MovimientoInventario> listarPorProducto(int productoId) throws Exception {
         List<MovimientoInventario> lista = new ArrayList<>();
-        String sql = "SELECT * FROM inventariomovimientos WHERE idProducto=?";
+        String sql = "SELECT idinventarioMovimientos, fecha, idUsuario, idProducto, tipoMovimiento FROM inventariomovimientos WHERE idProducto=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, productoId);
-            ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                MovimientoInventario m = new MovimientoInventario();
-                m.setId(rs.getInt("idinventarioMovimientos"));
-                m.setTipo(rs.getString("tipoMovimiento"));
-                m.setFecha(new java.util.Date(rs.getDate("fecha").getTime()));
-                m.setCantidad(rs.getInt("cantidad"));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    MovimientoInventario m = new MovimientoInventario();
+                    m.setId(rs.getInt("idinventarioMovimientos"));
+                    m.setFecha(new java.util.Date(rs.getDate("fecha").getTime()));
+                    m.setTipo(rs.getString("tipoMovimiento"));
 
-                Producto p = new Producto();
-                p.setId(rs.getInt("idProducto"));
-                m.setProducto(p);
+                    Producto p = new Producto();
+                    p.setId(rs.getInt("idProducto"));
+                    m.setProducto(p);
 
-                lista.add(m);
+                    Usuario u = new Usuario();
+                    u.setId(rs.getInt("idUsuario"));
+                    m.setUsuario(u);
+
+                    lista.add(m);
+                }
             }
         }
         return lista;
