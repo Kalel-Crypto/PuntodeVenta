@@ -4,8 +4,8 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
-import negocio.facade.SistemaFacade;
-import dto.InventarioDTO;
+import facade.SistemaFacade;
+import mx.puntodeventa.dao.InventarioDTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;

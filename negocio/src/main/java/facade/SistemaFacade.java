@@ -1,12 +1,12 @@
-package negocio.facade;
+package facade;
 
 import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Producto;
-import InventarioDTO;
+import mx.puntodeventa.dao.InventarioDTO;
 
 import negocio.service.UsuarioService;
 import negocio.service.ProductoService;
-import negocio.service.InventarioService;
+import service.InventarioService;
 
 import java.util.List;
 

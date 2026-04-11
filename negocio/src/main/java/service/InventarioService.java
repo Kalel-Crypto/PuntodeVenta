@@ -1,7 +1,8 @@
-package negocio.service;
+package service;
 
-import dto.InventarioDTO;
-import persistencia.InventarioDAO;
+import mx.puntodeventa.dao.InventarioDTO;
+import mx.puntodeventa.dao.InventarioDAO;
+
 
 import java.util.List;
 import java.util.stream.Collectors;

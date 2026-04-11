@@ -1,3 +1,4 @@
+package mx.puntodeventa.dao;
 
 public class InventarioDTO {
 

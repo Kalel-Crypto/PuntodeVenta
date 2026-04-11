@@ -1,8 +1,8 @@
-package negocio.service;
+package service;
 
+import mx.puntodeventa.dao.UsuarioDAO;
 import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Rol;
-import persistencia.UsuarioDAO;
 
 import java.util.List;
 

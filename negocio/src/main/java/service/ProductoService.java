@@ -1,9 +1,9 @@
-package negocio.service;
+package service;
 
+import mx.puntodeventa.dao.ProductoDAO;
+import mx.puntodeventa.dao.ProveedorDAO;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
-import persistencia.ProductoDAO;
-import persistencia.ProveedorDAO;
 
 import java.util.List;
 

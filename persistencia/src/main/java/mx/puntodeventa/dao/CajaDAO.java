@@ -1,3 +1,5 @@
+package mx.puntodeventa.dao;
+
 import mx.puntodeventa.entity.Caja;
 import java.sql.*;
 

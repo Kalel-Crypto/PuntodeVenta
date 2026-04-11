@@ -1,5 +1,6 @@
 package helper;
 
+import mx.puntodeventa.dao.InventarioDTO;
 import mx.puntodeventa.entity.Producto;
 
 import java.util.ArrayList;

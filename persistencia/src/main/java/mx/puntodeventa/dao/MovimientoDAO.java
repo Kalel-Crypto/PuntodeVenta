@@ -1,3 +1,5 @@
+package mx.puntodeventa.dao;
+
 import mx.puntodeventa.entity.MovimientoInventario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Usuario;
