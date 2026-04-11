@@ -4,8 +4,8 @@ import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.dao.InventarioDTO;
 
-import negocio.service.UsuarioService;
-import negocio.service.ProductoService;
+import service.UsuarioService;
+import service.ProductoService;
 import service.InventarioService;
 
 import java.util.List;
