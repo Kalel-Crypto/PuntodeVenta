@@ -7,8 +7,8 @@ import java.util.List;
 
 public class BusquedaHelper {
 
-    public List<Producto> buscar(String nombre) {
-        List<Producto> lista = new ArrayList<>();
+    public List<InventarioDTO> buscar(String nombre) {
+        List<InventarioDTO> lista = new ArrayList<>();
 
         return lista;
     }
