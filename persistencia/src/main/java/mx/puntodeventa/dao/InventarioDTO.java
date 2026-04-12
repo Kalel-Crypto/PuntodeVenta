@@ -3,7 +3,7 @@ package mx.puntodeventa.dao;
 public class InventarioDTO {
 
     private int idProducto;
-    private String nombre;
+    private String nombreProducto;
     private int stock;
     private double precio;
     private String proveedor;
@@ -16,12 +16,12 @@ public class InventarioDTO {
         this.idProducto = idProducto;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreProducto() {
+        return nombreProducto;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public int getStock() {

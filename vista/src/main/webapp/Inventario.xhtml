@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Inventario</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+        }
+
+        .contenedor {
+            width: 90%;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .barra-superior {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .busqueda {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+
+        .btn-blue {
+            background: #3b82f6 !important;
+            color: white !important;
+            font-weight: bold !important;
+            border: none !important;
+            padding: 8px 15px;
+        }
+
+
+        .btn-red {
+            background: #f87171 !important;
+            color: white !important;
+            font-weight: bold !important;
+            border: none !important;
+            padding: 8px 15px;
+        }
+
+
+        .btn-green {
+            background: #4ade80 !important;
+            color: white !important;
+            font-weight: bold !important;
+            border: none !important;
+            padding: 8px 15px;
+        }
+
+    </style>
+</h:head>
+
+<h:body>
+
+    <div class="contenedor">
+
+        <h:form id="formInventario">
+
+            <p:growl id="growl" showDetail="true" life="3000"/>
+
+            <p:tabView>
+
+
+                <p:tab title="Inventario">
+
+                    <div class="barra-superior">
+
+
+                        <p:commandButton value="Regresar"
+                                         styleClass="btn-blue"
+                                         action="#"/>
+
+                        <div class="busqueda">
+
+                            <p:inputText value="#{InventarioBean.nombre}"
+                                         placeholder="ingrese su nombre o ID.." />
+
+                            <p:commandButton icon="pi pi-search"
+                                             action="#{InventarioBean.buscarProducto}"
+                                             update="tablaInventario"
+                                             styleClass="btn-green"/>
+                        </div>
+
+                        <div></div>
+
+                    </div>
+
+
+                    <p:dataTable id="tablaInventario"
+                                 value="#{InventarioBean.listaInventario}"
+                                 var="producto"
+                                 selection="#{InventarioBean.seleccionado}"
+                                 selectionMode="single"
+                                 rowKey="#{producto.idProducto}">
+
+                        <p:ajax event="rowSelect" update="formInventario"/>
+                        <p:ajax event="rowUnselect" update="formInventario"/>
+
+                        <p:column headerText="ID">
+                            #{producto.idProducto}
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            #{producto.nombreProducto}
+                        </p:column>
+
+                        <p:column headerText="Stock">
+                            #{producto.stock}
+                        </p:column>
+
+                        <p:column headerText="Precio">
+                            #{producto.precio}
+                        </p:column>
+
+                        <p:column headerText="Proveedor">
+                            #{producto.proveedor}
+                        </p:column>
+
+                    </p:dataTable>
+
+
+                    <div style="text-align:center; margin-top:15px;">
+
+
+                        <p:commandButton value="Eliminar"
+                                         action="#{InventarioBean.prepararEliminar}"
+                                         update="formInventario growl"
+                                         disabled="#{empty InventarioBean.seleccionado}"
+                                         styleClass="btn-red"/>
+
+
+                        <p:commandButton value="Modificar"
+                                         action="#{InventarioBean.prepararModificar}"
+                                         update="formInventario growl"
+                                         disabled="#{empty InventarioBean.seleccionado}"
+                                         styleClass="btn-green"/>
+
+                    </div>
+
+                </p:tab>
+
+
+                <p:tab title="Altas">
+                    <h3 style="text-align:center; margin-top:50px;">
+                        [Aquí va tu diseño de altas]
+                    </h3>
+                </p:tab>
+
+            </p:tabView>
+
+            <p:dialog header="Modificar Producto"
+                      widgetVar="dlgModificar"
+                      modal="true"
+                      width="400">
+
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="Nombre:" />
+                    <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" />
+
+                    <h:outputLabel value="Stock:" />
+                    <p:inputText value="#{InventarioBean.productoEdit.stock}" />
+
+                    <h:outputLabel value="Precio:" />
+                    <p:inputText value="#{InventarioBean.productoEdit.precio}" />
+
+                    <h:outputLabel value="Proveedor:" />
+                    <p:inputText value="#{InventarioBean.productoEdit.proveedor}" />
+
+                </h:panelGrid>
+
+                <br/>
+
+                <p:commandButton value="Guardar"
+                                 action="#{InventarioBean.modificarProducto}"
+                                 update="formInventario growl"
+                                 oncomplete="PF('dlgModificar').hide()"
+                                 styleClass="btn-green"/>
+
+            </p:dialog>
+
+
+            <p:confirmDialog widgetVar="confirmDialog">
+                <h:outputText value="Quieres eliminar este producto?" />
+
+                <br/><br/>
+                <p:commandButton value="Sí"
+                                 action="#{InventarioBean.eliminarProducto}"
+                                 update="formInventario growl"
+                                 oncomplete="PF('confirmDialog').hide()"/>
+
+                <p:commandButton value="No"
+                                 onclick="PF('confirmDialog').hide(); return false;"/>
+
+            </p:confirmDialog>
+
+        </h:form>
+
+    </div>
+
+</h:body>
+</html>

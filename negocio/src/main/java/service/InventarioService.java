@@ -23,7 +23,7 @@ public class InventarioService {
 
         return lista.stream()
                 .filter(p -> p.getIdProducto() == idProducto &&
-                        p.getNombre().equalsIgnoreCase(nombre))
+                        p.getNombreProducto().equalsIgnoreCase(nombre))
                 .collect(Collectors.toList());
     }
 
@@ -33,7 +33,7 @@ public class InventarioService {
         List<InventarioDTO> lista = inventarioDAO.listar();
 
         return lista.stream()
-                .filter(p -> p.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+                .filter(p -> p.getNombreProducto().toLowerCase().contains(nombre.toLowerCase()))
                 .collect(Collectors.toList());
     }
 

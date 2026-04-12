@@ -31,8 +31,11 @@ public class InventarioDAO {
                 InventarioDTO dto = new InventarioDTO();
 
                 dto.setIdProducto(rs.getInt("idProducto"));
-                dto.setNombre(rs.getString("nombre"));
-                dto.setStock(rs.getInt("stock"));
+                dto.setNombreProducto(rs.getString("nombre"));
+
+                Integer stock = (Integer) rs.getObject("stock");
+                dto.setStock(stock != null ? stock : 0);
+
                 dto.setPrecio(rs.getDouble("precioUnitario"));
                 dto.setProveedor(rs.getString("proveedor"));
 

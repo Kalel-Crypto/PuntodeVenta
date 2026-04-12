@@ -1,8 +1,12 @@
 package ui;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+
+import org.primefaces.PrimeFaces;
 
 import facade.SistemaFacade;
 import mx.puntodeventa.dao.InventarioDTO;
@@ -12,109 +16,142 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named("InventarioBean")
-@RequestScoped
+@SessionScoped
 public class InventarioBean implements Serializable {
 
     private List<InventarioDTO> listaInventario;
     private InventarioDTO seleccionado;
+    private InventarioDTO productoEdit;
 
     private SistemaFacade facade;
 
     private String nombre;
-    private int nuevoStock;
-
+    private int ID;
     @PostConstruct
     public void inicio() {
         facade = new SistemaFacade();
         listaInventario = new ArrayList<>();
+        productoEdit = new InventarioDTO();
+        cargarLista();
+    }
 
+    private void cargarLista() {
         try {
             listaInventario = facade.listarInventario();
         } catch (Exception e) {
             e.printStackTrace();
+            listaInventario = new ArrayList<>();
         }
     }
-
 
     public void buscarProducto() {
         try {
             if (nombre == null || nombre.trim().isEmpty()) {
-                listaInventario = facade.listarInventario();
+                cargarLista();
             } else {
                 listaInventario = facade.buscarInventarioPorNombre(nombre);
+                //listaInventario = facade.buscarInventarioExacto(ID, nombre);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
-    public void modificarProducto() {
+    //AQUI TE PREPARO LA MODIFICACION
+    public void prepararModificar() {
 
         if (seleccionado == null) {
-            System.out.println("Debe seleccionar un producto");
+            msgWarn("Seleccione un producto primero");
             return;
         }
 
-        try {
-            facade.actualizarStock(seleccionado.getIdProducto(), nuevoStock);
-            listaInventario = facade.listarInventario();
+        if (productoEdit == null) {
+            productoEdit = new InventarioDTO();
+        }
 
-            // limpiar campo
-            nuevoStock = 0;
+        productoEdit.setIdProducto(seleccionado.getIdProducto());
+        productoEdit.setNombreProducto(seleccionado.getNombreProducto());
+        productoEdit.setStock(seleccionado.getStock());
+        productoEdit.setPrecio(seleccionado.getPrecio());
+        productoEdit.setProveedor(seleccionado.getProveedor());
+
+        PrimeFaces.current().executeScript("PF('dlgModificar').show()");
+    }
+    //AQUI PERMITE MODIFICAR EL PRODUCTO ENTERO NO SOLO EL STOCK
+    public void modificarProducto() {
+
+        try {
+            if (productoEdit == null) {
+                msgWarn("Seleccione un producto primero");
+                return;
+            }
+
+            facade.actualizarStock(productoEdit.getIdProducto(), productoEdit.getStock());
+
+            cargarLista();
+
+            seleccionado = null;
+            productoEdit = new InventarioDTO();
+
+            msgInfo("Producto modificado correctamente");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void prepararEliminar() {
+
+        if (seleccionado == null) {
+            msgWarn("Seleccione un producto primero");
+            return;
+        }
+
+        PrimeFaces.current().executeScript("PF('confirmDialog').show()");
+    }
 
     public void eliminarProducto() {
 
-        if (seleccionado == null) {
-            System.out.println("Debe seleccionar un producto");
-            return;
-        }
-
         try {
+            if (seleccionado == null) return;
+
             facade.eliminarRegistroInventario(seleccionado.getIdProducto());
-            listaInventario = facade.listarInventario();
+
+            cargarLista();
+
+            seleccionado = null;
+
+            msgInfo("Producto eliminado correctamente");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    public List<InventarioDTO> getListaInventario() {
-        return listaInventario;
+    private void msgWarn(String msg) {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", msg));
     }
 
-    public void setListaInventario(List<InventarioDTO> listaInventario) {
-        this.listaInventario = listaInventario;
+    private void msgInfo(String msg) {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", msg));
     }
 
-    public InventarioDTO getSeleccionado() {
-        return seleccionado;
-    }
 
-    public void setSeleccionado(InventarioDTO seleccionado) {
-        this.seleccionado = seleccionado;
-    }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public List<InventarioDTO> getListaInventario() { return listaInventario; }
+    public void setListaInventario(List<InventarioDTO> listaInventario) { this.listaInventario = listaInventario; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public InventarioDTO getSeleccionado() { return seleccionado; }
+    public void setSeleccionado(InventarioDTO seleccionado) { this.seleccionado = seleccionado; }
 
-    public int getNuevoStock() {
-        return nuevoStock;
-    }
+    public InventarioDTO getProductoEdit() { return productoEdit; }
+    public void setProductoEdit(InventarioDTO productoEdit) { this.productoEdit = productoEdit; }
 
-    public void setNuevoStock(int nuevoStock) {
-        this.nuevoStock = nuevoStock;
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }
