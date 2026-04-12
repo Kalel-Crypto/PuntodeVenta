@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Registro de Productos</title>
+    <style type="text/css">
+        .header-azul {
+            background-color: #0044cc;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+        }
+        .panel-contenedor {
+            border: none !important;
+            background-color: #d1edff !important;
+            padding: 20px;
+        }
+        .input-style {
+            background-color: white !important;
+            border-radius: 20px !important;
+            border: 1px solid #ccc !important;
+            width: 100%;
+            height: 30px;
+        }
+        .btn-cancelar {
+            background-color: #ff8a8a !important;
+            border: none !important;
+            border-radius: 10px !important;
+            width: 130px;
+            height: 45px;
+            color: white !important;
+        }
+        .btn-registrar {
+            background-color: #98fb98 !important;
+            border: none !important;
+            border-radius: 10px !important;
+            width: 130px;
+            height: 45px;
+            color: #2e7d32 !important;
+            font-weight: bold;
+        }
+    </style>
+</h:head>
+<h:body>
+    <p:dialog visible="true" closable="false" modal="true" showHeader="false" resizable="false">
+        <h:form id="formProducto">
+            <p:growl id="msgs" showDetail="true" />
+            <div class="header-azul">Registro de productos</div>
+
+            <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
+
+                <p:outputLabel for="nombre" value="Nombre *" style="font-weight: bold; font-size: 1.2em;"/>
+                <p:inputText id="nombre" value="#{productoBean.producto.nombre}"
+                             required="true" styleClass="input-style"/>
+
+                <p:outputLabel for="precio" value="Precio *" style="font-weight: bold; font-size: 1.2em;"/>
+                <p:inputText id="precio" value="#{productoBean.producto.precio}"
+                             required="true" styleClass="input-style"/>
+
+                <p:outputLabel for="proveedor" value="Proveedor *" style="font-weight: bold; font-size: 1.2em;"/>
+                <p:selectOneMenu id="proveedor" value="#{productoBean.producto.proveedor}" required="true" style="width: 100%;">
+                    <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
+                                   itemLabel="#{prov.nombre}" itemValue="#{prov}" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="stock" value="Stock *" style="font-weight: bold; font-size: 1.2em;"/>
+                <p:inputText id="stock" value="#{productoBean.stockInicial}"
+                             required="true" styleClass="input-style"/>
+
+                <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+                    <p:commandButton value="Cancelar" styleClass="btn-cancelar" process="@this" />
+                    <p:commandButton value="Registrar" action="#{productoBean.registrar}"
+                                     styleClass="btn-registrar" update="formProducto, msgs" />
+                </h:panelGrid>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+</h:body>
+</html>

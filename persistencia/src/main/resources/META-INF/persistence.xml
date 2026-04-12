@@ -8,8 +8,9 @@
 
 
     <!-- Declaración manual de entidades -->
-    <class>mx.desarrollo.entity.Alumno</class>
-    <class>mx.desarrollo.entity.Usuario</class>
+    <class>mx.puntodeventa.entity.Alumno</class>
+    <class>mx.puntodeventa.entity.Usuario</class>
+    <class>mx.puntodeventa.entity.Producto</class>
 
 
     <properties>

@@ -1,5 +1,7 @@
 package mx.puntodeventa.dao;
 
+import mx.puntodeventa.entity.Inventario;
+
 import java.sql.*;
 import java.util.*;
 
@@ -62,6 +64,19 @@ public class InventarioDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, idProducto);
+            ps.executeUpdate();
+        }
+    }
+
+    public void insertar(Inventario inventario) throws Exception {
+        String sql = "INSERT INTO inventario (idProducto, stock) VALUES (?, ?)";
+
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, inventario.getId());
+            ps.setInt(2, inventario.getStock());
+
             ps.executeUpdate();
         }
     }
