@@ -9,28 +9,41 @@ import java.util.*;
 public class ProductoDAO {
 
     public void insertar(Producto p) throws Exception {
-        String sql = "INSERT INTO producto(nombre, precioUnitario, idProveedor, stock, fechaCaducidad) VALUES(?,?,?,?,?)";
+        String sqlProducto = "INSERT INTO producto(nombre, precioUnitario, idProveedor, fechaCaducidad) VALUES(?,?,?,?)";
+        String sqlInventario = "INSERT INTO inventario(idProducto, stock) VALUES(?,?)";
 
-        try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection con = ConnectionManager.getConnection()) {
+            con.setAutoCommit(false);
+            try (PreparedStatement psP = con.prepareStatement(sqlProducto, Statement.RETURN_GENERATED_KEYS)) {
+                psP.setString(1, p.getNombre());
+                psP.setDouble(2, p.getPrecio());
+                psP.setInt(3, p.getProveedor().getId());
 
-            ps.setString(1, p.getNombre());
-            ps.setDouble(2, p.getPrecio());
-            ps.setInt(3, p.getProveedor().getId());
-            ps.setInt(4, p.getStock());
-
-            //Convertimos java.util.Date a java.sql.Date para MySQL
             if (p.getCaducidad() != null) {
-                ps.setDate(5, new java.sql.Date(p.getCaducidad().getTime()));
+                psP.setDate(4, new java.sql.Date(p.getCaducidad().getTime()));
             } else {
-                ps.setNull(5, Types.DATE);
+                psP.setNull(4, Types.DATE);
             }
-            ps.executeUpdate();
+            psP.executeUpdate();
 
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    p.setId(rs.getInt(1));
+                int idGenerado = 0;
+                try (ResultSet rs = psP.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idGenerado = rs.getInt(1);
+                        p.setId(idGenerado);
+                    }
                 }
+                try (PreparedStatement psI = con.prepareStatement(sqlInventario)) {
+                    psI.setInt(1, idGenerado);
+                    psI.setInt(2, p.getStock());
+                    psI.executeUpdate();
+                }
+                con.commit();
+                System.out.println("Registro exitoso");
+
+            } catch (Exception e) {
+                con.rollback();
+                throw e;
             }
         }
     }

@@ -1,5 +1,7 @@
 package ui;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import jakarta.annotation.PostConstruct;
 import facade.SistemaFacade;
@@ -16,6 +18,7 @@ public class ProductoBean implements Serializable {
     private Producto producto;
     private List<Proveedor> listaProveedores;
     private SistemaFacade facade;
+    private Integer idProveedorSeleccionado;
 
 
     private int stockInicial;
@@ -24,7 +27,6 @@ public class ProductoBean implements Serializable {
     public void init() {
         facade = new SistemaFacade();
         producto = new Producto();
-        producto.setProveedor(new Proveedor());
 
         try {
             listaProveedores = facade.listarProveedores();
@@ -36,18 +38,21 @@ public class ProductoBean implements Serializable {
     public void registrar() {
         try {
            facade.registrarProducto(
-                    producto.getNombre(),           // String nombre
-                    producto.getPrecio(),           // double precio
-                    producto.getProveedor().getId(),// int idProveedor
-                    stockInicial,                   // int stock
-                    producto.getCaducidad()         // Date caducidad
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                   idProveedorSeleccionado,
+                    stockInicial,
+                    producto.getCaducidad()
             );
 
             System.out.println("Producto registrado: " + producto.getNombre());
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto registrado correctamente"));
 
             this.producto = new Producto();
             this.producto.setProveedor(new Proveedor());
             this.stockInicial = 0;
+            idProveedorSeleccionado = null;
 
         } catch (Exception e) {
             System.err.println("Error en el registro: " + e.getMessage());
@@ -63,6 +68,9 @@ public class ProductoBean implements Serializable {
 
     public List<Proveedor> getListaProveedores() { return listaProveedores; }
     public void setListaProveedores(List<Proveedor> listaProveedores) { this.listaProveedores = listaProveedores; }
+
+    public Integer getIdProveedorSeleccionado() { return idProveedorSeleccionado; }
+    public void setIdProveedorSeleccionado(Integer idProveedorSeleccionado) { this.idProveedorSeleccionado = idProveedorSeleccionado; }
 }
 
 
