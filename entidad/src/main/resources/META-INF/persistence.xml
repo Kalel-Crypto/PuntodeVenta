@@ -3,15 +3,20 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
              version="3.1">
-    <persistence-unit  name="entity_prueba1PU" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit  name="persistencePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>mx.puntodeventa.entity.Usuario</class>
+        <class>mx.puntodeventa.entity.Producto</class>
+        <class>mx.puntodeventa.entity.Proveedor</class>
+        <class>mx.puntodeventa.entity.Venta</class>
 
         <properties>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
 
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/desarrollo?zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3307/inv_db?zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true"/>
             <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="Creeperisfavorite20040102030405"/>
+            <property name="hibernate.connection.password" value="GranMexico23"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>

@@ -19,10 +19,20 @@ public class Producto implements Serializable {
     private double precio;
 
     @ManyToOne
-    @JoinColumn(name = "idproveedor")
+    @JoinColumn(name = "idProveedor")
     private Proveedor proveedor;
 
-    public int getId() {
+    @Column(name = "stock")
+    private int stock;
+
+    @Column(name = "fechaCaducidad")
+    @Temporal(TemporalType.DATE)
+    private Date caducidad;
+
+    public Producto(){
+    }
+
+    public Integer getId() {
         return id;
     }
 
@@ -53,5 +63,18 @@ public class Producto implements Serializable {
 
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public int getStock(){
+        return stock;
+    }
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+    public Date getCaducidad() {
+        return caducidad;
+    }
+    public void setCaducidad(Date caducidad) {
+        this.caducidad = caducidad;
     }
 }

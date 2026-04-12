@@ -23,7 +23,7 @@
             <!-- Barra de búsqueda -->
             <div style="text-align:center; margin-bottom:20px;">
                 <p:inputText placeholder="Ingrese nombre o ID"
-                             value="#{InventarioBean.filtro}"
+                             value="#{InventarioBean.nombre}"
                              style="width:300px; margin-right:10px;" />
                 <p:commandButton value="Buscar"
                                  action="#{InventarioBean.buscarProducto()}"
@@ -32,13 +32,13 @@
             </div>
 
             <!-- Tabla de productos -->
-            <p:dataTable id="tablaProductos" var="producto" value="#{inventarioBean.listaProductos}"
+            <p:dataTable id="tablaProductos" var="producto" value="#{InventarioBean.listaInventario}"
                          emptyMessage="No hay productos registrados"
                          style="margin:0 auto; width:100%; background-color:#fff; border:1px solid #ccc;"
                          headerStyle="background-color:#eee; color:#333;">
 
                 <p:column headerText="Código">
-                    <h:outputText value="#{producto.codigo}" />
+                    <h:outputText value="#{producto.idProducto}" />
                 </p:column>
 
                 <p:column headerText="Nombre">
@@ -61,10 +61,10 @@
             <!-- Botones debajo de la tabla -->
             <div class="acciones">
                 <p:commandButton value="Modificar"
-                                 action="#{inventarioBean.modificar}"
+                                 action="#{InventarioBean.modificarProducto()}"
                                  styleClass="btn-gray" />
                 <p:commandButton value="Eliminar"
-                                 action="#{inventarioBean.eliminar}"
+                                 action="#{InventarioBean.eliminarProducto()}"
                                  styleClass="btn-gray" />
             </div>
         </h:form>

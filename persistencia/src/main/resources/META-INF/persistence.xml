@@ -8,15 +8,17 @@
 
 
     <!-- Declaración manual de entidades -->
-    <class>mx.desarrollo.entity.Alumno</class>
-    <class>mx.desarrollo.entity.Usuario</class>
+    <class>mx.puntodeventa.entity.Usuario</class>
+    <class>mx.puntodeventa.entity.Producto</class>
+    <class>mx.puntodeventa.entity.Proveedor</class>
+    <class>mx.puntodeventa.entity.Venta</class>
 
 
     <properties>
       <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/desarrollo?useSSL=false&amp;serverTimezone=UTC"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/inv_db?useSSL=false&amp;serverTimezone=UTC"/>
       <property name="jakarta.persistence.jdbc.user" value="root"/>
-      <property name="jakarta.persistence.jdbc.password" value="Creeperisfavorite20040102030405"/>
+      <property name="jakarta.persistence.jdbc.password" value="GranMexico23"/>
 
 
       <property name="hibernate.show_sql" value="true"/>

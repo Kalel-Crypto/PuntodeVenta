@@ -9,7 +9,7 @@ import java.util.*;
 public class ProductoDAO {
 
     public void insertar(Producto p) throws Exception {
-        String sql = "INSERT INTO producto(nombre, precioUnitario, idProveedor) VALUES(?,?,?)";
+        String sql = "INSERT INTO producto(nombre, precioUnitario, idProveedor, stock, fechaCaducidad) VALUES(?,?,?,?,?)";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -17,6 +17,14 @@ public class ProductoDAO {
             ps.setString(1, p.getNombre());
             ps.setDouble(2, p.getPrecio());
             ps.setInt(3, p.getProveedor().getId());
+            ps.setInt(4, p.getStock());
+
+            //Convertimos java.util.Date a java.sql.Date para MySQL
+            if (p.getCaducidad() != null) {
+                ps.setDate(5, new java.sql.Date(p.getCaducidad().getTime()));
+            } else {
+                ps.setNull(5, Types.DATE);
+            }
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -28,7 +36,7 @@ public class ProductoDAO {
     }
 
     public void actualizar(Producto p) throws Exception {
-        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=? WHERE idProducto=?";
+        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=?, stock=?, fechaCaducidad=? WHERE idProducto=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -36,13 +44,20 @@ public class ProductoDAO {
             ps.setString(1, p.getNombre());
             ps.setDouble(2, p.getPrecio());
             ps.setInt(3, p.getProveedor().getId());
-            ps.setInt(4, p.getId());
+            ps.setInt(4, p.getStock());
+            if (p.getCaducidad() != null) {
+                ps.setDate(5, new java.sql.Date(p.getCaducidad().getTime()));
+            } else {
+                ps.setNull(5, Types.DATE);
+            }
+            ps.setInt(6, p.getId());
+
             ps.executeUpdate();
         }
     }
 
     public Producto obtener(int id) throws Exception {
-        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto WHERE idProducto=?";
+        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor, stock, fechaCaducidad FROM producto WHERE idProducto=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -55,6 +70,8 @@ public class ProductoDAO {
                     p.setId(rs.getInt("idProducto"));
                     p.setNombre(rs.getString("nombre"));
                     p.setPrecio(rs.getDouble("precioUnitario"));
+                    p.setStock(rs.getInt("stock"));
+                    p.setCaducidad(rs.getDate("fechaCaducidad"));
 
                     Proveedor prov = new Proveedor();
                     prov.setId(rs.getInt("idProveedor"));
@@ -69,7 +86,7 @@ public class ProductoDAO {
 
     public List<Producto> listar() throws Exception {
         List<Producto> lista = new ArrayList<>();
-        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto";
+        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor, stock, fechaCaducidad FROM producto";
 
         try (Connection con = ConnectionManager.getConnection();
              Statement st = con.createStatement();
@@ -80,6 +97,8 @@ public class ProductoDAO {
                 p.setId(rs.getInt("idProducto"));
                 p.setNombre(rs.getString("nombre"));
                 p.setPrecio(rs.getDouble("precioUnitario"));
+                p.setStock(rs.getInt("stock"));
+                p.setCaducidad(rs.getDate("fechaCaducidad"));
 
                 Proveedor prov = new Proveedor();
                 prov.setId(rs.getInt("idProveedor"));

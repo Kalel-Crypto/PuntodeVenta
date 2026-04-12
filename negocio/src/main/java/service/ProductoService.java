@@ -5,6 +5,7 @@ import mx.puntodeventa.dao.ProveedorDAO;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProductoService {
@@ -13,7 +14,7 @@ public class ProductoService {
     private ProveedorDAO proveedorDAO = new ProveedorDAO();
 
 
-    public void registrarProducto(String nombre, double precio, int idProveedor) throws Exception {
+    public void registrarProducto(String nombre, double precio, int idProveedor, int stock, Date caducidad) throws Exception {
 
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new Exception("El nombre del producto es obligatorio");
@@ -33,17 +34,19 @@ public class ProductoService {
         producto.setNombre(nombre);
         producto.setPrecio(precio);
         producto.setProveedor(proveedor);
+        producto.setStock(stock);
+        producto.setCaducidad(caducidad);
 
         productoDAO.insertar(producto);
     }
 
 
-    public void actualizarProducto(int idProducto, String nombre, double precio, int idProveedor) throws Exception {
+    public void actualizarProducto(int idProducto, String nombre, double precio, int idProveedor, int stock, Date caducidad) throws Exception {
 
         Producto existente = productoDAO.obtener(idProducto);
 
         if (existente == null) {
-            throw new Exception("El producto no existe");
+            throw new Exception("El producto" + idProducto + "no existe");
         }
 
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -63,6 +66,8 @@ public class ProductoService {
         existente.setNombre(nombre);
         existente.setPrecio(precio);
         existente.setProveedor(proveedor);
+        existente.setStock(stock);
+        existente.setCaducidad(caducidad);
 
         productoDAO.actualizar(existente);
     }
