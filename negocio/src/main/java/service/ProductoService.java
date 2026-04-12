@@ -46,7 +46,7 @@ public class ProductoService {
         Producto existente = productoDAO.obtener(idProducto);
 
         if (existente == null) {
-            throw new Exception("El producto" + idProducto + "no existe");
+            throw new Exception("El producto " + idProducto + "no existe");
         }
 
         if (nombre == null || nombre.trim().isEmpty()) {

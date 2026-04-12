@@ -124,13 +124,29 @@ public class ProductoDAO {
     }
 
     public void eliminar(int id) throws Exception {
-        String sql = "DELETE FROM producto WHERE idProducto=?";
+        String sqlInventario = "DELETE FROM inventario WHERE idProducto=?";
+        String sqlProducto = "DELETE FROM producto WHERE idProducto=?";
 
-        try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConnectionManager.getConnection()) {
 
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            con.setAutoCommit(false);
+            try {
+                try (PreparedStatement psI = con.prepareStatement(sqlInventario)) {
+                    psI.setInt(1, id);
+                    psI.executeUpdate();
+                }
+                try (PreparedStatement psP = con.prepareStatement(sqlProducto)) {
+                    psP.setInt(1, id);
+
+                    psP.executeUpdate();
+
+                }
+                con.commit(); // Confirmamos el borrado en el inventario y el producto
+                System.out.println("Eliminacion exitosa de producto e inventario ID: " + id);
+            } catch (Exception e) {
+                con.rollback();
+                throw new Exception("Error al eliminar el producto: " + e.getMessage());
+            }
         }
     }
 }

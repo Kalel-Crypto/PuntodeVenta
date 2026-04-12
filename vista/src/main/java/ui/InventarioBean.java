@@ -1,8 +1,10 @@
 package ui;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
+import jakarta.faces.view.ViewScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 
 import facade.SistemaFacade;
 import mx.puntodeventa.dao.InventarioDTO;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named("InventarioBean")
-@RequestScoped
+@ViewScoped
 public class InventarioBean implements Serializable {
 
     private List<InventarioDTO> listaInventario;
@@ -72,15 +74,21 @@ public class InventarioBean implements Serializable {
     public void eliminarProducto() {
 
         if (seleccionado == null) {
-            System.out.println("Debe seleccionar un producto");
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Seleccione un producto de la tabla."));
             return;
         }
 
         try {
             facade.eliminarRegistroInventario(seleccionado.getIdProducto());
             listaInventario = facade.listarInventario();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Eliminado", "El producto se elimino correctamente."));
+            seleccionado = null;
 
         } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo eliminar el producto."));
             e.printStackTrace();
         }
     }

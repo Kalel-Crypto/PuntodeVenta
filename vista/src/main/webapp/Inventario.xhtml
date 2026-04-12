@@ -33,6 +33,9 @@
 
             <!-- Tabla de productos -->
             <p:dataTable id="tablaProductos" var="producto" value="#{InventarioBean.listaInventario}"
+                         selectionMode="single"
+                         selection="#{InventarioBean.seleccionado}"
+                         rowKey="#{producto.idProducto}"
                          emptyMessage="No hay productos registrados"
                          style="margin:0 auto; width:100%; background-color:#fff; border:1px solid #ccc;"
                          headerStyle="background-color:#eee; color:#333;">
@@ -65,8 +68,18 @@
                                  styleClass="btn-gray" />
                 <p:commandButton value="Eliminar"
                                  action="#{InventarioBean.eliminarProducto()}"
-                                 styleClass="btn-gray" />
+                                 update="tablaProductos"
+                                 styleClass="btn-gray">
+                    <p:confirm header="Confirmación"
+                               message="¿Estas seguro de eliminar este producto?"
+                               icon="pi pi-exclamation-triangle" />
+                </p:commandButton>
+
             </div>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="Sí, eliminar" type="button" styleClass="ui-confirmdialog-yes" />
+            </p:confirmDialog>
         </h:form>
     </div>
 </h:body>

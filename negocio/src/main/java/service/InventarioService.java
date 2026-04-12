@@ -47,8 +47,8 @@ public class InventarioService {
         inventarioDAO.actualizarStock(idProducto, nuevoStock);
     }
 
-
-    public void eliminarRegistro(int idProducto) throws Exception {
-        inventarioDAO.eliminar(idProducto);
-    }
+    // Quitaremos este metodo para dejar que la eliminacion sea por el ProductoService
+    //public void eliminarRegistro(int idProducto) throws Exception {
+      //  inventarioDAO.eliminar(idProducto);
+    //}
 }

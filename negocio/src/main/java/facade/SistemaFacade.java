@@ -76,6 +76,6 @@ public class SistemaFacade {
     }
 
     public void eliminarRegistroInventario(int idProducto) throws Exception {
-        inventarioService.eliminarRegistro(idProducto);
+        productoService.eliminarProducto(idProducto);
     }
 }
