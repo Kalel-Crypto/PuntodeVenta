@@ -1,5 +1,7 @@
 package facade;
 
+import mx.puntodeventa.dao.ProveedorDAO;
+import mx.puntodeventa.entity.Proveedor;
 import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.dao.InventarioDTO;
@@ -16,7 +18,10 @@ public class SistemaFacade {
     private ProductoService productoService = new ProductoService();
     private InventarioService inventarioService = new InventarioService();
 
-
+    public List<Proveedor> listarProveedores() throws Exception {
+        ProveedorDAO proveedorDao = new ProveedorDAO();
+        return proveedorDao.listar();
+    }
 
     public void registrarUsuario(Usuario usuario) throws Exception {
         usuarioService.registrarUsuario(usuario);
@@ -36,8 +41,8 @@ public class SistemaFacade {
 
 
 
-    public void registrarProducto(String nombre, double precio, int idProveedor) throws Exception {
-        productoService.registrarProducto(nombre, precio, idProveedor);
+    public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {
+        productoService.registrarProducto(nombre, precio, idProveedor, stock);
     }
 
     public void actualizarProducto(int idProducto, String nombre, double precio, int idProveedor) throws Exception {
@@ -60,6 +65,10 @@ public class SistemaFacade {
 
     public List<InventarioDTO> buscarInventarioPorNombre(String nombre) throws Exception {
         return inventarioService.buscarPorNombre(nombre);
+    }
+
+    public List<InventarioDTO> buscarInventarioPorId(int idProducto) throws Exception {
+        return inventarioService.buscarPorId(idProducto);
     }
 
     public List<InventarioDTO> buscarInventarioExacto(int idProducto, String nombre) throws Exception {

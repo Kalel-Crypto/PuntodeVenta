@@ -6,6 +6,7 @@ import jakarta.inject.Named;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
+import mx.puntodeventa.entity.Proveedor;
 import org.primefaces.PrimeFaces;
 
 import facade.SistemaFacade;
@@ -46,11 +47,14 @@ public class InventarioBean implements Serializable {
 
     public void buscarProducto() {
         try {
-            if (nombre == null || nombre.trim().isEmpty()) {
+            if ((nombre == null || nombre.trim().isEmpty()) && ID <= 0) {
                 cargarLista();
-            } else {
+            } else if (ID > 0 && (nombre != null && !nombre.trim().isEmpty())) {
+                listaInventario = facade.buscarInventarioExacto(ID, nombre);
+            } else if (nombre != null && !nombre.trim().isEmpty()) {
                 listaInventario = facade.buscarInventarioPorNombre(nombre);
-                //listaInventario = facade.buscarInventarioExacto(ID, nombre);
+            } else if (ID > 0) {
+                listaInventario = facade.buscarInventarioPorId(ID);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,7 +76,7 @@ public class InventarioBean implements Serializable {
         productoEdit.setNombreProducto(seleccionado.getNombreProducto());
         productoEdit.setStock(seleccionado.getStock());
         productoEdit.setPrecio(seleccionado.getPrecio());
-        productoEdit.setProveedor(seleccionado.getProveedor());
+        productoEdit.setIdProveedor(seleccionado.getIdProveedor());
 
         PrimeFaces.current().executeScript("PF('dlgModificar').show()");
     }
@@ -85,18 +89,31 @@ public class InventarioBean implements Serializable {
                 return;
             }
 
-            facade.actualizarStock(productoEdit.getIdProducto(), productoEdit.getStock());
+                facade.actualizarProducto(
+                        productoEdit.getIdProducto(),
+                        productoEdit.getNombreProducto(),
+                        productoEdit.getPrecio(),
+                        productoEdit.getIdProveedor()
+                );
 
-            cargarLista();
+                facade.actualizarStock(
+                        productoEdit.getIdProducto(),
+                        productoEdit.getStock()
+                );
+                cargarLista();
 
-            seleccionado = null;
-            productoEdit = new InventarioDTO();
+                seleccionado = null;
+                productoEdit = new InventarioDTO();
 
-            msgInfo("Producto modificado correctamente");
+                msgInfo("Producto modificado correctamente");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+
+        }catch(Exception e){
+            msgWarn("Error al modificar: " + e.getMessage());
         }
+
     }
 
     public void prepararEliminar() {
@@ -110,19 +127,24 @@ public class InventarioBean implements Serializable {
     }
 
     public void eliminarProducto() {
-
         try {
-            if (seleccionado == null) return;
+            if (seleccionado == null || seleccionado.getIdProducto() <= 0) {
+                return;
+            }
 
-            facade.eliminarRegistroInventario(seleccionado.getIdProducto());
+            int idProducto = seleccionado.getIdProducto();
+
+            facade.eliminarRegistroInventario(idProducto);
+            facade.eliminarProducto(idProducto);
 
             cargarLista();
 
             seleccionado = null;
 
-            msgInfo("Producto eliminado correctamente");
+            msgInfo("Producto eliminado completamente del sistema");
 
         } catch (Exception e) {
+            msgWarn("Error al eliminar el producto: " + e.getMessage());
             e.printStackTrace();
         }
     }

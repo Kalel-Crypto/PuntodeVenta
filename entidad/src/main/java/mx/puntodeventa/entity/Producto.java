@@ -54,4 +54,6 @@ public class Producto implements Serializable {
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
     }
+
+
 }

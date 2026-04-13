@@ -7,6 +7,8 @@ public class InventarioDTO {
     private int stock;
     private double precio;
     private String proveedor;
+    private int idProveedor;
+
 
     public int getIdProducto() {
         return idProducto;
@@ -46,5 +48,13 @@ public class InventarioDTO {
 
     public void setProveedor(String proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public int getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
     }
 }

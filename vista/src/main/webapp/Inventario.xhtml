@@ -155,8 +155,50 @@
 
                 <p:tab title="Altas">
                     <h3 style="text-align:center; margin-top:50px;">
-                        [Aquí va tu diseño de altas]
+                        Altas de Producots
                     </h3>
+                    <p:tabView>
+
+                        <p:tab title="Registrar Producto">
+
+                            <h:form id="formProducto">
+                                <p:growl id="msgs" showDetail="true" />
+
+                                <div class="header-azul">Registro de productos</div>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
+
+                                    <p:outputLabel for="nombre" value="Nombre *" style="font-weight: bold; font-size: 1.2em;"/>
+                                    <p:inputText id="nombre" value="#{productoBean.producto.nombre}"
+                                                 required="true" styleClass="input-style"/>
+
+                                    <p:outputLabel for="precio" value="Precio *" style="font-weight: bold; font-size: 1.2em;"/>
+                                    <p:inputText id="precio" value="#{productoBean.producto.precio}"
+                                                 required="true" styleClass="input-style"/>
+
+                                    <p:outputLabel for="proveedor" value="Proveedor *" style="font-weight: bold; font-size: 1.2em;"/>
+                                    <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true" style="width: 100%;">
+                                        <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
+                                                       itemLabel="#{prov.nombre}" itemValue="#{prov.id}" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="stock" value="Stock *" style="font-weight: bold; font-size: 1.2em;"/>
+                                    <p:inputText id="stock" value="#{productoBean.stockInicial}"
+                                                 required="true" styleClass="input-style"/>
+
+                                    <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+                                        <p:commandButton value="Cancelar" styleClass="btn-cancelar" process="@this" />
+                                        <p:commandButton value="Registrar" action="#{productoBean.registrar}"
+                                                         styleClass="btn-registrar" update="formProducto msgs" />
+                                    </h:panelGrid>
+
+                                </p:panelGrid>
+                            </h:form>
+
+                        </p:tab>
+
+                    </p:tabView>
                 </p:tab>
 
             </p:tabView>

@@ -27,6 +27,14 @@ public class InventarioService {
                 .collect(Collectors.toList());
     }
 
+    public List<InventarioDTO> buscarPorId(int idProducto) throws Exception {
+        List<InventarioDTO> lista = inventarioDAO.listar();
+
+        return lista.stream()
+                .filter(p -> p.getIdProducto() == idProducto)
+                .collect(Collectors.toList());
+    }
+
 
     public List<InventarioDTO> buscarPorNombre(String nombre) throws Exception {
 

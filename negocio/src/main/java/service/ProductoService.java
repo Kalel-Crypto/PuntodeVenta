@@ -2,8 +2,10 @@ package service;
 
 import mx.puntodeventa.dao.ProductoDAO;
 import mx.puntodeventa.dao.ProveedorDAO;
+import mx.puntodeventa.dao.InventarioDAO;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
+import mx.puntodeventa.entity.Inventario;
 
 import java.util.List;
 
@@ -11,9 +13,10 @@ public class ProductoService {
 
     private ProductoDAO productoDAO = new ProductoDAO();
     private ProveedorDAO proveedorDAO = new ProveedorDAO();
+    private InventarioDAO inventarioDAO = new InventarioDAO();
 
 
-    public void registrarProducto(String nombre, double precio, int idProveedor) throws Exception {
+    public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {
 
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new Exception("El nombre del producto es obligatorio");
@@ -33,8 +36,13 @@ public class ProductoService {
         producto.setNombre(nombre);
         producto.setPrecio(precio);
         producto.setProveedor(proveedor);
-
         productoDAO.insertar(producto);
+
+        Inventario inventario = new Inventario();
+        inventario.setId(producto.getId());
+        inventario.setStock(stock);
+
+        inventarioDAO.insertar(inventario);
     }
 
 
