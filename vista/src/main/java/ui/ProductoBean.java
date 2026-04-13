@@ -36,6 +36,11 @@ public class ProductoBean implements Serializable {
     }
 
     public void registrar() {
+        System.out.println("Nombre: " + producto.getNombre());
+        System.out.println("Precio del producto: " + producto.getNombre());
+        System.out.println("id proveedor: " + idProveedorSeleccionado);
+        System.out.println("Stock: " + stockInicial);
+
         try {
             facade.registrarProducto(
                     producto.getNombre(),
