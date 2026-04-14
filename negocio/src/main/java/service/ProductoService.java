@@ -44,9 +44,6 @@ public class ProductoService {
         productoDAO.insertar(producto,stock);
 
 
-
-
-
         /*
         ESTO ES INNECESARIO, ES REDUNDANTE PORQUE EN EL PRODUCTODAO TAMBIEN
         DA DE ALTA EL PRODUCTO EN EL INVENTARIO.... ATTE: KALEL
@@ -54,7 +51,6 @@ public class ProductoService {
         /*Inventario inventario = new Inventario();
         inventario.setId(producto.getId());
         inventario.setStock(stock);
-
        // inventarioDAO.insertar(inventario);*/
     }
 

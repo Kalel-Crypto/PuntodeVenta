@@ -6,6 +6,7 @@ import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.dao.InventarioDTO;
 
+import service.ProveedorService;
 import service.UsuarioService;
 import service.ProductoService;
 import service.InventarioService;
@@ -17,6 +18,7 @@ public class SistemaFacade {
     private UsuarioService usuarioService = new UsuarioService();
     private ProductoService productoService = new ProductoService();
     private InventarioService inventarioService = new InventarioService();
+    private ProveedorService proveedorService = new ProveedorService();
 
     public List<Proveedor> listarProveedores() throws Exception {
         ProveedorDAO proveedorDao = new ProveedorDAO();
@@ -38,7 +40,9 @@ public class SistemaFacade {
     public void eliminarUsuario(int id) throws Exception {
         usuarioService.eliminarUsuario(id);
     }
-
+    public void registrarProveedor(String nombre, String numero) throws Exception {
+        proveedorService.registrar(nombre, numero);
+    }
 
 
     public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {

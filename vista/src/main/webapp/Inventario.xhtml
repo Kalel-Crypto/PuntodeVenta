@@ -195,25 +195,25 @@
 
                             <div class="header-azul">Registro de proveedores</div>
 
-                            <!--   <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
+                               <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
 
                               <p:outputLabel for="nombreProv" value="Nombre *"/>
-                                  <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true"/>
+                                  <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
 
                                   <p:outputLabel for="telefonoProv" value="Teléfono *"/>
-                                  <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.telefono}" required="true"/>
+                                  <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.contacto}" required="true" requiredMessage="Asegurese de ingresar un numero"/>
 
 
                                   <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
 
                                       <p:commandButton value="Registrar"
                                                        action="#{proveedorBean.registrar}"
-                                                       process="@form"
+                                                       process="@this telefonoProv nombreProv"
                                                        update="formInventario msgsProveedor"
                                                        styleClass="btn-green" /> -
                                   </h:panelGrid>
 
-                              </p:panelGrid> -->
+                              </p:panelGrid>
 
                         </p:tab>
 
