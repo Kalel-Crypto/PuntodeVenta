@@ -13,7 +13,7 @@ public class ProductoService {
 
     private ProductoDAO productoDAO = new ProductoDAO();
     private ProveedorDAO proveedorDAO = new ProveedorDAO();
-    private InventarioDAO inventarioDAO = new InventarioDAO();
+    //private InventarioDAO inventarioDAO = new InventarioDAO();
 
 
     public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {
@@ -36,13 +36,21 @@ public class ProductoService {
         producto.setNombre(nombre);
         producto.setPrecio(precio);
         producto.setProveedor(proveedor);
-        productoDAO.insertar(producto);
+        productoDAO.insertar(producto,stock);
 
-        Inventario inventario = new Inventario();
+
+
+
+
+        /*
+        ESTO ES INNECESARIO, ES REDUNDANTE PORQUE EN EL PRODUCTODAO TAMBIEN
+        DA DE ALTA EL PRODUCTO EN EL INVENTARIO.... ATTE: KALEL
+        */
+        /*Inventario inventario = new Inventario();
         inventario.setId(producto.getId());
         inventario.setStock(stock);
 
-        inventarioDAO.insertar(inventario);
+       // inventarioDAO.insertar(inventario);*/
     }
 
 

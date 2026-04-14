@@ -19,6 +19,7 @@ public class InventarioDTO {
     }
 
     public String getNombreProducto() {
+
         return nombreProducto;
     }
 

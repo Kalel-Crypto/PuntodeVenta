@@ -8,9 +8,9 @@ import java.util.*;
 
 public class ProductoDAO {
 
-    public void insertar(Producto p) throws Exception {
-        String sqlProducto = "INSERT INTO producto(nombre, precioUnitario, idProveedor, fechaCaducidad) VALUES(?,?,?,?)";
-        String sqlInventario = "INSERT INTO inventario(idProducto, stock) VALUES(?,?)";
+    public void insertar(Producto p, int cantidad) throws Exception {
+        String sqlProducto = "INSERT INTO producto(nombre, precioUnitario, idProveedor) VALUES (?, ?, ?)";
+        String sqlInventario = "INSERT INTO inventario(idProducto, stock) VALUES (?, ?)";
 
         try (Connection con = ConnectionManager.getConnection()) {
             con.setAutoCommit(false);
@@ -29,6 +29,7 @@ public class ProductoDAO {
                 }
                 try (PreparedStatement psI = con.prepareStatement(sqlInventario)) {
                     psI.setInt(1, idGenerado);
+                    psI.setInt(2,cantidad);
                     psI.executeUpdate();
                 }
                 con.commit();
@@ -57,7 +58,7 @@ public class ProductoDAO {
     }
 
     public Producto obtener(int id) throws Exception {
-        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor, stock, fechaCaducidad FROM producto WHERE idProducto=?";
+        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto WHERE idProducto=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {

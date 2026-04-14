@@ -2,19 +2,25 @@ package ui;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.annotation.PostConstruct;
 import facade.SistemaFacade;
+import mx.puntodeventa.entity.Inventario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
+import org.primefaces.PrimeFaces;
+
 import java.io.Serializable;
 import java.util.List;
-
+import jakarta.inject.Inject;
 
 @Named("productoBean")
-@RequestScoped
+@ViewScoped
 public class ProductoBean implements Serializable {
 
+    @Inject
+    private InventarioBean inventarioBean;
     private Producto producto;
     private List<Proveedor> listaProveedores;
     private SistemaFacade facade;
@@ -53,6 +59,11 @@ public class ProductoBean implements Serializable {
             System.out.println("Producto registrado: " + producto.getNombre());
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto registrado correctamente"));
+           // facade.listarInventario();
+            inventarioBean.cargarLista();
+
+            PrimeFaces.current().ajax().update(":formInventario:tablaInventario");
+            PrimeFaces.current().ajax().update(":formInventario:growl");
 
             this.producto = new Producto();
             this.producto.setProveedor(new Proveedor());

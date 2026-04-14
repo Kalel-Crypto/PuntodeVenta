@@ -36,13 +36,14 @@ public class InventarioBean implements Serializable {
         cargarLista();
     }
 
-    private void cargarLista() {
+    public void cargarLista() {
         try {
             listaInventario = facade.listarInventario();
         } catch (Exception e) {
             e.printStackTrace();
             listaInventario = new ArrayList<>();
         }
+
     }
 
     public void buscarProducto() {
@@ -68,9 +69,9 @@ public class InventarioBean implements Serializable {
             return;
         }
 
-        if (productoEdit == null) {
-            productoEdit = new InventarioDTO();
-        }
+
+        productoEdit = new InventarioDTO();
+
 
         productoEdit.setIdProducto(seleccionado.getIdProducto());
         productoEdit.setNombreProducto(seleccionado.getNombreProducto());
@@ -78,11 +79,12 @@ public class InventarioBean implements Serializable {
         productoEdit.setPrecio(seleccionado.getPrecio());
         productoEdit.setIdProveedor(seleccionado.getIdProveedor());
 
+
         PrimeFaces.current().executeScript("PF('dlgModificar').show()");
     }
     //AQUI PERMITE MODIFICAR EL PRODUCTO ENTERO NO SOLO EL STOCK
     public void modificarProducto() {
-
+        System.out.print("Nombre del producto: " + productoEdit.getNombreProducto());
         try {
             if (productoEdit == null) {
                 msgWarn("Seleccione un producto primero");
@@ -134,17 +136,17 @@ public class InventarioBean implements Serializable {
 
             int idProducto = seleccionado.getIdProducto();
 
+
+
             facade.eliminarRegistroInventario(idProducto);
             facade.eliminarProducto(idProducto);
-
-            cargarLista();
-
             seleccionado = null;
-
-            msgInfo("Producto eliminado completamente del sistema");
-
+            msgInfo("Producto eliminado correctamente");
+            cargarLista();
         } catch (Exception e) {
-            msgWarn("Error al eliminar el producto: " + e.getMessage());
+            msgWarn("Error al eliminar el producto, intentelo de nuevo");
+            System.out.println("ERROR: " + e.getMessage());
+            cargarLista();
             e.printStackTrace();
         }
     }
