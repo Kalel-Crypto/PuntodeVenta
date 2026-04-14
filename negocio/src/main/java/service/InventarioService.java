@@ -39,7 +39,7 @@ public class InventarioService {
     public List<InventarioDTO> buscarPorNombre(String nombre) throws Exception {
 
         List<InventarioDTO> lista = inventarioDAO.listar();
-
+        System.out.println("El nombre llego a InventarioService: " + nombre);
         return lista.stream()
                 .filter(p -> p.getNombreProducto().toLowerCase().contains(nombre.toLowerCase()))
                 .collect(Collectors.toList());

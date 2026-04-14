@@ -1,5 +1,7 @@
 package service;
 
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import mx.puntodeventa.dao.ProductoDAO;
 import mx.puntodeventa.dao.ProveedorDAO;
 import mx.puntodeventa.dao.InventarioDAO;
@@ -32,6 +34,9 @@ public class ProductoService {
             throw new Exception("El proveedor no es válido");
         }
 
+        if(stock < 0){
+            throw new Exception("El Stock debe ser numero positivo");
+        }
         Producto producto = new Producto();
         producto.setNombre(nombre);
         producto.setPrecio(precio);
@@ -52,7 +57,6 @@ public class ProductoService {
 
        // inventarioDAO.insertar(inventario);*/
     }
-
 
     public void actualizarProducto(int idProducto, String nombre, double precio, int idProveedor) throws Exception {
 

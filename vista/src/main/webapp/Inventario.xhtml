@@ -80,17 +80,25 @@
 
                         <div class="busqueda">
 
-                            <p:inputText value="#{InventarioBean.nombre}"
+                            <p:inputText id="busqueda"
+                                         value="#{InventarioBean.busqueda}"
                                          placeholder="ingrese su nombre o ID..." />
 
-                            <p:commandButton icon="pi pi-search"
+                            <p:commandButton value="Buscar"
                                              action="#{InventarioBean.buscarProducto}"
+                                             process="@this busqueda"
                                              update="tablaInventario"
                                              styleClass="btn-green"/>
+
+                            <p:commandButton value="Refrescar"
+                                             id="Refrescar"
+                                             action="#{InventarioBean.refrescar()}"
+                                             process="@this"
+                                             update="tablaInventario"
+                                             var="producto"/>
+
+
                         </div>
-
-                        <div></div>
-
                     </div>
 
                     <p:dataTable id="tablaInventario"

@@ -23,8 +23,8 @@ public class InventarioBean implements Serializable {
     private List<InventarioDTO> listaInventario;
     private InventarioDTO seleccionado;
     private InventarioDTO productoEdit;
-
     private SistemaFacade facade;
+    private String busqueda;
 
     private String nombre;
     private int ID;
@@ -33,6 +33,11 @@ public class InventarioBean implements Serializable {
         facade = new SistemaFacade();
         listaInventario = new ArrayList<>();
         productoEdit = new InventarioDTO();
+        cargarLista();
+    }
+
+    public void refrescar(){
+        this.busqueda = null;
         cargarLista();
     }
 
@@ -47,7 +52,26 @@ public class InventarioBean implements Serializable {
     }
 
     public void buscarProducto() {
-        try {
+        int Id;
+        System.out.println("DATO CAPTURADO DEL FIELD: " + busqueda);
+        try{
+            if(busqueda.trim().isEmpty()){
+                cargarLista();
+            }
+            Id = Integer.parseInt(busqueda);
+           listaInventario = facade.buscarInventarioPorId(Id);
+        }catch (NumberFormatException msg){
+            try {
+                listaInventario = facade.buscarInventarioPorNombre(busqueda);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        /*try {
             if ((nombre == null || nombre.trim().isEmpty()) && ID <= 0) {
                 cargarLista();
             } else if (ID > 0 && (nombre != null && !nombre.trim().isEmpty())) {
@@ -59,8 +83,9 @@ public class InventarioBean implements Serializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
+
     //AQUI TE PREPARO LA MODIFICACION
     public void prepararModificar() {
 
@@ -90,7 +115,7 @@ public class InventarioBean implements Serializable {
                 msgWarn("Seleccione un producto primero");
                 return;
             }
-
+                System.out.println("Proveedor del producto a modificar: " + productoEdit.getProveedor());
                 facade.actualizarProducto(
                         productoEdit.getIdProducto(),
                         productoEdit.getNombreProducto(),
@@ -177,5 +202,13 @@ public class InventarioBean implements Serializable {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public String getBusqueda() {
+        return busqueda;
+    }
+
+    public void setBusqueda(String busqueda) {
+        this.busqueda = busqueda;
     }
 }

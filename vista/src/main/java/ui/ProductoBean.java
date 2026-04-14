@@ -47,6 +47,16 @@ public class ProductoBean implements Serializable {
         System.out.println("id proveedor: " + idProveedorSeleccionado);
         System.out.println("Stock: " + stockInicial);
 
+        if(producto.getPrecio() <= 0){
+            msgWarn("Asegurese de que el precio sea un numero positivo");
+            return;
+        }
+        if(stockInicial < 0){
+            msgWarn("Asegurese que el stock sea un numero positivo");
+            return;
+        }
+
+
         try {
             facade.registrarProducto(
                     producto.getNombre(),
@@ -75,7 +85,10 @@ public class ProductoBean implements Serializable {
             e.printStackTrace();
         }
     }
-
+    private void msgWarn(String mensaje) {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", mensaje));
+    }
     public Producto getProducto() { return producto; }
     public void setProducto(Producto producto) { this.producto = producto; }
 
