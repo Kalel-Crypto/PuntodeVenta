@@ -6,6 +6,8 @@ import mx.puntodeventa.entity.Proveedor;
 import java.sql.*;
 import java.util.*;
 
+import static mx.puntodeventa.entity.DetalleVenta_.idProducto;
+
 public class ProductoDAO {
 
     public void insertar(Producto p, int cantidad) throws Exception {
@@ -43,7 +45,7 @@ public class ProductoDAO {
     }
 
     public void actualizar(Producto p) throws Exception {
-        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=?, stock=?, fechaCaducidad=? WHERE idProducto=?";
+        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=? WHERE idProducto=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -51,7 +53,7 @@ public class ProductoDAO {
             ps.setString(1, p.getNombre());
             ps.setDouble(2, p.getPrecio());
             ps.setInt(3, p.getProveedor().getId());
-            ps.setInt(6, p.getId());
+            ps.setInt(4, p.getId());
 
             ps.executeUpdate();
         }

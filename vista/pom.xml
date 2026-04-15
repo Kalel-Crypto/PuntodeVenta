@@ -17,11 +17,9 @@
         <maven.compiler.target>21</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
-
         <primefaces.version>14.0.0</primefaces.version>
         <primefaces.extensions.version>14.0.0</primefaces.extensions.version>
         <jakarta.ee.version>10.0.0</jakarta.ee.version>
-
 
         <joda.time.version>2.12.5</joda.time.version>
         <itext.version>8.0.2</itext.version>
@@ -37,7 +35,6 @@
         <logback.version>1.4.11</logback.version>
     </properties>
 
-
     <repositories>
         <repository>
             <id>central</id>
@@ -52,9 +49,7 @@
         </repository>
     </repositories>
 
-
     <dependencies>
-        <!-- Jakarta EE API -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-web-api</artifactId>
@@ -62,8 +57,6 @@
             <scope>provided</scope>
         </dependency>
 
-
-        <!-- PrimeFaces 14 -->
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
@@ -71,8 +64,12 @@
             <classifier>jakarta</classifier>
         </dependency>
 
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>all-themes</artifactId>
+            <version>1.0.10</version>
+        </dependency>
 
-        <!-- PrimeFaces Extensions 14 -->
         <dependency>
             <groupId>org.primefaces.extensions</groupId>
             <artifactId>primefaces-extensions</artifactId>
@@ -80,12 +77,12 @@
             <classifier>jakarta</classifier>
         </dependency>
 
-
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.faces</artifactId>
             <version>4.0.1</version>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -93,15 +90,12 @@
             <scope>test</scope>
         </dependency>
 
-
-
-
-        <!-- Weld para CDI -->
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet-shaded</artifactId>
             <version>5.1.1.Final</version>
         </dependency>
+
         <dependency>
             <groupId>mx.avanti.example</groupId>
             <artifactId>entidad</artifactId>
@@ -126,11 +120,16 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>9.2.0</version>
         </dependency>
-
-
     </dependencies>
+
     <build>
         <finalName>web</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
     </build>
-
 </project>
