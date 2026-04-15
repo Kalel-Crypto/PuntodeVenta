@@ -10,17 +10,13 @@ public class Producto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProducto")
-    private int id;
+    private Integer id;
 
+    @Column(name = "nombre",nullable = false)
     private String nombre;
 
     @Column(name = "precioUnitario")
     private double precio;
-
-    private int stock;
-
-    @Temporal(TemporalType.DATE)
-    private Date fechaCaducidad;
 
     @ManyToOne
     @JoinColumn(name = "idproveedor")
@@ -30,7 +26,7 @@ public class Producto implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -50,19 +46,15 @@ public class Producto implements Serializable {
         this.precio = precio;
     }
 
-    public int getStock() {
-        return stock;
+
+    public Proveedor getProveedor() {
+        return proveedor;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
     }
 
-    public Date getFechaCaducidad() {
-        return fechaCaducidad;
-    }
 
-    public void setFechaCaducidad(Date fechaCaducidad) {
-        this.fechaCaducidad = fechaCaducidad;
-    }
+
 }

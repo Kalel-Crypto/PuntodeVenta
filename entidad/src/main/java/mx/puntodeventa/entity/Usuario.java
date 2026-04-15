@@ -5,21 +5,26 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
-    private int id;
+    private Integer id;
 
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
+    @Column(name = "password", nullable = false)
     private String password;
-    private String rol;
+
+    @Column(name = "rol", nullable = false)
+    private Rol rol;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -39,11 +44,11 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 }
