@@ -43,7 +43,7 @@ public class ProductoDAO {
     }
 
     public void actualizar(Producto p) throws Exception {
-        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=?, stock=?, fechaCaducidad=? WHERE idProducto=?";
+        String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=? WHERE idProducto=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
