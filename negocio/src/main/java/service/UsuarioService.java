@@ -13,6 +13,11 @@ public class UsuarioService {
 
     public void registrarUsuario(Usuario usuario) throws Exception {
 
+        System.out.println("Llegue a UsuarioService: " + usuario.getNombre());
+        System.out.println("Llegue a UsuarioService: " + usuario.getPassword());
+        System.out.println("Llegue a UsuarioService: " + usuario.getRol());
+
+
         if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
             throw new Exception("El nombre es obligatorio");
         }

@@ -1,0 +1,56 @@
+package ui;
+
+import java.io.Serializable;
+
+import facade.SistemaFacade;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import mx.puntodeventa.entity.Rol;
+import mx.puntodeventa.entity.Usuario;
+
+@Named("usuarioBean")
+@SessionScoped
+public class UsuarioBean implements Serializable {
+    private Usuario usuario;
+    private SistemaFacade facade;
+
+    @PostConstruct
+    public void inicio(){
+        usuario = new Usuario();
+        facade = new SistemaFacade();
+    }
+    public void registrar(){
+        System.out.println("Nombre del usuario: " + usuario.getNombre());
+        System.out.println("Contraseña del usuario " + usuario.getNombre());
+
+        if(usuario.getNombre().length() <= 4){
+            msgWarn("Ingrese un usuario con una longitud mayor a 4 caracteres");
+            return;
+        }
+        if(usuario.getPassword().length() <= 6){
+            msgWarn("Ingrese una contraseña con una longitud mayor a 6 caracteres");
+            return;
+        }
+
+        try {
+            facade.registrarUsuario(usuario);
+        }catch (Exception msg){
+            msg.printStackTrace();
+        }
+    }
+    private void msgWarn(String mensaje) {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", mensaje));
+    }
+
+    public Rol[] getRoles() {
+        return Rol.values();
+    }
+    public Object getUsuario() {
+        return usuario;
+    }
+}
