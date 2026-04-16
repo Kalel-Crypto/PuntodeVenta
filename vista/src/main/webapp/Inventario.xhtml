@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
@@ -219,70 +220,54 @@
 
                     </p:tabView>
                 </p:tab>
-
             </p:tabView>
 
-            <!-- Dialogo de modificar -->
-            <p:dialog header="Modificar Producto"
-                      widgetVar="dlgModificar"
-                      modal="true"
-                      width="400">
+        </h:form>
+
+        <p:dialog header="Modificar Producto" widgetVar="dlgModificar" modal="true" width="400" appendTo="@(body)">
+            <h:form id="formModificar">
+                <p:messages id="mensajesDialogo" showDetail="true" closable="true" />
+
+
 
                 <h:panelGrid columns="2">
-
                     <h:outputLabel value="Nombre:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" />
+                    <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" readonly="true" />
 
                     <h:outputLabel value="Stock:" />
                     <p:inputText value="#{InventarioBean.productoEdit.stock}" />
 
                     <h:outputLabel value="Precio:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.precio}" />
+                    <p:inputText value="#{InventarioBean.productoEdit.precio}" readonly="true" />
 
-
-                    <p:outputLabel for="proveedor" value="Proveedor *"/>
-
-                    <p:selectOneMenu id="proveedor"
-                                     value="#{InventarioBean.productoEdit.idProveedor}"
-                                     style="width: 100%;">
-
-                        <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                       itemLabel="#{prov.nombre}"
-                                       itemValue="#{prov.id}" />
-                    </p:selectOneMenu>
-
+                    <h:outputLabel value="Proveedor:" />
+                    <p:inputText value="#{InventarioBean.seleccionado.proveedor}" readonly="true" />
                 </h:panelGrid>
 
                 <br/>
 
-                <p:commandButton value="Guardar"
+                <p:commandButton value="Guardar Cambios"
                                  action="#{InventarioBean.modificarProducto}"
-                                 process="@this"
-                                 update="formInventario growl"
-                                 oncomplete="PF('dlgModificar').hide()"
-                                 styleClass="btn-green"/>
+                                 process="@form"
+                                 update="@form :formInventario:tablaInventario :formInventario:growl"
+                                 oncomplete="if (!args.validationFailed) PF('dlgModificar').hide();" />
+            </h:form>
+        </p:dialog>
 
-            </p:dialog>
+        <p:confirmDialog widgetVar="confirmDialog" appendTo="@(body)"> <h:outputText value="Quieres eliminar este producto?" />
+            <br/><br/>
 
-            <!-- Dialogo de confirmar eliminacion -->
-            <p:confirmDialog widgetVar="confirmDialog">
-                <h:outputText value="Quieres eliminar este producto?" />
-
-                <br/><br/>
+            <h:form>
                 <p:commandButton value="Sí"
                                  action="#{InventarioBean.eliminarProducto}"
                                  process="@this"
-                                 update="tablaInventario growl"
+                                 update=":formInventario:tablaInventario :formInventario:growl"
                                  oncomplete="PF('confirmDialog').hide()"/>
 
                 <p:commandButton value="No"
                                  onclick="PF('confirmDialog').hide(); return false;"/>
+            </h:form>
+        </p:confirmDialog>
 
-            </p:confirmDialog>
-
-        </h:form>
-
-    </div>
-
-</h:body>
+    </div> </h:body>
 </html>

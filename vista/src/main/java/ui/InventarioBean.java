@@ -88,7 +88,8 @@ public class InventarioBean implements Serializable {
 
     //AQUI TE PREPARO LA MODIFICACION
     public void prepararModificar() {
-
+        System.out.println("Producto seleccionado ID: " + seleccionado.getIdProducto());
+        System.out.println("Proveedor seleccionado ID: " + seleccionado.getIdProveedor());
         if (seleccionado == null) {
             msgWarn("Seleccione un producto primero");
             return;
@@ -105,42 +106,46 @@ public class InventarioBean implements Serializable {
         productoEdit.setIdProveedor(seleccionado.getIdProveedor());
 
 
+
+
+        PrimeFaces.current().ajax().update("formModificar");
         PrimeFaces.current().executeScript("PF('dlgModificar').show()");
     }
     //AQUI PERMITE MODIFICAR EL PRODUCTO ENTERO NO SOLO EL STOCK
     public void modificarProducto() {
-        System.out.print("Nombre del producto: " + productoEdit.getNombreProducto());
+
         try {
             if (productoEdit == null) {
                 msgWarn("Seleccione un producto primero");
                 return;
             }
-                System.out.println("Proveedor del producto a modificar: " + productoEdit.getProveedor());
-                facade.actualizarProducto(
-                        productoEdit.getIdProducto(),
-                        productoEdit.getNombreProducto(),
-                        productoEdit.getPrecio(),
-                        productoEdit.getIdProveedor()
-                );
 
-                facade.actualizarStock(
-                        productoEdit.getIdProducto(),
-                        productoEdit.getStock()
-                );
-                cargarLista();
+            System.out.println("ID Proveedor a guardar: " + productoEdit.getIdProveedor());
 
-                seleccionado = null;
-                productoEdit = new InventarioDTO();
+            facade.actualizarProducto(
+                    productoEdit.getIdProducto(),
+                    productoEdit.getNombreProducto(),
+                    productoEdit.getPrecio(),
+                    productoEdit.getIdProveedor()
+            );
 
-                msgInfo("Producto modificado correctamente");
+            facade.actualizarStock(
+                    productoEdit.getIdProducto(),
+                    productoEdit.getStock()
+            );
 
+            cargarLista();
 
+            seleccionado = null;
+            productoEdit = new InventarioDTO();
 
+            msgInfo("Producto modificado correctamente");
 
-        }catch(Exception e){
+        } catch(Exception e) {
+            System.out.println("ERROR EN MODIFICAR: " + e.getMessage());
+            e.printStackTrace();
             msgWarn("Error al modificar: " + e.getMessage());
         }
-
     }
 
     public void prepararEliminar() {
