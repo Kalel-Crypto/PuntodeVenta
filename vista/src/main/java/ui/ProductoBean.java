@@ -57,6 +57,7 @@ public class ProductoBean implements Serializable {
         }
 
 
+
         try {
             facade.registrarProducto(
                     producto.getNombre(),

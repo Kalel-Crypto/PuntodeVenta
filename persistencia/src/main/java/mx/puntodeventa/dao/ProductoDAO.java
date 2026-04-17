@@ -51,11 +51,12 @@ public class ProductoDAO {
             ps.setString(1, p.getNombre());
             ps.setDouble(2, p.getPrecio());
             ps.setInt(3, p.getProveedor().getId());
-            ps.setInt(6, p.getId());
+            ps.setInt(4, p.getId());
 
             ps.executeUpdate();
         }
     }
+
 
     public Producto obtener(int id) throws Exception {
         String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto WHERE idProducto=?";
@@ -108,6 +109,24 @@ public class ProductoDAO {
             }
         }
         return lista;
+    }
+
+    public boolean existeProductoPorNombre(String nombre) throws Exception {
+        String sql = "SELECT COUNT(*) FROM producto WHERE nombre = ?";
+        boolean existe = false;
+
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    existe = rs.getInt(1) > 0;
+                }
+            }
+        }
+        return existe;
     }
 
     public void eliminar(int id) throws Exception {

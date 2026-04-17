@@ -135,8 +135,6 @@ public class InventarioBean implements Serializable {
                 msgInfo("Producto modificado correctamente");
 
 
-
-
         }catch(Exception e){
             msgWarn("Error al modificar: " + e.getMessage());
         }

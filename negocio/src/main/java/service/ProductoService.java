@@ -37,6 +37,10 @@ public class ProductoService {
         if(stock < 0){
             throw new Exception("El Stock debe ser numero positivo");
         }
+
+        if (productoDAO.existeProductoPorNombre(nombre)) {
+            throw new Exception("El nombre del producto ya existe en el sistema.");
+        }
         Producto producto = new Producto();
         producto.setNombre(nombre);
         producto.setPrecio(precio);
