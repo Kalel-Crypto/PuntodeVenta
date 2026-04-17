@@ -88,7 +88,8 @@ public class InventarioBean implements Serializable {
 
     //AQUI TE PREPARO LA MODIFICACION
     public void prepararModificar() {
-
+        System.out.println("Producto seleccionado ID: " + seleccionado.getIdProducto());
+        System.out.println("Proveedor seleccionado ID: " + seleccionado.getIdProveedor());
         if (seleccionado == null) {
             msgWarn("Seleccione un producto primero");
             return;
@@ -105,11 +106,12 @@ public class InventarioBean implements Serializable {
         productoEdit.setIdProveedor(seleccionado.getIdProveedor());
 
 
+        PrimeFaces.current().ajax().update("formModificar");
         PrimeFaces.current().executeScript("PF('dlgModificar').show()");
     }
     //AQUI PERMITE MODIFICAR EL PRODUCTO ENTERO NO SOLO EL STOCK
     public void modificarProducto() {
-        System.out.print("Nombre del producto: " + productoEdit.getNombreProducto());
+        //System.out.print("Nombre del producto: " + productoEdit.getNombreProducto());
         try {
             if (productoEdit == null) {
                 msgWarn("Seleccione un producto primero");
@@ -138,7 +140,7 @@ public class InventarioBean implements Serializable {
 
 
         }catch(Exception e){
-            msgWarn("Error al modificar: " + e.getMessage());
+            msgWarn("Error al modificar: Intentelo de nuevo");
         }
 
     }

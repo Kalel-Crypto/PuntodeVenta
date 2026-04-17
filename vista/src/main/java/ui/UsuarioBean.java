@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.Serializable;
+import java.util.List;
 
 import facade.SistemaFacade;
 import jakarta.annotation.PostConstruct;
@@ -17,11 +18,18 @@ import mx.puntodeventa.entity.Usuario;
 public class UsuarioBean implements Serializable {
     private Usuario usuario;
     private SistemaFacade facade;
-
+    private List<Usuario> listaUsuarios;
     @PostConstruct
     public void inicio(){
         usuario = new Usuario();
         facade = new SistemaFacade();
+
+        try{
+            listaUsuarios = facade.listarUsuarios();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
     public void registrar(){
         System.out.println("Nombre del usuario: " + usuario.getNombre());
@@ -52,5 +60,13 @@ public class UsuarioBean implements Serializable {
     }
     public Object getUsuario() {
         return usuario;
+    }
+
+    public List<Usuario> getListaUsuarios() {
+        return listaUsuarios;
+    }
+
+    public void setListaUsuarios(List<Usuario> listaUsuarios) {
+        this.listaUsuarios = listaUsuarios;
     }
 }

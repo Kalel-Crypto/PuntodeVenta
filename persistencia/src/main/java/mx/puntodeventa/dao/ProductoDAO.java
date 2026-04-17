@@ -6,6 +6,8 @@ import mx.puntodeventa.entity.Proveedor;
 import java.sql.*;
 import java.util.*;
 
+import static mx.puntodeventa.entity.DetalleVenta_.idProducto;
+
 public class ProductoDAO {
 
     public void insertar(Producto p, int cantidad) throws Exception {
@@ -42,6 +44,25 @@ public class ProductoDAO {
         }
     }
 
+    public boolean existeProductoPorNombre(String nombre) throws Exception {
+        String sql = "SELECT COUNT(*) FROM producto WHERE nombre = ?";
+        boolean existe = false;
+
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    existe = rs.getInt(1) > 0;
+                }
+            }
+        }
+        return existe;
+    }
+
+
     public void actualizar(Producto p) throws Exception {
         String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=? WHERE idProducto=?";
 
@@ -51,7 +72,7 @@ public class ProductoDAO {
             ps.setString(1, p.getNombre());
             ps.setDouble(2, p.getPrecio());
             ps.setInt(3, p.getProveedor().getId());
-            ps.setInt(6, p.getId());
+            ps.setInt(4, p.getId());
 
             ps.executeUpdate();
         }

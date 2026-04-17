@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
     <title>Inventario</title>
@@ -69,7 +70,7 @@
 
             <p:tabView>
 
-                <!-- La tabla inventario  -->
+                <!-- tab de invetairo -->
                 <p:tab title="Inventario">
 
                     <div class="barra-superior">
@@ -91,12 +92,9 @@
                                              styleClass="btn-green"/>
 
                             <p:commandButton value="Refrescar"
-                                             id="Refrescar"
                                              action="#{InventarioBean.refrescar()}"
                                              process="@this"
-                                             update="tablaInventario"
-                                             var="producto"/>
-
+                                             update="tablaInventario"/>
 
                         </div>
                     </div>
@@ -113,14 +111,17 @@
 
                         <p:column headerText="ID">#{producto.idProducto}</p:column>
                         <p:column headerText="Nombre">#{producto.nombreProducto}</p:column>
+
                         <p:column headerText="Stock">
-                            <h:outputText value="#{producto.stock} unidades"></h:outputText>
+                            <h:outputText value="#{producto.stock} unidades"/>
                         </p:column>
+
                         <p:column headerText="Precio">
                             <h:outputText value="#{producto.precio}">
-                                <f:convertNumber type="currency" />
+                                <f:convertNumber type="currency"/>
                             </h:outputText>
                         </p:column>
+
                         <p:column headerText="Proveedor">#{producto.proveedor}</p:column>
 
                     </p:dataTable>
@@ -146,119 +147,89 @@
 
                 </p:tab>
 
-                <!-- Alta de producto -->
+                <!-- tab de las altas de producto -->
                 <p:tab title="Altas">
+
                     <p:tabView>
 
+                        <!-- alta de producto -->
                         <p:tab title="Registrar Producto">
 
-                            <p:growl id="msgs" showDetail="true" />
+                            <p:growl id="msgs" showDetail="true"/>
 
                             <div class="header-azul">Registro de productos</div>
 
                             <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
 
                                 <p:outputLabel for="nombre" value="Nombre *"/>
-                                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true" requiredMessage="Ingrese un nombre"/>
+                                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true"/>
 
                                 <p:outputLabel for="precio" value="Precio *"/>
-                                <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true" requiredMessage="Ingrese un precio"/>
+                                <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true"/>
 
                                 <p:outputLabel for="proveedor" value="Proveedor *"/>
-                                <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true" requiredMessage="Seleccione un proveedor" style="width: 100%;">
-                                    <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                                <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                                   itemLabel="#{prov.nombre}" itemValue="#{prov.id}" />
+                                                   itemLabel="#{prov.nombre}" itemValue="#{prov.id}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="stock" value="Stock *"/>
-                                <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true" requiredMessage="Ingrese un precio"/>
+                                <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true"/>
 
-                                <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
-                                    <p:commandButton value="Cancelar" process="@this" />
+                                <h:panelGrid columns="2" style="margin-top:20px;">
+                                    <p:commandButton value="Cancelar" process="@this"/>
 
                                     <p:commandButton value="Registrar"
                                                      action="#{productoBean.registrar}"
                                                      process="@this nombre precio proveedor stock"
                                                      update="msgs"
-                                                     styleClass="btn-green" />
+                                                     styleClass="btn-green"/>
                                 </h:panelGrid>
 
                             </p:panelGrid>
 
                         </p:tab>
 
-                        <!-- Alta de proveedor -->
+                        <!-- alta de proveedor-->
                         <p:tab title="Registrar Proveedor">
 
-                            <p:growl id="msgsProveedor" showDetail="true" />
+                            <p:growl id="msgsProveedor"/>
 
-                            <div class="header-azul">Registro de proveedores</div>
+                            <p:panelGrid columns="1">
 
-                            <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
+                                <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true"/>
+                                <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.contacto}" required="true"/>
 
-                                <p:outputLabel for="nombreProv" value="Nombre *"/>
-                                <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre de proveedor"/>
-
-                                <p:outputLabel for="telefonoProv" value="Teléfono *"/>
-                                <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.contacto}" required="true" requiredMessage="Asegurese de ingresar un numero de proveedor"/>
-
-
-                                <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
-
-                                    <p:commandButton value="Registrar"
-                                                     action="#{proveedorBean.registrar}"
-                                                     process="@this telefonoProv nombreProv"
-                                                     update="msgsProveedor"
-                                                     styleClass="btn-green" /> -
-                                </h:panelGrid>
+                                <p:commandButton value="Registrar"
+                                                 action="#{proveedorBean.registrar}"
+                                                 process="@this nombreProv telefonoProv"
+                                                 update="msgsProveedor"/>
 
                             </p:panelGrid>
 
                         </p:tab>
 
-                        <!-- Tab Usuarios -->
+                        <!-- alta de usuario -->
                         <p:tab title="Registrar Usuario">
 
-                            <p:growl id="msgsUsuario" showDetail="true" />
+                            <p:growl id="msgsUsuario"/>
 
-                            <div class="header-azul">Registro de usuarios</div>
+                            <p:panelGrid columns="1">
 
-                            <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
+                                <p:inputText id="nombreUsuario" value="#{usuarioBean.usuario.nombre}" required="true"/>
+                                <p:password id="passwordUsuario" value="#{usuarioBean.usuario.password}" required="true"/>
 
-                                <p:outputLabel for="nombreUsuario" value="Nombre *"/>
-                                <p:inputText id="nombreUsuario"
-                                             value="#{usuarioBean.usuario.nombre}"
-                                             required="true"
-                                             requiredMessage="Ingrese un nombre"/>
-
-                                <p:outputLabel for="passwordUsuario" value="Contraseña *"/>
-                                <p:password id="passwordUsuario"
-                                            value="#{usuarioBean.usuario.password}"
-                                            required="true"
-                                            requiredMessage="Ingrese una contraseña"/>
-
-                                <p:outputLabel for="rolUsuario" value="Rol *"/>
-                                <p:selectOneMenu id="rolUsuario"
-                                                 value="#{usuarioBean.usuario.rol}"
-                                                 required="true" requiredMessage="Seleccione un rol"
-                                                 style="width: 100%;">
+                                <p:selectOneMenu id="rolUsuario" value="#{usuarioBean.usuario.rol}" required="true">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                    <f:selectItems value="#{usuarioBean.roles}"
-                                                   var="rol"
-                                                   itemLabel="#{rol}"
-                                                   itemValue="#{rol}" />
+                                    <f:selectItems value="#{usuarioBean.roles}" var="rol"
+                                                   itemLabel="#{rol}" itemValue="#{rol}"/>
                                 </p:selectOneMenu>
 
-                                <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
-
-                                    <p:commandButton value="Registrar"
-                                                     action="#{usuarioBean.registrar}"
-                                                     process="@this nombreUsuario passwordUsuario rolUsuario"
-                                                     update="msgsUsuario"
-                                                     styleClass="btn-green" />
-
-                                </h:panelGrid>
+                                <p:commandButton value="Registrar"
+                                                 action="#{usuarioBean.registrar}"
+                                                 process="@this nombreUsuario passwordUsuario rolUsuario"
+                                                 update="msgsUsuario"/>
 
                             </p:panelGrid>
 
@@ -267,66 +238,46 @@
                     </p:tabView>
                 </p:tab>
 
+                <!--Panl de la auditoria -->
+
+                <p:tab title="Auditoría">
+
+                    <h:form id="formAuditoria">
+
+                        <div class="header-azul">Vista de Auditoría</div>
+
+                        <div class="barra-superior">
+
+                            <p:selectOneMenu>
+                                <f:selectItem itemLabel="Todos"/>
+                                <f:selectItem itemLabel="Entrada"/>
+                                <f:selectItem itemLabel="Salida"/>
+                            </p:selectOneMenu>
+
+                            <p:selectOneMenu id="usuarioFiltro"
+                                             value="Usuarios.."
+                                             style="width: 180px; margin-left:10px;">
+                                <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" />
+                                <f:selectItems value="#{usuarioBean.listaUsuarios}"
+                                               var="user"
+                                               itemLabel="#{user.nombre}"
+                                               itemValue="#{user.id}" />
+                            </p:selectOneMenu>
+
+                            <p:inputText placeholder="Buscar..."/>
+
+                        </div>
+
+                        <p:panel style="background:black; color:lime; height:300px; overflow:auto;">
+                            Aqui va la auditoria
+                        </p:panel>
+
+                    </h:form>
+
+                </p:tab>
+
+
             </p:tabView>
-
-            <!-- Dialogo de modificar -->
-            <p:dialog header="Modificar Producto"
-                      widgetVar="dlgModificar"
-                      modal="true"
-                      width="400">
-
-                <h:panelGrid columns="2">
-
-                    <h:outputLabel value="Nombre:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" />
-
-                    <h:outputLabel value="Stock:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.stock}" />
-
-                    <h:outputLabel value="Precio:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.precio}" />
-
-
-                    <p:outputLabel for="proveedor" value="Proveedor *"/>
-
-                    <p:selectOneMenu id="proveedor"
-                                     value="#{InventarioBean.productoEdit.idProveedor}"
-                                     style="width: 100%;">
-
-                        <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                       itemLabel="#{prov.nombre}"
-                                       itemValue="#{prov.id}" />
-                    </p:selectOneMenu>
-
-                </h:panelGrid>
-
-                <br/>
-
-                <p:commandButton value="Guardar"
-                                 action="#{InventarioBean.modificarProducto}"
-                                 process="@this"
-                                 update="formInventario growl"
-                                 oncomplete="PF('dlgModificar').hide()"
-                                 styleClass="btn-green"/>
-
-            </p:dialog>
-
-            <!-- Dialogo de confirmar eliminacion -->
-            <p:confirmDialog widgetVar="confirmDialog">
-                <h:outputText value="Quieres eliminar este producto?" />
-
-                <br/><br/>
-                <p:commandButton value="Sí"
-                                 action="#{InventarioBean.eliminarProducto}"
-                                 process="@this"
-                                 update="tablaInventario growl"
-                                 oncomplete="PF('confirmDialog').hide()"/>
-
-                <p:commandButton value="No"
-                                 onclick="PF('confirmDialog').hide(); return false;"/>
-
-            </p:confirmDialog>
-
         </h:form>
 
     </div>

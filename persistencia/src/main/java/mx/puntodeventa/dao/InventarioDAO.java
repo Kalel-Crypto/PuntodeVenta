@@ -17,6 +17,7 @@ public class InventarioDAO {
                 p.nombre,
                 i.stock,
                 p.precioUnitario,
+                p.idProveedor,
                 pr.nombre AS proveedor
             FROM producto p
             LEFT JOIN inventario i ON p.idProducto = i.idProducto
@@ -38,7 +39,7 @@ public class InventarioDAO {
 
                 dto.setPrecio(rs.getDouble("precioUnitario"));
                 dto.setProveedor(rs.getString("proveedor"));
-
+                dto.setIdProveedor(rs.getInt("idProveedor"));
                 lista.add(dto);
             }
         }

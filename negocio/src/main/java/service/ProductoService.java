@@ -18,6 +18,7 @@ public class ProductoService {
     //private InventarioDAO inventarioDAO = new InventarioDAO();
 
 
+
     public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {
 
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -36,6 +37,9 @@ public class ProductoService {
 
         if(stock < 0){
             throw new Exception("El Stock debe ser numero positivo");
+        }
+        if (productoDAO.existeProductoPorNombre(nombre)) {
+            throw new Exception("El nombre del producto ya existe en el sistema.");
         }
         Producto producto = new Producto();
         producto.setNombre(nombre);
