@@ -41,6 +41,9 @@ public class ProveedorBean implements Serializable {
             facade.registrarProveedor(proveedor.getNombre(), proveedor.getContacto());
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proveedor registrado correctamente"));
+            this.proveedor = new Proveedor();
+            this.proveedor.setNombre("");
+            this.proveedor.setContacto("");
         }catch(Exception e){
             e.printStackTrace();
         }
