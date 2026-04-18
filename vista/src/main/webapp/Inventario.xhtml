@@ -68,7 +68,7 @@
 
             <p:growl id="growl" showDetail="true" life="3000"/>
 
-            <p:tabView>
+            <p:tabView id="tabsPrincipal">
 
                 <!-- tab de invetairo -->
                 <p:tab title="Inventario">
@@ -236,43 +236,144 @@
                         </p:tab>
 
                     </p:tabView>
+
                 </p:tab>
+                <!--Panl de mostrarproveedores -->
+
+                <p:tab title="Proveedores">
+
+                    <div class="controls-container barra-superior">
+                        <p:commandButton value="Regresar" action="inventario.xhtml" styleClass="btn-blue" />
+
+                        <div class="busqueda">
+                            <p:inputText id="busquedaProveedor"
+                                         value="#{proveedorBean.busqueda}"
+                                         placeholder="ingrese nombre o ID..." />
+
+                            <p:commandButton value="Buscar"
+                                             actionListener="#{proveedorBean.buscarProveedor}"
+                                             update="tablaProveedores"
+                                             styleClass="btn-green" />
+
+                            <p:commandButton value="Refrescar"
+                                             actionListener="#{proveedorBean.cargarProveedores}"
+                                             update="tablaProveedores"
+                                             styleClass="btn-blue" />
+                        </div>
+                    </div>
+
+                    <p:dataTable id="tablaProveedores"
+                                 value="#{proveedorBean.listaProveedores}"
+                                 var="prov"
+                                 emptyMessage="No se encontraron proveedores"
+                                 style="margin-top:20px;">
+
+                        <p:column headerText="ID Proveedor">
+                            <h:outputText value="#{prov.id}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{prov.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Contacto">
+                            <h:outputText value="#{prov.contacto}" />
+                        </p:column>
+
+                        <p:column headerText="Acciones" style="text-align: center;">
+
+                            <p:commandButton value="Modificar"
+                                             action="#{proveedorBean.prepararModificacion(prov)}"
+                                             process="@this"  update=":formInventario:tabsPrincipal:panelModificarProv"
+                                             oncomplete="PF('dlgModProv').show()"
+                                             styleClass="btn-green"
+                                             style="margin-right: 5px;" />
+
+                            <p:commandButton value="Eliminar"
+                                             actionListener="#{proveedorBean.eliminarProveedor(prov)}"
+                                             update="tablaProveedores growl"
+                                             styleClass="btn-red">
+                                <p:confirm header="Confirmación"
+                                           message="¿Estás seguro de que deseas eliminar permanentemente a este proveedor?"
+                                           icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                                     responsive="true" width="350">
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no ui-button-flat"/>
+                        <p:commandButton value="Sí" type="button"
+                                         styleClass="ui-confirmdialog-yes" />
+                    </p:confirmDialog>
+
+                    <p:dialog header="Modificar Proveedor"
+                              widgetVar="dlgModProv"
+                              modal="true"
+                              showEffect="fade"
+                              hideEffect="fade"
+                              resizable="false">
+
+                        <p:outputPanel id="panelModificarProv">
+
+                            <p:panelGrid columns="2"
+                                         rendered="#{not empty proveedorBean.proveedorSeleccionado}"
+                                         styleClass="ui-noborder">
+
+                                <p:outputLabel value="Nombre:" />
+                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.nombre}" required="true" />
+
+                                <p:outputLabel value="Contacto:" />
+                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.contacto}" required="true" />
+
+                            </p:panelGrid>
+
+                            <div style="text-align: center; margin-top: 15px;">
+                                <p:commandButton value="Guardar Cambios"
+                                                 action="#{proveedorBean.guardarModificacion}"
+                                                 process="panelModificarProv"
+                                                 update=":formInventario:tabsPrincipal:tablaProveedores :formInventario:growl"
+                                                 oncomplete="if (!args.validationFailed) PF('dlgModProv').hide()"
+                                                 styleClass="btn-blue" />
+                            </div>
+
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </p:tab>
+
 
                 <!--Panl de la auditoria -->
 
                 <p:tab title="Auditoría">
 
-                    <h:form id="formAuditoria">
+                    <div class="header-azul">Vista de Auditoría</div>
 
-                        <div class="header-azul">Vista de Auditoría</div>
+                    <div class="barra-superior">
+                        <p:selectOneMenu>
+                            <f:selectItem itemLabel="Todos"/>
+                            <f:selectItem itemLabel="Entrada"/>
+                            <f:selectItem itemLabel="Salida"/>
+                        </p:selectOneMenu>
 
-                        <div class="barra-superior">
+                        <p:selectOneMenu id="usuarioFiltro"
+                                         value="Usuarios.."
+                                         style="width: 180px; margin-left:10px;">
+                            <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" />
+                            <f:selectItems value="#{usuarioBean.listaUsuarios}"
+                                           var="user"
+                                           itemLabel="#{user.nombre}"
+                                           itemValue="#{user.id}" />
+                        </p:selectOneMenu>
 
-                            <p:selectOneMenu>
-                                <f:selectItem itemLabel="Todos"/>
-                                <f:selectItem itemLabel="Entrada"/>
-                                <f:selectItem itemLabel="Salida"/>
-                            </p:selectOneMenu>
+                        <p:inputText placeholder="Buscar..."/>
+                    </div>
 
-                            <p:selectOneMenu id="usuarioFiltro"
-                                             value="Usuarios.."
-                                             style="width: 180px; margin-left:10px;">
-                                <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" />
-                                <f:selectItems value="#{usuarioBean.listaUsuarios}"
-                                               var="user"
-                                               itemLabel="#{user.nombre}"
-                                               itemValue="#{user.id}" />
-                            </p:selectOneMenu>
-
-                            <p:inputText placeholder="Buscar..."/>
-
-                        </div>
-
-                        <p:panel style="background:black; color:lime; height:300px; overflow:auto;">
-                            Aqui va la auditoria
-                        </p:panel>
-
-                    </h:form>
+                    <p:panel style="background:black; color:lime; height:300px; overflow:auto;">
+                        Aqui va la auditoria
+                    </p:panel>
 
                 </p:tab>
 

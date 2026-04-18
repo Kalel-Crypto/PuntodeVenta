@@ -61,7 +61,20 @@ public class SistemaFacade {
         return productoService.listarProductos();
     }
 
+    public void modificarProveedor(Proveedor p) throws Exception {
+        ProveedorDAO dao = new ProveedorDAO();
+        dao.actualizar(p);
+    }
 
+    public void eliminarProveedor(int id) throws Exception {
+        ProveedorDAO dao = new ProveedorDAO();
+        dao.eliminar(id);
+    }
+
+    public List<Proveedor> buscarProveedores(String busqueda) throws Exception {
+        ProveedorDAO dao = new ProveedorDAO();
+        return dao.buscar(busqueda);
+    }
 
     public List<InventarioDTO> listarInventario() throws Exception {
         return inventarioService.listarInventario();

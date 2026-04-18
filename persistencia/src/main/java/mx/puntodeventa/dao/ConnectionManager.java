@@ -9,7 +9,7 @@ public class ConnectionManager {
     private static final String URL =
             "jdbc:mysql://localhost:3306/inv_db?useSSL=false&serverTimezone=UTC&autoReconnect=true";
     private static final String USER = "root";
-    private static final String PASSWORD = "Creeperisfavorite20040102030405";
+    private static final String PASSWORD = "6864314146";
 
     public static Connection getConnection() throws SQLException {
         try {
