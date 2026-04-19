@@ -46,8 +46,16 @@ public class UsuarioBean implements Serializable {
 
         try {
             facade.registrarUsuario(usuario);
-        }catch (Exception msg){
-            msg.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Usuario " + usuario.getNombre() + " registrado."));
+            usuario = new Usuario();
+            listaUsuarios = facade.listarUsuarios();
+
+        }catch (Exception e){String errorDetalle = (e.getMessage() != null) ? e.getMessage() : "Error de comunicacion con la base de datos";
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al registrar", errorDetalle));
+
+            e.printStackTrace();
         }
     }
     private void msgWarn(String mensaje) {

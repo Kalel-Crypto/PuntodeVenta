@@ -10,7 +10,11 @@
     <!--<param-name>javax.faces.PROJECT_STAGE</param-name>
     <param-value>Development</param-value>--><!--LA LINEA 4 Y 5 SON PARA DEVOLVER EL TEMA DE DISEÑO POR DEFAULT-->
     <param-name>primefaces.THEME</param-name><!--LA LINE 6 Y 7 SON PARA CAMBIAR EL TEMA DE DISEÑO DE LA APPWEB LOS LAYOUTS SE ENCUENTRAN EN LA LIGA-->
-    <param-value>south-street</param-value><!--http://primefaces.org/themes-->
+    <param-value>nova-light</param-value><!--http://primefaces.org/themes-->
+  </context-param>
+  <context-param>
+    <param-name/>
+    <param-value/>
   </context-param>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
@@ -28,6 +32,6 @@
     </session-timeout>
   </session-config>
   <welcome-file-list>
-    <welcome-file>Inventario.xhtml</welcome-file>
+    <welcome-file>login.xhtml</welcome-file>
   </welcome-file-list>
 </web-app>

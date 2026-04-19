@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Inicio de sesion</title>
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card-login {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .titulo-login {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .field {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+       {
+            width: 100% !important;
+        }
+
+        .btn-login {
+            width: 100% !important;
+            margin-top: 10px;
+            background-color: #3b82f6 !important;
+            border: none !important;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <div class="card-login">
+        <h:form id="loginForm">
+            <p:growl id="growl" showDetail="true" life="3000" />
+
+            <div class="titulo-login">Punto de Venta</div>
+
+            <div class="field">
+                <p:outputLabel for="usuario" value="Nombre de Usuario" style="display:block; margin-bottom:5px;"/>
+                <p:inputText id="usuario"
+                             value="#{loginUI.nombre}"
+                             required="true"
+                             requiredMessage="El usuario es obligatorio"
+                             placeholder="" />
+            </div>
+
+            <div class="field">
+                <p:outputLabel for="password" value="Contraseña" style="display:block; margin-bottom:5px;"/>
+                <p:password id="password"
+                            value="#{loginUI.password}"
+                            required="true"
+                            requiredMessage="La contraseña es obligatoria"
+                            toggleMask="true"
+                            placeholder="" />
+            </div>
+
+            <p:commandButton value="Iniciar Sesión"
+                             action="#{loginUI.login}"
+                             update="growl"
+                             styleClass="btn-login"
+                             icon="pi pi-sign-in" />
+        </h:form>
+    </div>
+
+</h:body>
+</html>
