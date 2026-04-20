@@ -16,7 +16,8 @@ public class UsuarioDAO {
 
             ps.setString(1, u.getNombre());
             ps.setString(2, u.getPassword());
-            ps.setString(3, u.getRol().name());
+            String rolParaDb = (u.getRol() == Rol.ADMINISTRADOR) ? "ADMINISTRADOR" : "CAJERO";
+            ps.setString(3, rolParaDb);
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -42,7 +43,12 @@ public class UsuarioDAO {
                     u.setId(rs.getInt("idusuario"));
                     u.setNombre(rs.getString("nombre"));
                     u.setPassword(rs.getString("password"));
-                    u.setRol(Rol.valueOf(rs.getString("rol")));
+                    String rolBD = rs.getString("rol");
+                    if (rolBD.equalsIgnoreCase("admin")) {
+                        u.setRol(Rol.ADMINISTRADOR);
+                    } else {
+                        u.setRol(Rol.CAJERO);
+                    }
                     return u;
                 }
             }
@@ -79,5 +85,15 @@ public class UsuarioDAO {
             ps.setInt(1, id);
             ps.executeUpdate();
         }
+    }
+    private Rol mapearRol(String rolBD) {
+        if (rolBD == null) return null;
+
+        if (rolBD.equalsIgnoreCase("admin")) {
+            return Rol.ADMINISTRADOR;
+        } else if (rolBD.equalsIgnoreCase("cajero")) {
+            return Rol.CAJERO;
+        }
+        return null;
     }
 }
