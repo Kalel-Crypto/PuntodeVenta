@@ -21,15 +21,21 @@ public class UsuarioBean implements Serializable {
     private List<Usuario> listaUsuarios;
     @PostConstruct
     public void inicio(){
-        usuario = new Usuario();
         facade = new SistemaFacade();
 
-        try{
+        try {
+            usuario = facade.login("tu_nombre_usuario", "1234567");
+        } catch(Exception e) {
+
+            usuario = new Usuario();
+            usuario.setId(1);
+            usuario.setNombre("Admin Temporal");
+        }
+        try {
             listaUsuarios = facade.listarUsuarios();
-        }catch(Exception e){
+        } catch(Exception e) {
             e.printStackTrace();
         }
-
     }
     public void registrar(){
         System.out.println("Nombre del usuario: " + usuario.getNombre());
@@ -58,7 +64,7 @@ public class UsuarioBean implements Serializable {
     public Rol[] getRoles() {
         return Rol.values();
     }
-    public Object getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 

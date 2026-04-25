@@ -57,6 +57,15 @@
             border: none !important;
             padding: 8px 15px;
         }
+
+        .header-azul {
+            background: #3b82f6;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
     </style>
 </h:head>
 
@@ -70,7 +79,6 @@
 
             <p:tabView id="tabsPrincipal">
 
-                <!-- tab de invetairo -->
                 <p:tab title="Inventario">
 
                     <div class="barra-superior">
@@ -122,6 +130,14 @@
                             </h:outputText>
                         </p:column>
 
+
+
+                        <p:column headerText="Total Valor">
+                            <h:outputText value="#{producto.stock * producto.precio}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+
                         <p:column headerText="Proveedor">#{producto.proveedor}</p:column>
 
                     </p:dataTable>
@@ -145,14 +161,83 @@
 
                     </div>
 
+                    <p:dialog header="Modificar Producto"
+                              widgetVar="dlgModificar"
+                              modal="true"
+                              showEffect="fade"
+                              hideEffect="fade"
+                              resizable="false">
+
+                        <p:outputPanel id="formModificar">
+
+                            <p:panelGrid columns="2"
+                                         rendered="#{not empty InventarioBean.productoEdit}"
+                                         styleClass="ui-noborder">
+
+                                <p:outputLabel value="Nombre del Producto:" />
+                                <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" required="true" />
+
+                                <p:outputLabel value="Precio:" />
+                                <p:inputText value="#{InventarioBean.productoEdit.precio}" required="true" />
+
+                                <p:outputLabel value="Stock:" />
+                                <p:inputText value="#{InventarioBean.productoEdit.stock}" required="true" />
+
+                                <p:outputLabel value="ID Proveedor:" />
+                                <p:inputText value="#{InventarioBean.productoEdit.idProveedor}" required="true" />
+
+                            </p:panelGrid>
+
+                            <div style="text-align: center; margin-top: 15px;">
+                                <p:commandButton value="Guardar Cambios"
+                                                 action="#{InventarioBean.modificarProducto}"
+                                                 process="formModificar"
+                                                 update=":formInventario:tabsPrincipal:tablaInventario :formInventario:growl"
+                                                 oncomplete="if (!args.validationFailed) PF('dlgModificar').hide()"
+                                                 styleClass="btn-blue" />
+                            </div>
+
+                        </p:outputPanel>
+                    </p:dialog>
                 </p:tab>
 
-                <!-- tab de las altas de producto -->
+                <p:tab title="Movimientos">
+                    <div class="header-azul">Gestión de Carga y Descarga de Stock</div>
+
+                    <p:dataTable id="tablaMovimientos"
+                                 value="#{InventarioBean.listaInventario}"
+                                 var="p" rows="10" paginator="true" paginatorPosition="bottom">
+
+                        <p:column headerText="Producto">#{p.nombreProducto}</p:column>
+
+                        <p:column headerText="Stock Actual" style="text-align:center;">
+                            <h:outputText value="#{p.stock}" style="font-weight:bold;"/>
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <p:spinner id="cantOp" value="#{InventarioBean.cantidadOperacion}" min="1" style="width:100%"/>
+                        </p:column>
+
+                        <p:column headerText="Acciones" style="text-align:center;">
+                            <p:commandButton value="Entrada" icon="pi pi-plus"
+                                             action="#{InventarioBean.registrarEntrada(p)}"
+                                             process="@this cantOp"
+                                             update=":formInventario:growl :formInventario:tabsPrincipal:tablaMovimientos :formInventario:tabsPrincipal:tablaInventario"
+                                             styleClass="btn-green" style="margin-right:5px;"/>
+
+                            <p:commandButton value="Salida" icon="pi pi-minus"
+                                             action="#{InventarioBean.registrarSalida(p)}"
+                                             process="@this cantOp"
+                                             update=":formInventario:growl :formInventario:tabsPrincipal:tablaMovimientos :formInventario:tabsPrincipal:tablaInventario"
+                                             styleClass="btn-red"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+
                 <p:tab title="Altas">
 
                     <p:tabView>
 
-                        <!-- alta de producto -->
                         <p:tab title="Registrar Producto">
 
                             <p:growl id="msgs" showDetail="true"/>
@@ -191,7 +276,6 @@
 
                         </p:tab>
 
-                        <!-- alta de proveedor-->
                         <p:tab title="Registrar Proveedor">
 
                             <p:growl id="msgsProveedor"/>
@@ -210,7 +294,6 @@
 
                         </p:tab>
 
-                        <!-- alta de usuario -->
                         <p:tab title="Registrar Usuario">
 
                             <p:growl id="msgsUsuario"/>
@@ -238,7 +321,6 @@
                     </p:tabView>
 
                 </p:tab>
-                <!--Panl de mostrarproveedores -->
 
                 <p:tab title="Proveedores">
 
@@ -344,39 +426,67 @@
 
                 </p:tab>
 
+                <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria()}">
 
-                <!--Panl de la auditoria -->
-
-                <p:tab title="Auditoría">
-
-                    <div class="header-azul">Vista de Auditoría</div>
-
-                    <div class="barra-superior">
-                        <p:selectOneMenu>
-                            <f:selectItem itemLabel="Todos"/>
-                            <f:selectItem itemLabel="Entrada"/>
-                            <f:selectItem itemLabel="Salida"/>
-                        </p:selectOneMenu>
-
-                        <p:selectOneMenu id="usuarioFiltro"
-                                         value="Usuarios.."
-                                         style="width: 180px; margin-left:10px;">
-                            <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" />
-                            <f:selectItems value="#{usuarioBean.listaUsuarios}"
-                                           var="user"
-                                           itemLabel="#{user.nombre}"
-                                           itemValue="#{user.id}" />
-                        </p:selectOneMenu>
-
-                        <p:inputText placeholder="Buscar..."/>
+                    <div class="header-azul" style="background: #3b82f6; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                        Historial de Movimientos y Reporte Mensual
                     </div>
 
-                    <p:panel style="background:black; color:lime; height:300px; overflow:auto;">
-                        Aqui va la auditoria
-                    </p:panel>
+                    <h:panelGrid columns="4" id="panelTotales" style="margin-bottom:15px; background:#f8fafc; padding:15px; border: 1px solid #e2e8f0; border-radius:8px; width:100%;">
+                        <h:panelGroup>
+                            <h:outputText value="TOTAL ENTRADAS: " style="font-weight:bold; color:#64748b;"/>
+                            <h:outputText value="#{AuditoriaBean.totalEntradas} unidades" style="color:#22c55e; font-weight:bold; font-size:1.2em;"/>
+                        </h:panelGroup>
 
+                        <h:panelGroup>
+                            <h:outputText value="TOTAL SALIDAS: " style="font-weight:bold; color:#64748b; margin-left:20px;"/>
+                            <h:outputText value="#{AuditoriaBean.totalSalidas} unidades" style="color:#ef4444; font-weight:bold; font-size:1.2em;"/>
+                        </h:panelGroup>
+
+                        <p:commandButton value="Actualizar Reporte"
+                                         action="#{AuditoriaBean.cargarTodosLosMovimientos}"
+                                         update="tablaAuditoria panelTotales"
+                                         icon="pi pi-refresh"
+                                         styleClass="btn-blue" />
+                    </h:panelGrid>
+
+                    <p:dataTable id="tablaAuditoria"
+                                 value="#{AuditoriaBean.listaMovimientos}"
+                                 var="mov"
+                                 emptyMessage="No hay movimientos registrados"
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 style="margin-top:10px;">
+
+                        <p:column headerText="Fecha" style="width:150px; text-align:center;">
+                            <h:outputText value="#{mov.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Usuario">
+                            <i class="pi pi-user" style="margin-right:5px; color:#94a3b8;"></i>
+                            <h:outputText value="#{mov.usuario.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Producto">
+                            <h:outputText value="#{mov.producto.nombre}" style="font-weight:bold;" />
+                        </p:column>
+
+                        <p:column headerText="Tipo" style="text-align:center;">
+                            <h:outputText value="#{mov.tipo}"
+                                          style="padding:4px 8px; border-radius:4px; font-weight:bold;
+                                 background: #{mov.tipo == 'Entrada' ? '#dcfce7' : '#fee2e2'};
+                                 color: #{mov.tipo == 'Entrada' ? '#166534' : '#991b1b'}" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad" style="text-align:right; width:100px;">
+                            <h:outputText value="#{mov.cantidad}"
+                                          style="font-weight:bold; #{mov.tipo == 'Salida' ? 'color:#ef4444;' : 'color:#22c55e;'}" />
+                        </p:column>
+                    </p:dataTable>
                 </p:tab>
-
 
             </p:tabView>
         </h:form>

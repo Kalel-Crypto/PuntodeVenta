@@ -1,6 +1,8 @@
 package facade;
 
+import mx.puntodeventa.dao.MovimientoDAO;
 import mx.puntodeventa.dao.ProveedorDAO;
+import mx.puntodeventa.entity.MovimientoInventario;
 import mx.puntodeventa.entity.Proveedor;
 import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Producto;
@@ -44,6 +46,22 @@ public class SistemaFacade {
         proveedorService.registrar(nombre, numero);
     }
 
+    public void registrarMovimientoSeguro(Usuario usuario, Producto producto, String tipo, int cantidad) {
+        try {
+            MovimientoDAO dao = new MovimientoDAO();
+            MovimientoInventario m = new MovimientoInventario();
+            m.setFecha(new java.util.Date());
+            m.setUsuario(usuario);
+            m.setProducto(producto);
+            m.setTipo(tipo);
+            m.setCantidad(cantidad);
+
+            dao.insertar(m);
+        } catch (Exception e) {
+            System.err.println("CRÍTICO: Falló el registro de auditoría: " + e.getMessage());
+        }
+    }
+
 
     public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {
         productoService.registrarProducto(nombre, precio, idProveedor, stock);
@@ -80,6 +98,7 @@ public class SistemaFacade {
         return inventarioService.listarInventario();
     }
 
+
     public List<InventarioDTO> buscarInventarioPorNombre(String nombre) throws Exception {
         return inventarioService.buscarPorNombre(nombre);
     }
@@ -90,6 +109,11 @@ public class SistemaFacade {
 
     public List<InventarioDTO> buscarInventarioExacto(int idProducto, String nombre) throws Exception {
         return inventarioService.buscarExacto(idProducto, nombre);
+    }
+
+    public List<MovimientoInventario> listarTodosLosMovimientos() throws Exception {
+        MovimientoDAO movimientoDAO = new MovimientoDAO();
+        return movimientoDAO.listarTodos();
     }
 
     public void actualizarStock(int idProducto, int nuevoStock) throws Exception {
