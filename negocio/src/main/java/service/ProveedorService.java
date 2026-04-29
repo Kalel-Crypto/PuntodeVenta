@@ -21,14 +21,4 @@ public class ProveedorService {
         provedor.setContacto(numero);
         dao.insertar(provedor);
     }
-
-
-
-
-
-
-
-
-
-
 }

@@ -1,62 +1,140 @@
 package ui;
 
-
 import facade.SistemaFacade;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import mx.puntodeventa.entity.Proveedor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Named("proveedorBean")
 @SessionScoped
 public class ProveedorBean implements Serializable {
 
     private SistemaFacade facade;
+
     private Proveedor proveedor;
+    private Proveedor proveedorSeleccionado;
+    private String busqueda;
+    private List<Proveedor> listaProveedores;
 
     @PostConstruct
     public void inicio(){
         facade = new SistemaFacade();
         proveedor = new Proveedor();
+        proveedorSeleccionado = null;
+        listaProveedores = new ArrayList<>();
+        cargarProveedores();
     }
 
-    public void registrar(){
-
-        System.out.println("Nombre del proveedor: " + proveedor.getNombre());
-        System.out.println("Numero del proveedor: " + proveedor.getContacto());
-
-        if(proveedor.getNombre().trim().isEmpty()){
-            msgWarn("Asegurese de ingresar un nombre ");
+    public void registrar() {
+        if(proveedor.getNombre() == null || proveedor.getNombre().trim().isEmpty()){
+            msgWarn("Asegúrese de ingresar un nombre.");
+            return;
         }
         if(!proveedor.getContacto().matches("^686\\d{7}$")){
-            msgWarn("Ingrese un numero de telefono valido");
+            msgWarn("Ingrese un número de teléfono válido.");
+            return;
         }
 
         try{
             facade.registrarProveedor(proveedor.getNombre(), proveedor.getContacto());
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proveedor registrado correctamente"));
-        }catch(Exception e){
+            msgInfo("Proveedor registrado correctamente.");
+            this.proveedor = new Proveedor();
+            cargarProveedores();
+        } catch(Exception e){
+            msgError("Error al registrar el proveedor en la base de datos.");
             e.printStackTrace();
         }
-
-
-
     }
+
+    public void cargarProveedores() {
+        try {
+            List<Proveedor> lista = facade.listarProveedores();
+            this.listaProveedores = (lista != null) ? lista : new ArrayList<>();
+        } catch (Exception e) {
+            msgError("Error al cargar la lista de proveedores.");
+            e.printStackTrace();
+            this.listaProveedores = new ArrayList<>();
+        }
+    }
+
+    public void buscarProveedor() {
+        if(busqueda == null || busqueda.trim().isEmpty()){
+            cargarProveedores();
+            return;
+        }
+        try {
+            List<Proveedor> lista = facade.buscarProveedores(busqueda);
+            this.listaProveedores = (lista != null) ? lista : new ArrayList<>();
+        } catch (Exception e) {
+            msgError("Error al realizar la búsqueda.");
+            e.printStackTrace();
+        }
+    }
+
+    public void prepararModificacion(Proveedor prov) {
+        this.proveedorSeleccionado = prov;
+    }
+
+    public void guardarModificacion() {
+        if(proveedorSeleccionado == null || proveedorSeleccionado.getNombre() == null || proveedorSeleccionado.getNombre().trim().isEmpty()){
+            msgWarn("El nombre no puede estar vacío.");
+            return;
+        }
+        if(!proveedorSeleccionado.getContacto().matches("^686\\d{7}$")){
+            msgWarn("El campo contacto debe cumplir con el formato establecido.");
+            return;
+        }
+
+        try {
+            facade.modificarProveedor(proveedorSeleccionado);
+            msgInfo("Proveedor modificado exitosamente.");
+            cargarProveedores();
+        } catch (Exception e) {
+            msgError("Error al modificar el proveedor.");
+            e.printStackTrace();
+        }
+    }
+
+    public void eliminarProveedor(Proveedor prov) {
+        try {
+            facade.eliminarProveedor(prov.getId());
+            msgInfo("Proveedor eliminado exitosamente.");
+            cargarProveedores();
+        } catch (Exception e) {
+            msgError("Error: No se puede eliminar el proveedor. Es probable que tenga productos asociados.");
+            e.printStackTrace();
+        }
+    }
+
+    private void msgInfo(String mensaje) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje));
+    }
+
     private void msgWarn(String mensaje) {
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", mensaje));
-    }
-    public Proveedor getProveedor() {
-        return proveedor;
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", mensaje));
     }
 
-    public void setProveedor(Proveedor proveedor) {
-        this.proveedor = proveedor;
+    private void msgError(String mensaje) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", mensaje));
     }
+
+    public Proveedor getProveedor() { return proveedor; }
+    public void setProveedor(Proveedor proveedor) { this.proveedor = proveedor; }
+
+    public Proveedor getProveedorSeleccionado() { return proveedorSeleccionado; }
+    public void setProveedorSeleccionado(Proveedor proveedorSeleccionado) { this.proveedorSeleccionado = proveedorSeleccionado; }
+
+    public String getBusqueda() { return busqueda; }
+    public void setBusqueda(String busqueda) { this.busqueda = busqueda; }
+
+
+    public List<Proveedor> getListaProveedores() { return listaProveedores; }
+    public void setListaProveedores(List<Proveedor> listaProveedores) { this.listaProveedores = listaProveedores; }
 }

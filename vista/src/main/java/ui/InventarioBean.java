@@ -2,10 +2,12 @@ package ui;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
+import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
 import org.primefaces.PrimeFaces;
 
@@ -25,6 +27,7 @@ public class InventarioBean implements Serializable {
     private InventarioDTO productoEdit;
     private SistemaFacade facade;
     private String busqueda;
+    private int cantidadOperacion;
 
     private String nombre;
     private int ID;
@@ -35,6 +38,9 @@ public class InventarioBean implements Serializable {
         productoEdit = new InventarioDTO();
         cargarLista();
     }
+
+    @Inject
+    private UsuarioBean usuarioBean;
 
     public void refrescar(){
         this.busqueda = null;
@@ -86,6 +92,73 @@ public class InventarioBean implements Serializable {
         }*/
     }
 
+    public void registrarEntrada(InventarioDTO dto) {
+        if (usuarioBean.getUsuario() == null ||
+                !String.valueOf(usuarioBean.getUsuario().getRol()).equalsIgnoreCase("ADMINISTRADOR")) {
+            msgWarn("Acceso denegado: Solo el administrador puede registrar entradas.");
+            return;
+        }
+
+        if (cantidadOperacion <= 0) {
+            msgWarn("La cantidad debe ser mayor a cero.");
+            return;
+        }
+
+        try {
+            mx.puntodeventa.entity.Producto p = new mx.puntodeventa.entity.Producto();
+            p.setId(dto.getIdProducto());
+            p.setNombre(dto.getNombreProducto());
+
+            int nuevoStock = dto.getStock() + cantidadOperacion;
+
+            facade.actualizarStock(dto.getIdProducto(), nuevoStock);
+
+            facade.registrarMovimientoSeguro(usuarioBean.getUsuario(), p, "Entrada", cantidadOperacion);
+
+            dto.setStock(nuevoStock);
+
+            msgInfo("Entrada registrada. Nuevo stock: " + nuevoStock);
+            cantidadOperacion = 0;
+            cargarLista();
+        } catch (Exception e) {
+            msgWarn("Error al procesar la entrada.");
+            e.printStackTrace();
+        }
+    }
+
+    public void registrarSalida(InventarioDTO dto) {
+        if (usuarioBean.getUsuario() == null ||
+                !String.valueOf(usuarioBean.getUsuario().getRol()).equalsIgnoreCase("ADMINISTRADOR")) {
+            msgWarn("Acceso denegado.");
+            return;
+        }
+
+        if (dto.getStock() < cantidadOperacion) {
+            msgWarn("No hay suficiente stock para realizar esta salida.");
+            return;
+        }
+
+        try {
+            mx.puntodeventa.entity.Producto p = new mx.puntodeventa.entity.Producto();
+            p.setId(dto.getIdProducto());
+            p.setNombre(dto.getNombreProducto());
+
+            int nuevoStock = dto.getStock() - cantidadOperacion;
+
+            facade.actualizarStock(dto.getIdProducto(), nuevoStock);
+
+            facade.registrarMovimientoSeguro(usuarioBean.getUsuario(), p, "Salida", cantidadOperacion);
+
+            dto.setStock(nuevoStock);
+            msgInfo("Salida registrada correctamente.");
+            cantidadOperacion = 0;
+            cargarLista();
+        } catch (Exception e) {
+            msgWarn("Fallo al registrar la salida.");
+            e.printStackTrace();
+        }
+    }
+
     //AQUI TE PREPARO LA MODIFICACION
     public void prepararModificar() {
         System.out.println("Producto seleccionado ID: " + seleccionado.getIdProducto());
@@ -106,21 +179,28 @@ public class InventarioBean implements Serializable {
         productoEdit.setIdProveedor(seleccionado.getIdProveedor());
 
 
-
-
         PrimeFaces.current().ajax().update("formModificar");
         PrimeFaces.current().executeScript("PF('dlgModificar').show()");
     }
     //AQUI PERMITE MODIFICAR EL PRODUCTO ENTERO NO SOLO EL STOCK
     public void modificarProducto() {
-
+        System.out.println(">>> ENTRANDO A modificarProducto() <<<");
         try {
-            if (productoEdit == null) {
+            if (productoEdit == null || seleccionado == null) {
                 msgWarn("Seleccione un producto primero");
                 return;
             }
 
-            System.out.println("ID Proveedor a guardar: " + productoEdit.getIdProveedor());
+            int stockAnterior = seleccionado.getStock();
+            int stockNuevo = productoEdit.getStock();
+            int diferencia = stockNuevo - stockAnterior;
+
+            String tipoMovimiento = "";
+            if (diferencia > 0) {
+                tipoMovimiento = "Entrada";
+            } else if (diferencia < 0) {
+                tipoMovimiento = "Salida";
+            }
 
             facade.actualizarProducto(
                     productoEdit.getIdProducto(),
@@ -134,17 +214,33 @@ public class InventarioBean implements Serializable {
                     productoEdit.getStock()
             );
 
-            cargarLista();
+            if (!tipoMovimiento.isEmpty()) {
+                try {
+                    mx.puntodeventa.entity.Producto p = new mx.puntodeventa.entity.Producto();
+                    p.setId(productoEdit.getIdProducto());
+                    p.setNombre(productoEdit.getNombreProducto());
 
+                    facade.registrarMovimientoSeguro(
+                            usuarioBean.getUsuario(),
+                            p,
+                            tipoMovimiento,
+                            Math.abs(diferencia)
+                    );
+                } catch (Exception e) {
+                    System.err.println("Error no crítico en auditoría: " + e.getMessage());
+                }
+            }
+
+            cargarLista();
             seleccionado = null;
             productoEdit = new InventarioDTO();
 
             msgInfo("Producto modificado correctamente");
 
         } catch(Exception e) {
-            System.out.println("ERROR EN MODIFICAR: " + e.getMessage());
+            msgWarn("Error al modificar: Intentelo de nuevo");
+            System.out.println("ERROR CRÍTICO EN MODIFICAR PRODUCTO:");
             e.printStackTrace();
-            msgWarn("Error al modificar: " + e.getMessage());
         }
     }
 
@@ -201,6 +297,14 @@ public class InventarioBean implements Serializable {
 
     public InventarioDTO getProductoEdit() { return productoEdit; }
     public void setProductoEdit(InventarioDTO productoEdit) { this.productoEdit = productoEdit; }
+
+    public int getCantidadOperacion() {
+        return cantidadOperacion;
+    }
+
+    public void setCantidadOperacion(int cantidadOperacion) {
+        this.cantidadOperacion = cantidadOperacion;
+    }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }

@@ -44,6 +44,25 @@ public class ProductoDAO {
         }
     }
 
+    public boolean existeProductoPorNombre(String nombre) throws Exception {
+        String sql = "SELECT COUNT(*) FROM producto WHERE nombre = ?";
+        boolean existe = false;
+
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    existe = rs.getInt(1) > 0;
+                }
+            }
+        }
+        return existe;
+    }
+
+
     public void actualizar(Producto p) throws Exception {
         String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=? WHERE idProducto=?";
 

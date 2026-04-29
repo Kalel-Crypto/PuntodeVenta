@@ -40,7 +40,6 @@ public class InventarioDAO {
                 dto.setPrecio(rs.getDouble("precioUnitario"));
                 dto.setProveedor(rs.getString("proveedor"));
                 dto.setIdProveedor(rs.getInt("idProveedor"));
-
                 lista.add(dto);
             }
         }
