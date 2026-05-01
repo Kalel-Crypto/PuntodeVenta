@@ -428,66 +428,69 @@
 
                 <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria()}">
 
-                    <div class="header-azul" style="background: #3b82f6; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
-                        Historial de Movimientos y Reporte Mensual
-                    </div>
+                    <h:form id="formAuditoria">
 
-                    <h:panelGrid columns="4" id="panelTotales" style="margin-bottom:15px; background:#f8fafc; padding:15px; border: 1px solid #e2e8f0; border-radius:8px; width:100%;">
-                        <h:panelGroup>
-                            <h:outputText value="TOTAL ENTRADAS: " style="font-weight:bold; color:#64748b;"/>
-                            <h:outputText value="#{AuditoriaBean.totalEntradas} unidades" style="color:#22c55e; font-weight:bold; font-size:1.2em;"/>
-                        </h:panelGroup>
+                        <div class="header-azul" style="background: #3b82f6; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                            Historial de Movimientos y Reporte Mensual
+                        </div>
 
-                        <h:panelGroup>
-                            <h:outputText value="TOTAL SALIDAS: " style="font-weight:bold; color:#64748b; margin-left:20px;"/>
-                            <h:outputText value="#{AuditoriaBean.totalSalidas} unidades" style="color:#ef4444; font-weight:bold; font-size:1.2em;"/>
-                        </h:panelGroup>
+                        <h:panelGrid columns="4" id="panelTotales" style="margin-bottom:15px; background:#f8fafc; padding:15px; border: 1px solid #e2e8f0; border-radius:8px; width:100%;">
+                            <h:panelGroup>
+                                <h:outputText value="TOTAL ENTRADAS: " style="font-weight:bold; color:#64748b;"/>
+                                <h:outputText value="#{AuditoriaBean.totalEntradas} unidades" style="color:#22c55e; font-weight:bold; font-size:1.2em;"/>
+                            </h:panelGroup>
 
-                        <p:commandButton value="Actualizar Reporte"
-                                         action="#{AuditoriaBean.cargarTodosLosMovimientos}"
-                                         update="tablaAuditoria panelTotales"
-                                         icon="pi pi-refresh"
-                                         styleClass="btn-blue" />
-                    </h:panelGrid>
+                            <h:panelGroup>
+                                <h:outputText value="TOTAL SALIDAS: " style="font-weight:bold; color:#64748b; margin-left:20px;"/>
+                                <h:outputText value="#{AuditoriaBean.totalSalidas} unidades" style="color:#ef4444; font-weight:bold; font-size:1.2em;"/>
+                            </h:panelGroup>
 
-                    <p:dataTable id="tablaAuditoria"
-                                 value="#{AuditoriaBean.listaMovimientos}"
-                                 var="mov"
-                                 emptyMessage="No hay movimientos registrados"
-                                 rows="10"
-                                 paginator="true"
-                                 paginatorPosition="bottom"
-                                 style="margin-top:10px;">
+                            <p:commandButton value="Actualizar Reporte"
+                                             action="#{AuditoriaBean.cargarTodosLosMovimientos}"
+                                             update="@form"
+                                             process="@this"
+                                             icon="pi pi-refresh"
+                                             styleClass="btn-blue" />
+                        </h:panelGrid>
 
-                        <p:column headerText="Fecha" style="width:150px; text-align:center;">
-                            <h:outputText value="#{mov.fecha}">
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                            </h:outputText>
-                        </p:column>
+                        <p:dataTable id="tablaAuditoria"
+                                     value="#{AuditoriaBean.listaMovimientos}"
+                                     var="mov"
+                                     emptyMessage="No hay movimientos registrados"
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     style="margin-top:10px;">
 
-                        <p:column headerText="Usuario">
-                            <i class="pi pi-user" style="margin-right:5px; color:#94a3b8;"></i>
-                            <h:outputText value="#{mov.usuario.nombre}" />
-                        </p:column>
+                            <p:column headerText="Fecha" style="width:150px; text-align:center;">
+                                <h:outputText value="#{mov.fecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
 
-                        <p:column headerText="Producto">
-                            <h:outputText value="#{mov.producto.nombre}" style="font-weight:bold;" />
-                        </p:column>
+                            <p:column headerText="Usuario">
+                                <i class="pi pi-user" style="margin-right:5px; color:#94a3b8;"></i>
+                                <h:outputText value="#{mov.usuario.nombre}" />
+                            </p:column>
 
-                        <p:column headerText="Tipo" style="text-align:center;">
-                            <h:outputText value="#{mov.tipo}"
-                                          style="padding:4px 8px; border-radius:4px; font-weight:bold;
-                                 background: #{mov.tipo == 'Entrada' ? '#dcfce7' : '#fee2e2'};
-                                 color: #{mov.tipo == 'Entrada' ? '#166534' : '#991b1b'}" />
-                        </p:column>
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{mov.producto.nombre}" style="font-weight:bold;" />
+                            </p:column>
 
-                        <p:column headerText="Cantidad" style="text-align:right; width:100px;">
-                            <h:outputText value="#{mov.cantidad}"
-                                          style="font-weight:bold; #{mov.tipo == 'Salida' ? 'color:#ef4444;' : 'color:#22c55e;'}" />
-                        </p:column>
-                    </p:dataTable>
-                </p:tab>
+                            <p:column headerText="Tipo" style="text-align:center;">
+                                <h:outputText value="#{mov.tipo}"
+                                              style="padding:4px 8px; border-radius:4px; font-weight:bold;
+                     background: #{mov.tipo == 'Entrada' ? '#dcfce7' : '#fee2e2'};
+                     color: #{mov.tipo == 'Entrada' ? '#166534' : '#991b1b'}" />
+                            </p:column>
 
+                            <p:column headerText="Cantidad" style="text-align:right; width:100px;">
+                                <h:outputText value="#{mov.cantidad}"
+                                              style="font-weight:bold; #{mov.tipo == 'Salida' ? 'color:#ef4444;' : 'color:#22c55e;'}" />
+                            </p:column>
+                        </p:dataTable>
+
+                    </h:form> </p:tab>
             </p:tabView>
         </h:form>
 

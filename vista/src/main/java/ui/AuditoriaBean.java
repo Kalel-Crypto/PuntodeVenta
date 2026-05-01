@@ -65,14 +65,19 @@ public class AuditoriaBean implements Serializable {
     }
 
     public boolean puedeVerAuditoria() {
-        if (usuarioBean != null &&
-                usuarioBean.getUsuario() != null &&
-                usuarioBean.getUsuario().getRol() != null) {
 
-            String rol = usuarioBean.getUsuario().getRol().toString();
-            return "ADMINISTRADOR".equalsIgnoreCase(rol) || "ADMIN".equalsIgnoreCase(rol);
-        }
-        return false;
+        return true;
+
+    /*
+    if (usuarioBean != null &&
+            usuarioBean.getUsuario() != null &&
+            usuarioBean.getUsuario().getRol() != null) {
+
+        String rol = usuarioBean.getUsuario().getRol().toString();
+        return "ADMINISTRADOR".equalsIgnoreCase(rol) || "ADMIN".equalsIgnoreCase(rol);
+    }
+    return false;
+    */
     }
 
     public List<MovimientoInventario> getListaMovimientos() { return listaMovimientos; }
