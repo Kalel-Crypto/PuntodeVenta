@@ -7,13 +7,13 @@ import java.sql.SQLException;
 public class ConnectionManager {
 
     private static final String URL =
-            "jdbc:mysql://localhost:3306/inv_db?useSSL=false&serverTimezone=UTC&autoReconnect=true";
+            "jdbc:mysql://localhost:3306/inv_db?useSSL=false&serverTimezone=America/Tijuana&autoReconnect=true";
     private static final String USER = "root";
-    private static final String PASSWORD = "6864314146";
+    private static final String PASSWORD = "Creeperisfavorite20040102030405";
 
     public static Connection getConnection() throws SQLException {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); //
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Conexión exitosa a la BD");

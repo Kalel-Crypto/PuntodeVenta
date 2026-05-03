@@ -54,6 +54,7 @@ public class MovimientoDAO {
             while (rs.next()) {
                 MovimientoInventario m = new MovimientoInventario();
                 m.setId(rs.getInt("idinventarioMovimientos"));
+                Calendar tzCal = Calendar.getInstance(TimeZone.getTimeZone("America/Tijuana"));
                 m.setFecha(new java.util.Date(rs.getTimestamp("fecha").getTime()));
                 m.setTipo(rs.getString("tipoMovimiento"));
                 m.setCantidad(rs.getInt("cantidad"));
@@ -90,10 +91,10 @@ public class MovimientoDAO {
                     MovimientoInventario m = new MovimientoInventario();
                     m.setId(rs.getInt("idinventarioMovimientos"));
 
-
+                    Calendar tzCal = Calendar.getInstance(TimeZone.getTimeZone("America/Tijuana"));
                     m.setFecha(new java.util.Date(rs.getTimestamp("fecha").getTime()));
                     m.setTipo(rs.getString("tipoMovimiento"));
-                    m.setCantidad(rs.getInt("cantidad")); // Recuperamos la cantidad
+                    m.setCantidad(rs.getInt("cantidad"));
 
                     Producto p = new Producto();
                     p.setId(rs.getInt("idProducto"));

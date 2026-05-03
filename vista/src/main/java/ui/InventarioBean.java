@@ -93,12 +93,16 @@ public class InventarioBean implements Serializable {
     }
 
     public void registrarEntrada(InventarioDTO dto) {
-        if (usuarioBean.getUsuario() == null ||
-                !String.valueOf(usuarioBean.getUsuario().getRol()).equalsIgnoreCase("ADMINISTRADOR")) {
-            msgWarn("Acceso denegado: Solo el administrador puede registrar entradas.");
-            return;
-        }
 
+
+    /*
+    if (usuarioBean.getUsuario() == null ||
+            !String.valueOf(usuarioBean.getUsuario().getRol()).equalsIgnoreCase("ADMINISTRADOR")) {
+        msgWarn("Acceso denegado: Solo el administrador puede registrar entradas.");
+        return;
+    }
+    */
+        // ------------------------------------------
         if (cantidadOperacion <= 0) {
             msgWarn("La cantidad debe ser mayor a cero.");
             return;
@@ -127,11 +131,13 @@ public class InventarioBean implements Serializable {
     }
 
     public void registrarSalida(InventarioDTO dto) {
+        /*
         if (usuarioBean.getUsuario() == null ||
                 !String.valueOf(usuarioBean.getUsuario().getRol()).equalsIgnoreCase("ADMINISTRADOR")) {
             msgWarn("Acceso denegado.");
             return;
         }
+        */
 
         if (dto.getStock() < cantidadOperacion) {
             msgWarn("No hay suficiente stock para realizar esta salida.");
