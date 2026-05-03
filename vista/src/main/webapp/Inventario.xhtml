@@ -175,16 +175,16 @@
                                          styleClass="ui-noborder">
 
                                 <p:outputLabel value="Nombre del Producto:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" required="true" />
+                                <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" required="true" requiredMessage="No deje el campo del nombre vacio" />
 
                                 <p:outputLabel value="Precio:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.precio}" required="true" />
+                                <p:inputText value="#{InventarioBean.productoEdit.precio}" required="true"  requiredMessage="No deje el campo del precio vacio"/>
 
                                 <p:outputLabel value="Stock:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.stock}" required="true" />
+                                <p:inputText value="#{InventarioBean.productoEdit.stock}" required="true" requiredMessage="No deje el Stock vacio"/>
 
                                 <p:outputLabel value="ID Proveedor:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.idProveedor}" required="true" />
+                                <p:inputText value="#{InventarioBean.productoEdit.idProveedor}" required="true" requiredMessage="Seleccione un proveedor"/>
 
                             </p:panelGrid>
 
@@ -247,20 +247,20 @@
                             <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
 
                                 <p:outputLabel for="nombre" value="Nombre *"/>
-                                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true"/>
+                                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
 
                                 <p:outputLabel for="precio" value="Precio *"/>
-                                <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true"/>
+                                <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true" requiredMessage="Asegurese de ingresar un precio"/>
 
                                 <p:outputLabel for="proveedor" value="Proveedor *"/>
-                                <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true">
+                                <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true" requiredMessage="Seleccione un proveedor">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
                                                    itemLabel="#{prov.nombre}" itemValue="#{prov.id}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="stock" value="Stock *"/>
-                                <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true"/>
+                                <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true" requiredMessage="No deje el Stock vacio"/>
 
                                 <h:panelGrid columns="2" style="margin-top:20px;">
                                     <p:commandButton value="Cancelar" process="@this"/>
@@ -282,8 +282,10 @@
 
                             <p:panelGrid columns="1">
 
-                                <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true"/>
-                                <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.contacto}" required="true"/>
+                                <p:outputLabel value="Nombre del proveedor *"/>
+                                <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
+                                <p:outputLabel value="Numero del proveedor *"/>
+                                <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.contacto}" required="true" requiredMessage="Asegurese de ingresar un numero de celular"/>
 
                                 <p:commandButton value="Registrar"
                                                  action="#{proveedorBean.registrar}"
@@ -300,10 +302,12 @@
 
                             <p:panelGrid columns="1">
 
-                                <p:inputText id="nombreUsuario" value="#{usuarioBean.usuario.nombre}" required="true"/>
-                                <p:password id="passwordUsuario" value="#{usuarioBean.usuario.password}" required="true"/>
+                                <p:outputLabel value="Nombre de usuario *"/>
+                                <p:inputText id="nombreUsuario" value="#{usuarioBean.usuario.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
+                                <p:outputLabel value="Constraseña *"/>
+                                <p:password id="passwordUsuario" value="#{usuarioBean.usuario.password}" required="true" requiredMessage="Asegurese de ingresar una contraseña"/>
 
-                                <p:selectOneMenu id="rolUsuario" value="#{usuarioBean.usuario.rol}" required="true">
+                                <p:selectOneMenu id="rolUsuario" value="#{usuarioBean.usuario.rol}" required="true" requiredMessage="Seleccione un rol">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{usuarioBean.roles}" var="rol"
                                                    itemLabel="#{rol}" itemValue="#{rol}"/>
@@ -333,7 +337,8 @@
                                          placeholder="ingrese nombre o ID..." />
 
                             <p:commandButton value="Buscar"
-                                             actionListener="#{proveedorBean.buscarProveedor}"
+                                             action="#{proveedorBean.buscarProveedor}"
+                                             process="@this busquedaProveedor"
                                              update="tablaProveedores"
                                              styleClass="btn-green" />
 
@@ -405,10 +410,10 @@
                                          styleClass="ui-noborder">
 
                                 <p:outputLabel value="Nombre:" />
-                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.nombre}" required="true" />
+                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.nombre}" required="true" requiredMessage="No deje el campo de nombre vacio"/>
 
                                 <p:outputLabel value="Contacto:" />
-                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.contacto}" required="true" />
+                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.contacto}" required="true" requiredMessage="No deje el campo del numero telefonico vacio"/>
 
                             </p:panelGrid>
 

@@ -65,6 +65,7 @@ public class ProveedorBean implements Serializable {
     }
 
     public void buscarProveedor() {
+        System.out.println("Entre al metodo con: " + busqueda);
         if(busqueda == null || busqueda.trim().isEmpty()){
             cargarProveedores();
             return;
