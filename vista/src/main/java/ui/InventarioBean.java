@@ -65,7 +65,10 @@ public class InventarioBean implements Serializable {
                 cargarLista();
             }
             Id = Integer.parseInt(busqueda);
+            long inicio = System.currentTimeMillis();
            listaInventario = facade.buscarInventarioPorId(Id);
+            long fin = System.currentTimeMillis();
+            System.out.println("Tiempo: " + (fin - inicio));
         }catch (NumberFormatException msg){
             try {
                 listaInventario = facade.buscarInventarioPorNombre(busqueda);
