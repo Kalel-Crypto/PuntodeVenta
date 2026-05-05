@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Punto de venta</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+        }
+
+
+        .ui-card {
+            border-radius: 12px !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+            border: none !important;
+        }
+
+        .header-logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header-logo i {
+            font-size: 3rem;
+            color: #3b82f6;
+        }
+
+        .titulo-login {
+            font-size: 1.8rem;
+            color: #1e293b;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .subtitulo-login {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .field {
+            margin-bottom: 25px;
+        }
+
+        .ui-inputfield {
+            width: 100% !important;
+            padding: 12px !important;
+            border-radius: 6px !important;
+        }
+
+        .btn-login {
+            width: 100% !important;
+            padding: 10px !important;
+            font-size: 1.1rem !important;
+            background-color: #3b82f6 !important;
+            border-radius: 6px !important;
+            transition: background 0.3s ease !important;
+        }
+
+        .btn-login:hover {
+            background-color: #2563eb !important;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <div class="login-container">
+        <p:card>
+            <h:form id="loginForm">
+                <p:growl id="growl" showDetail="true" life="4000" />
+
+                <div class="header-logo">
+                    <i class="pi pi-shopping-cart" />
+                    <div class="titulo-login">Punto de venta</div>
+                    <div class="subtitulo-login">Ingresa tus credenciales para continuar</div>
+                </div>
+
+                <div class="field">
+                    <span class="ui-float-label ui-input-icon-left">
+                        <i class="pi pi-user" />
+                        <p:inputText id="usuario"
+                                     value="#{loginUI.usuario.nombre}"
+                                     required="true"
+                                     requiredMessage="El usuario es requerido" />
+                        <p:outputLabel for="usuario" value="Nombre de Usuario" />
+                    </span>
+                </div>
+
+                <div class="field">
+                    <span class="ui-float-label ui-input-icon-left">
+                        <i class="pi pi-lock" />
+                        <p:password id="password"
+                                    value="#{loginUI.usuario.password}"
+                                    required="true"
+                                    requiredMessage="La contraseña es requerida"
+                                    toggleMask="true"
+                                    redisplay="true" />
+                        <p:outputLabel for="password" value="Contraseña" />
+                    </span>
+                </div>
+                <div class="field">
+                    <p:outputLabel for="rol" value="Tipo de Usuario" style="display:block; margin-bottom:8px; color:#64748b; font-size:0.9rem;"/>
+                    <p:selectOneMenu id="rol" value="#{loginUI.usuario.rol}" required="true">
+                        <f:selectItem itemLabel="Seleccione su rol" itemValue="" noSelectionOption="true"/>
+                        <f:selectItem itemLabel="Administrador" itemValue="ADMINISTRADOR"/>
+                        <f:selectItem itemLabel="Cajero" itemValue="CAJERO"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <p:commandButton value="Acceder"
+                                     action="#{loginUI.login}"
+                                     update="growl"
+                                     styleClass="btn-login"
+                                     icon="pi pi-sign-in"
+                                     iconPos="right" />
+                </div>
+            </h:form>
+        </p:card>
+    </div>
+
+</h:body>
+</html>
