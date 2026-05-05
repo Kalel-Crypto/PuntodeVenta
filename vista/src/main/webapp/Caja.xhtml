@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Punto de Venta</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: white;
+        }
+
+        .barra-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #1e3a8a, #2563eb);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .titulo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .info {
+            color: #e0e7ff;
+            font-size: 14px;
+        }
+
+        .contenedor {
+            display: flex;
+            gap: 20px;
+        }
+
+        .panel-izq {
+            flex: 3;
+        }
+
+        .panel-der {
+            flex: 1;
+            background: rgba(255,255,255,0.08);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .btn {
+            background: #2563eb !important;
+            color: white !important;
+            border-radius: 8px !important;
+        }
+
+        .btn:hover {
+            background: #1e40af !important;
+        }
+
+        .btn-danger {
+            background: #ef4444 !important;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c !important;
+        }
+
+        .ui-datatable thead th {
+            background: #1e3a8a !important;
+            color: white !important;
+        }
+
+        .ui-datatable tbody tr:hover {
+            background: rgba(59,130,246,0.3) !important;
+        }
+
+        .total {
+            font-size: 28px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .box {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .btn-delete-row {
+            background: #ef4444 !important;
+            color: white !important;
+            border-radius: 6px !important;
+        }
+        .barra-busqueda {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .input-busqueda {
+            width: 100%;
+            border-radius: 8px !important;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <h:form>
+
+
+        <div class="barra-top">
+            <span class="titulo">Punto de Venta</span>
+
+            <div>
+                <h:outputText value="Caja: #{ventaBean.cajaActual.idcaja}" class="info"/>
+                <br/>
+                <h:outputText value="Cajero: #{ventaBean.nombreUsuario}" class="info"/>
+            </div>
+        </div>
+
+        <div class="contenedor">
+
+
+            <div class="panel-izq">
+
+                <div class="barra-busqueda">
+
+                    <p:inputText placeholder="Ingrese nombre o ID.."
+                                 value="#{ventaBean.busqueda}"
+                                 styleClass="input-busqueda"/>
+
+                    <p:commandButton icon="pi pi-search"
+                                     action="#{ventaBean.buscar}"
+                                     update="@form"
+                                     styleClass="btn"/>
+
+                </div>
+
+                <p:dataTable value="#{ventaBean.listaDetalle}" var="item">
+
+                    <p:column headerText="Producto">
+                        #{item.producto.nombre}
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{item.precioUnitario}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Cantidad">
+                        #{item.cantidad}
+                    </p:column>
+
+                    <p:column headerText="Subtotal">
+                        <h:outputText value="#{item.precioUnitario * item.cantidad}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width:60px; text-align:center;">
+                        <p:commandButton icon="pi pi-trash"
+                                         action="#{ventaBean.eliminar(item)}"
+                                         update="@form"
+                                         styleClass="btn-delete-row ui-button-rounded ui-button-sm"/>
+                    </p:column>
+
+                </p:dataTable>
+
+                <div style="margin-top:15px;">
+                    <p:commandButton value="Cancelar Venta" styleClass="btn-danger"/>
+                    <p:commandButton value="Nueva Venta" styleClass="btn"/>
+                </div>
+
+            </div>
+
+            <!-- 🟦 DERECHA -->
+            <div class="panel-der">
+
+                <h3>Resumen</h3>
+
+                <p>Total:</p>
+                <div class="total">
+                    <h:outputText value="#{ventaBean.total}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </div>
+
+                <br/>
+
+                <p>Dinero recibido</p>
+                <p:inputText value="#{ventaBean.dineroRecibido}" style="width:100%;" />
+
+                <br/><br/>
+
+                <p>Cambio</p>
+                <div class="box">
+                    <h:outputText value="#{ventaBean.cambio}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </div>
+
+                <br/>
+
+                <p:commandButton value="Cobrar"
+                                 action="#{ventaBean.cobrar}"
+                                 update="@form"
+                                 styleClass="btn"
+                                 style="width:100%;"/>
+
+            </div>
+
+        </div>
+
+    </h:form>
+
+</h:body>
+</html>

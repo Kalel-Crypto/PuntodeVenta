@@ -3,6 +3,7 @@
   <component name="WebContextManager">
     <option name="state">
       <map>
+        <entry key="file://$PROJECT_DIR$/vista/src/main/webapp/Caja.xhtml" value="file://$PROJECT_DIR$/vista/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/vista/src/main/webapp/Inventario.xhtml" value="file://$PROJECT_DIR$/vista/src/main/webapp" />
       </map>
     </option>

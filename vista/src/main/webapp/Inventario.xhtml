@@ -11,17 +11,20 @@
 
     <style>
         body {
-            font-family: Arial;
-            background: #f2f2f2;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #eef4fb;
         }
+
 
         .contenedor {
             width: 90%;
             margin: 30px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
+
 
         .barra-superior {
             display: flex;
@@ -35,36 +38,203 @@
         }
 
         .btn-blue {
-            background: #3b82f6 !important;
+            background: #2563eb !important;
             color: white !important;
-            font-weight: bold !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
             border: none !important;
             padding: 8px 15px;
+            transition: 0.3s;
         }
 
-        .btn-red {
-            background: #f87171 !important;
-            color: white !important;
-            font-weight: bold !important;
-            border: none !important;
-            padding: 8px 15px;
+        .btn-blue:hover {
+            background: #1e40af !important;
         }
 
         .btn-green {
-            background: #4ade80 !important;
+            background: #3b82f6 !important;
             color: white !important;
-            font-weight: bold !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
             border: none !important;
             padding: 8px 15px;
+            transition: 0.3s;
         }
 
+        .btn-green:hover {
+            background: #1d4ed8 !important;
+        }
+
+        .btn-red {
+            background: #ef4444 !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            border: none !important;
+            padding: 8px 15px;
+            transition: 0.3s;
+        }
+
+        .btn-red:hover {
+            background: #b91c1c !important;
+        }
+
+
         .header-azul {
-            background: #3b82f6;
+            background: linear-gradient(90deg, #2563eb, #1e3a8a);
             color: white;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
             font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+
+        .ui-inputfield {
+            border-radius: 6px !important;
+            border: 1px solid #cbd5f5 !important;
+        }
+
+
+        .ui-datatable {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ui-datatable thead th {
+            background: #1e3a8a !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .ui-datatable tbody tr:nth-child(even) {
+            background: #f1f5ff;
+        }
+
+        .ui-datatable tbody tr:hover {
+            background: #dbeafe !important;
+        }
+
+
+        .ui-panelgrid {
+            background: #f8fbff;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+
+        .ui-tabs .ui-tabs-nav {
+            background: #1e3a8a;
+            border-radius: 8px;
+        }
+
+        .ui-tabs .ui-tabs-nav li a {
+            color: white !important;
+            font-weight: 500;
+        }
+
+        .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+            background: #2563eb !important;
+            border-radius: 6px;
+        }
+
+
+        .ui-dialog {
+            border-radius: 12px !important;
+        }
+
+        .ui-dialog-titlebar {
+            background: #1e3a8a !important;
+            color: white !important;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .ui-tabs .ui-tabs-nav {
+            background: #1e3a8a !important;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .ui-tabs .ui-tabs-nav li {
+            background: transparent !important;
+            border: none !important;
+            margin-right: 5px;
+        }
+
+
+        .ui-tabs .ui-tabs-nav li a {
+            color: #c7d2fe !important;
+            font-weight: 500;
+        }
+
+
+        .ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+            background: #2563eb !important;
+            border-radius: 6px;
+        }
+
+        .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+            color: white !important;
+        }
+
+
+        .ui-tabs .ui-tabs-nav li:hover {
+            background: #1d4ed8 !important;
+            border-radius: 6px;
+        }
+
+        .ui-tabs .ui-tabs-panels {
+            border: none !important;
+        }
+
+        .btn-logout {
+            background: #dc2626 !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+        }
+
+        .btn-logout:hover {
+            background: #991b1b !important;
+        }
+
+
+        .btn-refresh {
+            background: #1d4ed8 !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+        }
+
+        .btn-refresh:hover {
+            background: #1e3a8a !important;
+        }
+
+        .ui-selectonemenu {
+            border-radius: 6px !important;
+            border: 1px solid #93c5fd !important;
+        }
+
+
+        .ui-selectonemenu-label {
+            color: #1e3a8a !important;
+        }
+
+
+        .ui-selectonemenu-trigger {
+            background: #2563eb !important;
+            border: none !important;
+        }
+
+
+        .ui-selectonemenu-panel {
+            border-radius: 8px !important;
+        }
+
+
+        .ui-selectonemenu-item:hover {
+            background: #dbeafe !important;
         }
     </style>
 </h:head>
@@ -76,6 +246,9 @@
         <h:form id="formInventario">
 
             <p:growl id="growl" showDetail="true" life="3000"/>
+
+
+
 
             <p:tabView id="tabsPrincipal">
 
@@ -102,7 +275,8 @@
                             <p:commandButton value="Refrescar"
                                              action="#{InventarioBean.refrescar()}"
                                              process="@this"
-                                             update="tablaInventario"/>
+                                             update="tablaInventario"
+                                             styleClass="btn-refresh"/>
 
                         </div>
                     </div>
@@ -263,7 +437,7 @@
                                 <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true" requiredMessage="No deje el Stock vacio"/>
 
                                 <h:panelGrid columns="2" style="margin-top:20px;">
-                                    <p:commandButton value="Cancelar" process="@this"/>
+
 
                                     <p:commandButton value="Registrar"
                                                      action="#{productoBean.registrar}"
@@ -290,7 +464,8 @@
                                 <p:commandButton value="Registrar"
                                                  action="#{proveedorBean.registrar}"
                                                  process="@this nombreProv telefonoProv"
-                                                 update="msgsProveedor"/>
+                                                 update="msgsProveedor"
+                                                 styleClass="btn-green"/>
 
                             </p:panelGrid>
 
@@ -306,7 +481,7 @@
                                 <p:inputText id="nombreUsuario" value="#{usuarioBean.usuario.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
                                 <p:outputLabel value="Constraseña *"/>
                                 <p:password id="passwordUsuario" value="#{usuarioBean.usuario.password}" required="true" requiredMessage="Asegurese de ingresar una contraseña"/>
-
+                                <p:outputLabel value="Rol del usuario" />
                                 <p:selectOneMenu id="rolUsuario" value="#{usuarioBean.usuario.rol}" required="true" requiredMessage="Seleccione un rol">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{usuarioBean.roles}" var="rol"
@@ -316,7 +491,8 @@
                                 <p:commandButton value="Registrar"
                                                  action="#{usuarioBean.registrar}"
                                                  process="@this nombreUsuario passwordUsuario rolUsuario"
-                                                 update="msgsUsuario"/>
+                                                 update="msgsUsuario"
+                                                 styleClass="btn-green"/>
 
                             </p:panelGrid>
 

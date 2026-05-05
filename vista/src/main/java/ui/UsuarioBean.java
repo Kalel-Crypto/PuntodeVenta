@@ -22,8 +22,8 @@ public class UsuarioBean implements Serializable {
     @PostConstruct
     public void inicio(){
         facade = new SistemaFacade();
-
-        try {
+        usuario = new Usuario();
+        /*try {
             usuario = facade.login("tu_nombre_usuario", "1234567");
         } catch(Exception e) {
 
@@ -35,7 +35,7 @@ public class UsuarioBean implements Serializable {
             listaUsuarios = facade.listarUsuarios();
         } catch(Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
     public void registrar(){
         System.out.println("Nombre del usuario: " + usuario.getNombre());

@@ -14,8 +14,9 @@ public class DetalleVenta implements Serializable {
     @Column(name = "idVenta", nullable = false)
     private Integer idventa;
 
-    @Column(name = "idProducto", nullable = false)
-    private Integer idProducto;
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
+    private Producto producto;
 
     @Column(name = "precioUnitario", nullable = false)
     private Double precioUnitario;
@@ -42,12 +43,12 @@ public class DetalleVenta implements Serializable {
         this.idventa = idventa;
     }
 
-    public Integer getIdProducto() {
-        return idProducto;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setIdProducto(Integer idProducto) {
-        this.idProducto = idProducto;
+    public void setProducto(Producto p) {
+        this.producto = p;
     }
 
     public Double getPrecioUnitario() {
