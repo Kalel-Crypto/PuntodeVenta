@@ -7,6 +7,7 @@ package ui;
 
 import facade.SistemaFacade;
 import helper.LoginHelper;
+import jakarta.faces.view.ViewScoped;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ import java.io.Serializable;
 
 @Named("loginUI")
 @SessionScoped
-public class LoginBeanUI extends HttpServlet implements Serializable{
+public class LoginBeanUI implements Serializable{
     private Usuario usuario;
     LoginHelper helper;
     AuditoriaBean auditoriaBean;
@@ -49,18 +50,25 @@ public class LoginBeanUI extends HttpServlet implements Serializable{
                     break;
                 }
             }
-            System.out.println("Nombre del usuario logeado: " + usuarioLogeado.getNombre());
-            FacesContext.getCurrentInstance().getExternalContext().redirect("Inventario.xhtml");
+            if(usuarioLogeado.getRol().equals(Rol.ADMINISTRADOR)){
+                FacesContext.getCurrentInstance().getExternalContext().redirect("Inventario.xhtml");
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("Caja.xhtml");
+            }
         } else {
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error","Credenciales invalidas, verefique su usuario y/o contraseña"));
         }
     }
 
-    public void logout() throws IOException {
-        System.out.println("Entre a logout");
-        usuarioLogeado = null;
-        FacesContext.getCurrentInstance().getExternalContext().redirect("loginUI.xhtml");
+    public String logout() {
+        System.out.println("LOGOUT EJECUTADO");
 
+        FacesContext.getCurrentInstance()
+                .getExternalContext()
+                .invalidateSession();
+
+        return "/loginUI.xhtml?faces-redirect=true";
     }
 
     public Rol[] getRoles() {

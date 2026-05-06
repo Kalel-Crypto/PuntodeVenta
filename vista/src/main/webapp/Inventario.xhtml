@@ -266,7 +266,9 @@
             <div class="barra-global">
 
                 <p:commandButton value="Cerrar sesión"
-                                 action="#{loginUI.logout()}"
+                                 action="#{loginUI.logout}"
+                                 immediate="true"
+                                 ajax="false"
                                  styleClass="btn-logout"
                                  icon="pi pi-sign-out"/>
 
