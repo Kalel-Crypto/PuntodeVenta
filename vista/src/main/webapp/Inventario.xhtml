@@ -236,6 +236,23 @@
         .ui-selectonemenu-item:hover {
             background: #dbeafe !important;
         }
+        .barra-global {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #1e3a8a, #2563eb);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .texto-sesion {
+            color: #e0e7ff;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+
     </style>
 </h:head>
 
@@ -246,7 +263,17 @@
         <h:form id="formInventario">
 
             <p:growl id="growl" showDetail="true" life="3000"/>
+            <div class="barra-global">
 
+                <p:commandButton value="Cerrar sesión"
+                                 action="#{loginUI.logout()}"
+                                 styleClass="btn-logout"
+                                 icon="pi pi-sign-out"/>
+
+                <h:outputText value="Sesion iniciada: #{loginUI.usuarioLogeado.nombre}"
+                              styleClass="texto-sesion"/>
+
+            </div>
 
 
 
@@ -394,7 +421,7 @@
 
                         <p:column headerText="Acciones" style="text-align:center;">
                             <p:commandButton value="Entrada" icon="pi pi-plus"
-                                             action="#{InventarioBean.registrarEntrada(p)}"
+                                             action="#{InventarioBean.registrarEntrada(p,loginUI.usuarioLogeado)}"
                                              process="@this cantOp"
                                              update=":formInventario:growl :formInventario:tabsPrincipal:tablaMovimientos :formInventario:tabsPrincipal:tablaInventario"
                                              styleClass="btn-green" style="margin-right:5px;"/>
@@ -607,7 +634,7 @@
 
                 </p:tab>
 
-                <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria()}">
+                <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
 
                     <h:form id="formAuditoria">
 
@@ -627,9 +654,9 @@
                             </h:panelGroup>
 
                             <p:commandButton value="Actualizar Reporte"
-                                             action="#{AuditoriaBean.cargarTodosLosMovimientos}"
-                                             update="@form"
+                                             action="#{AuditoriaBean.cargarTodosLosMovimientos()}"
                                              process="@this"
+                                             update="tablaAuditoria"
                                              icon="pi pi-refresh"
                                              styleClass="btn-blue" />
                         </h:panelGrid>

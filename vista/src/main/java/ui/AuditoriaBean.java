@@ -2,6 +2,7 @@ package ui;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
@@ -11,9 +12,10 @@ import java.util.stream.Collectors;
 
 import facade.SistemaFacade;
 import mx.puntodeventa.entity.MovimientoInventario;
+import mx.puntodeventa.entity.Usuario;
 
 @Named("AuditoriaBean")
-@SessionScoped
+@ViewScoped
 public class AuditoriaBean implements Serializable {
 
     private List<MovimientoInventario> listaMovimientos;
@@ -23,12 +25,12 @@ public class AuditoriaBean implements Serializable {
     private int totalEntradas;
     private int totalSalidas;
     private String mesFiltro;
-
-    @Inject
-    private UsuarioBean usuarioBean;
+    private Usuario usuarioLogeado;
+    LoginBeanUI loginBeanUI;
 
     @PostConstruct
     public void inicio() {
+        loginBeanUI = new LoginBeanUI();
         facade = new SistemaFacade();
         listaMovimientos = new ArrayList<>();
         listaFiltrada = new ArrayList<>();
@@ -64,10 +66,11 @@ public class AuditoriaBean implements Serializable {
         return cantidad < 0 ? "color: red; font-weight: bold;" : "";
     }
 
-    public boolean puedeVerAuditoria() {
-
-        return true;
-
+    public boolean puedeVerAuditoria(Usuario usuarioLogeado) {
+       if(usuarioLogeado != null){
+            return true;
+        }
+        return false;
     /*
     if (usuarioBean != null &&
             usuarioBean.getUsuario() != null &&
@@ -88,4 +91,12 @@ public class AuditoriaBean implements Serializable {
 
     public String getMesFiltro() { return mesFiltro; }
     public void setMesFiltro(String mesFiltro) { this.mesFiltro = mesFiltro; }
+
+    public Usuario getUsuarioLogeado() {
+        return usuarioLogeado;
+    }
+
+    public void setUsuarioLogeado(Usuario usuarioLogeado) {
+        this.usuarioLogeado = usuarioLogeado;
+    }
 }

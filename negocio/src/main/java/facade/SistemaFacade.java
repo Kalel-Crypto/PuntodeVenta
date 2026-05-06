@@ -48,15 +48,8 @@ public class SistemaFacade {
 
     public void registrarMovimientoSeguro(Usuario usuario, Producto producto, String tipo, int cantidad) {
         try {
-
-            if (usuario == null) {
-                usuario = new mx.puntodeventa.entity.Usuario();
-
-                usuario.setId(1);
-                usuario.setNombre("Usuario de Prueba");
-
-            }
-
+            System.out.println("Nombre del usuario: " + usuario.getNombre() +
+                    "\n" + "ID: " + usuario.getId());
             MovimientoDAO dao = new MovimientoDAO();
             MovimientoInventario m = new MovimientoInventario();
             m.setFecha(new java.util.Date());

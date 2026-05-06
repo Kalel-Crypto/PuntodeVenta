@@ -7,8 +7,10 @@ import jakarta.inject.Named;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
+import mx.puntodeventa.entity.MovimientoInventario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
+import mx.puntodeventa.entity.Usuario;
 import org.primefaces.PrimeFaces;
 
 import facade.SistemaFacade;
@@ -23,22 +25,27 @@ import java.util.List;
 public class InventarioBean implements Serializable {
 
     private List<InventarioDTO> listaInventario;
+    private List<MovimientoInventario> listaMovimientos;
+
     private InventarioDTO seleccionado;
     private InventarioDTO productoEdit;
+
     private SistemaFacade facade;
     private String busqueda;
     private int cantidadOperacion;
-
     private String nombre;
     private int ID;
+    AuditoriaBean auditoriaBean;
+
+
     @PostConstruct
-    public void inicio() {
+    public void inicio(){
         facade = new SistemaFacade();
         listaInventario = new ArrayList<>();
         productoEdit = new InventarioDTO();
+        auditoriaBean = new AuditoriaBean();
         cargarLista();
     }
-
     @Inject
     private UsuarioBean usuarioBean;
 
@@ -79,57 +86,29 @@ public class InventarioBean implements Serializable {
             throw new RuntimeException(e);
         }
 
-
-        /*try {
-            if ((nombre == null || nombre.trim().isEmpty()) && ID <= 0) {
-                cargarLista();
-            } else if (ID > 0 && (nombre != null && !nombre.trim().isEmpty())) {
-                listaInventario = facade.buscarInventarioExacto(ID, nombre);
-            } else if (nombre != null && !nombre.trim().isEmpty()) {
-                listaInventario = facade.buscarInventarioPorNombre(nombre);
-            } else if (ID > 0) {
-                listaInventario = facade.buscarInventarioPorId(ID);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
-    public void registrarEntrada(InventarioDTO dto) {
-
-
-    /*
-    if (usuarioBean.getUsuario() == null ||
-            !String.valueOf(usuarioBean.getUsuario().getRol()).equalsIgnoreCase("ADMINISTRADOR")) {
-        msgWarn("Acceso denegado: Solo el administrador puede registrar entradas.");
-        return;
-    }
-    */
-        // ------------------------------------------
+    public void registrarEntrada(InventarioDTO dto, Usuario usuarioLogeado) {
         if (cantidadOperacion <= 0) {
             msgWarn("La cantidad debe ser mayor a cero.");
             return;
         }
-
-        try {
-            mx.puntodeventa.entity.Producto p = new mx.puntodeventa.entity.Producto();
+        try{
+            Producto p = new Producto();
             p.setId(dto.getIdProducto());
             p.setNombre(dto.getNombreProducto());
-
             int nuevoStock = dto.getStock() + cantidadOperacion;
-
             facade.actualizarStock(dto.getIdProducto(), nuevoStock);
-
-            facade.registrarMovimientoSeguro(usuarioBean.getUsuario(), p, "Entrada", cantidadOperacion);
-
+            facade.registrarMovimientoSeguro(usuarioLogeado,p, "Entrada", cantidadOperacion);
             dto.setStock(nuevoStock);
-
             msgInfo("Entrada registrada. Nuevo stock: " + nuevoStock);
             cantidadOperacion = 0;
+
             cargarLista();
-        } catch (Exception e) {
+
+        }catch (Exception msg){
             msgWarn("Error al procesar la entrada.");
-            e.printStackTrace();
+            msg.printStackTrace();
         }
     }
 

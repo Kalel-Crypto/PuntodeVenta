@@ -5,8 +5,7 @@ import mx.puntodeventa.entity.Proveedor;
 
 import java.sql.*;
 import java.util.*;
-
-import static mx.puntodeventa.entity.DetalleVenta_.idProducto;
+//import static mx.puntodeventa.entity.DetalleVenta_.idProducto;
 
 public class ProductoDAO {
 

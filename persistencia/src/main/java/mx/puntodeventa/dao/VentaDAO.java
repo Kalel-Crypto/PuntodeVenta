@@ -1,4 +1,4 @@
-package mx.puntodeventa.dao;
+/*package mx.puntodeventa.dao;
 
 import mx.puntodeventa.entity.DetalleVenta;
 import mx.puntodeventa.entity.Venta;
@@ -48,4 +48,4 @@ public class VentaDAO {
             con.close();
         }
     }
-}
+}*/
