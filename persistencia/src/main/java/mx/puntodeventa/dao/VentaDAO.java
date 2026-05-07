@@ -1,4 +1,4 @@
-/*package mx.puntodeventa.dao;
+package mx.puntodeventa.dao;
 
 import mx.puntodeventa.entity.DetalleVenta;
 import mx.puntodeventa.entity.Venta;
@@ -33,7 +33,7 @@ public class VentaDAO {
                 psDetalle.setInt(1, d.getCantidad());
                 psDetalle.setDouble(2, d.getPrecioUnitario());
                 psDetalle.setInt(3, ventaId);
-                psDetalle.setInt(4, d.getIdProducto());
+                psDetalle.setInt(4, d.getId());
                 psDetalle.addBatch();
             }
 
@@ -48,4 +48,4 @@ public class VentaDAO {
             con.close();
         }
     }
-}*/
+}

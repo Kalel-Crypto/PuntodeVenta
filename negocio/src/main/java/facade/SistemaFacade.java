@@ -13,6 +13,7 @@ import service.UsuarioService;
 import service.ProductoService;
 import service.InventarioService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SistemaFacade {
@@ -62,6 +63,40 @@ public class SistemaFacade {
         } catch (Exception e) {
             System.err.println("CRÍTICO: Falló el registro de auditoría: " + e.getMessage());
         }
+    }
+
+    public List<Producto> buscarProductosPorFiltro(String query) throws Exception {
+
+        List<Producto> todosLosProductos = productoService.listarProductos();
+        List<Producto> resultados = new ArrayList<>();
+
+        if (query == null || query.trim().isEmpty()) {
+            return resultados;
+        }
+
+        try {
+
+            int idBusqueda = Integer.parseInt(query.trim());
+
+            for (Producto p : todosLosProductos) {
+                if (p.getId() == idBusqueda) {
+                    resultados.add(p);
+                    break;
+                }
+            }
+
+        } catch (NumberFormatException e) {
+
+            String textoBusqueda = query.toLowerCase().trim();
+
+            for (Producto p : todosLosProductos) {
+                if (p.getNombre() != null && p.getNombre().toLowerCase().contains(textoBusqueda)) {
+                    resultados.add(p);
+                }
+            }
+        }
+
+        return resultados;
     }
 
 

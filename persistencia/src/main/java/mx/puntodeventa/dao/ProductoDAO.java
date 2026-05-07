@@ -106,7 +106,7 @@ public class ProductoDAO {
 
     public List<Producto> listar() throws Exception {
         List<Producto> lista = new ArrayList<>();
-        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor, stock, fechaCaducidad FROM producto";
+        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto";
 
         try (Connection con = ConnectionManager.getConnection();
              Statement st = con.createStatement();
@@ -148,7 +148,7 @@ public class ProductoDAO {
                     psP.executeUpdate();
 
                 }
-                con.commit(); // Confirmamos el borrado en el inventario y el producto
+                con.commit();
                 System.out.println("Eliminacion exitosa de producto e inventario ID: " + id);
             } catch (Exception e) {
                 con.rollback();

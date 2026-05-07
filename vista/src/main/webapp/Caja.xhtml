@@ -96,23 +96,29 @@
             color: white !important;
             border-radius: 6px !important;
         }
+
         .barra-busqueda {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            width: 100%;
         }
 
-        .input-busqueda {
+
+        .ui-autocomplete {
             width: 100%;
+        }
+        .ui-autocomplete-input {
+            width: 100% !important;
             border-radius: 8px !important;
+            padding: 10px !important;
         }
     </style>
 </h:head>
 
 <h:body>
 
-    <h:form>
+    <h:form id="formVenta">
 
+        <p:growl id="mensajes" showDetail="true" life="3000" />
 
         <div class="barra-top">
             <span class="titulo">Punto de Venta</span>
@@ -126,23 +132,41 @@
 
         <div class="contenedor">
 
-
             <div class="panel-izq">
 
                 <div class="barra-busqueda">
+                    <p:autoComplete id="buscadorProducto"
+                                    value="#{ventaBean.idProductoSeleccionado}"
+                                    completeMethod="#{ventaBean.sugerirProductos}"
+                                    var="prod"
+                                    itemLabel="#{prod.nombreProducto}"
+                                    itemValue="#{prod.idProducto}"
+                                    forceSelection="true"
+                                    minQueryLength="1"
+                                    placeholder="Busca por Nombre o ID (Ej. Gall...)"
+                                    emptyMessage="Producto no encontrado"
+                                    scrollHeight="250">
 
-                    <p:inputText placeholder="Ingrese nombre o ID.."
-                                 value="#{ventaBean.busqueda}"
-                                 styleClass="input-busqueda"/>
+                        <p:ajax event="itemSelect" listener="#{ventaBean.agregarProducto}" update="@form" />
 
-                    <p:commandButton icon="pi pi-search"
-                                     action="#{ventaBean.buscar}"
-                                     update="@form"
-                                     styleClass="btn"/>
+                        <p:column>
+                            <h:outputText value="#{prod.nombreProducto}" />
+                        </p:column>
 
+                        <p:column>
+                            <h:outputText value="$#{prod.precio}" />
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{prod.stock > 0 ? 'Stock: ' : '¡AGOTADO!'}"
+                                          style="font-weight: bold; color: #{prod.stock > 0 ? '#22c55e' : '#ef4444'};" />
+                            <h:outputText value="#{prod.stock}" rendered="#{prod.stock > 0}" style="font-weight: bold; color: #22c55e;"/>
+                        </p:column>
+
+                    </p:autoComplete>
                 </div>
 
-                <p:dataTable value="#{ventaBean.listaDetalle}" var="item">
+                <p:dataTable value="#{ventaBean.listaDetalle}" var="item" id="tablaDetalle">
 
                     <p:column headerText="Producto">
                         #{item.producto.nombre}
@@ -180,7 +204,6 @@
 
             </div>
 
-            <!-- 🟦 DERECHA -->
             <div class="panel-der">
 
                 <h3>Resumen</h3>
