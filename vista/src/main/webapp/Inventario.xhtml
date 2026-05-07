@@ -387,7 +387,14 @@
                                 <p:inputText value="#{InventarioBean.productoEdit.stock}" required="true" requiredMessage="No deje el Stock vacio"/>
 
                                 <p:outputLabel value="ID Proveedor:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.idProveedor}" required="true" requiredMessage="Seleccione un proveedor"/>
+                                <p:selectOneMenu id = "proveedorDLG"
+                                                 value="#{InventarioBean.productoEdit.idProveedor}"
+                                                 style="width: 100%;">
+                                    <f:selectItems value="#{productoBean.listaProveedores}" var = "prov"
+                                                   itemLabel="#{prov.nombre}"
+                                                   itemValue="#{prov.id}"/>
+
+                                </p:selectOneMenu>
 
                             </p:panelGrid>
 
@@ -429,7 +436,7 @@
                                              styleClass="btn-green" style="margin-right:5px;"/>
 
                             <p:commandButton value="Salida" icon="pi pi-minus"
-                                             action="#{InventarioBean.registrarSalida(p)}"
+                                             action="#{InventarioBean.registrarSalida(p,loginUI.usuarioLogeado)}"
                                              process="@this cantOp"
                                              update=":formInventario:growl :formInventario:tabsPrincipal:tablaMovimientos :formInventario:tabsPrincipal:tablaInventario"
                                              styleClass="btn-red"/>

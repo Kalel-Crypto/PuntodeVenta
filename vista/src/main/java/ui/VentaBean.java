@@ -40,11 +40,8 @@ public class VentaBean implements Serializable {
     @PostConstruct
     public void init() {
         facade = new SistemaFacade();
-
         cajaActual = new Caja();
         cajaActual.setIdcaja(1);
-        this.nombreUsuario = "Cajero de Prueba";
-
         listaDetalle = new ArrayList<>();
         total = 0.0;
     }

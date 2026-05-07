@@ -112,38 +112,27 @@ public class InventarioBean implements Serializable {
         }
     }
 
-    public void registrarSalida(InventarioDTO dto) {
-        /*
-        if (usuarioBean.getUsuario() == null ||
-                !String.valueOf(usuarioBean.getUsuario().getRol()).equalsIgnoreCase("ADMINISTRADOR")) {
-            msgWarn("Acceso denegado.");
+    public void registrarSalida(InventarioDTO dto, Usuario usuarioLogeado) {
+        if (cantidadOperacion <= 0) {
+            msgWarn("La cantidad debe ser mayor a cero.");
             return;
         }
-        */
-
-        if (dto.getStock() < cantidadOperacion) {
-            msgWarn("No hay suficiente stock para realizar esta salida.");
-            return;
-        }
-
-        try {
-            mx.puntodeventa.entity.Producto p = new mx.puntodeventa.entity.Producto();
+        try{
+            Producto p = new Producto();
             p.setId(dto.getIdProducto());
             p.setNombre(dto.getNombreProducto());
-
-            int nuevoStock = dto.getStock() - cantidadOperacion;
-
+            int nuevoStock = dto.getStock() + cantidadOperacion;
             facade.actualizarStock(dto.getIdProducto(), nuevoStock);
-
-            facade.registrarMovimientoSeguro(usuarioBean.getUsuario(), p, "Salida", cantidadOperacion);
-
+            facade.registrarMovimientoSeguro(usuarioLogeado,p, "Salida", cantidadOperacion);
             dto.setStock(nuevoStock);
-            msgInfo("Salida registrada correctamente.");
+            msgInfo("Entrada registrada. Nuevo stock: " + nuevoStock);
             cantidadOperacion = 0;
+
             cargarLista();
-        } catch (Exception e) {
-            msgWarn("Fallo al registrar la salida.");
-            e.printStackTrace();
+
+        }catch (Exception msg){
+            msgWarn("Error al procesar la entrada.");
+            msg.printStackTrace();
         }
     }
 

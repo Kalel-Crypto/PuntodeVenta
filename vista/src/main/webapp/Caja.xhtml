@@ -126,7 +126,7 @@
             <div>
                 <h:outputText value="Caja: #{ventaBean.cajaActual.idcaja}" class="info"/>
                 <br/>
-                <h:outputText value="Cajero: #{ventaBean.nombreUsuario}" class="info"/>
+                <h:outputText value="Cajero: #{loginUI.usuarioLogeado.nombre}" class="info"/>
             </div>
         </div>
 
@@ -166,7 +166,7 @@
                     </p:autoComplete>
                 </div>
 
-                <p:dataTable value="#{ventaBean.listaDetalle}" var="item" id="tablaDetalle">
+                <p:dataTable value="#{ventaBean.listaDetalle}" var="item" id="tablaDetalle" emptyMessage="No hay articulos agregados">
 
                     <p:column headerText="Producto">
                         #{item.producto.nombre}
