@@ -638,33 +638,45 @@
 
                 <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
 
-                    <h:form id="formAuditoria">
+                    <div class="header-azul" style="background: #3b82f6; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                        Historial de Movimientos y Auditoría
+                    </div>
 
-                        <div class="header-azul" style="background: #3b82f6; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
-                            Historial de Movimientos y Reporte Mensual
-                        </div>
+                    <h:panelGrid columns="1" style="margin-bottom:15px; width:100%;">
+                        <h:panelGroup>
+                            <h:outputText value="Filtrar por Usuario: " style="font-weight:bold; color:#1e3a8a; display:block; margin-bottom:5px;"/>
+                            <p:selectOneMenu value="#{AuditoriaBean.idUsuarioFiltro}" style="min-width: 180px;">
+                                <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{AuditoriaBean.listaUsuarios}" var="usr"
+                                               itemLabel="#{usr.nombre}" itemValue="#{usr.id}"/>
+                                <p:ajax process="@this" listener="#{AuditoriaBean.aplicarFiltros}" update="areaResultados" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGrid>
 
-                        <h:panelGrid columns="4" id="panelTotales" style="margin-bottom:15px; background:#f8fafc; padding:15px; border: 1px solid #e2e8f0; border-radius:8px; width:100%;">
+                    <h:panelGroup id="areaResultados" layout="block">
+
+                        <h:panelGrid columns="3" id="panelTotales" style="margin-bottom:15px; background:#f8fafc; padding:15px; border: 1px solid #e2e8f0; border-radius:8px; width:100%;">
                             <h:panelGroup>
-                                <h:outputText value="TOTAL ENTRADAS: " style="font-weight:bold; color:#64748b;"/>
+                                <h:outputText value="TOTAL ENTRADAS: " style="font-weight:bold; color:#64748b; display:block;"/>
                                 <h:outputText value="#{AuditoriaBean.totalEntradas} unidades" style="color:#22c55e; font-weight:bold; font-size:1.2em;"/>
                             </h:panelGroup>
 
                             <h:panelGroup>
-                                <h:outputText value="TOTAL SALIDAS: " style="font-weight:bold; color:#64748b; margin-left:20px;"/>
+                                <h:outputText value="TOTAL SALIDAS: " style="font-weight:bold; color:#64748b; display:block;"/>
                                 <h:outputText value="#{AuditoriaBean.totalSalidas} unidades" style="color:#ef4444; font-weight:bold; font-size:1.2em;"/>
                             </h:panelGroup>
 
                             <p:commandButton value="Actualizar Reporte"
                                              action="#{AuditoriaBean.cargarTodosLosMovimientos()}"
                                              process="@this"
-                                             update="tablaAuditoria"
+                                             update="areaResultados"
                                              icon="pi pi-refresh"
                                              styleClass="btn-blue" />
                         </h:panelGrid>
 
                         <p:dataTable id="tablaAuditoria"
-                                     value="#{AuditoriaBean.listaMovimientos}"
+                                     value="#{AuditoriaBean.listaFiltrada}"
                                      var="mov"
                                      emptyMessage="No hay movimientos registrados"
                                      rows="10"
@@ -678,29 +690,26 @@
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Usuario">
-                                <i class="pi pi-user" style="margin-right:5px; color:#94a3b8;"></i>
-                                <h:outputText value="#{mov.usuario.nombre}" />
+                            <p:column headerText="Usuario" style="text-align:center;">
+                                <h:outputText value="#{mov.usuario != null ? mov.usuario.nombre : 'Sistema'}" />
                             </p:column>
 
                             <p:column headerText="Producto">
-                                <h:outputText value="#{mov.producto.nombre}" style="font-weight:bold;" />
+                                <h:outputText value="#{mov.producto != null ? mov.producto.nombre : 'N/A'}" />
                             </p:column>
 
                             <p:column headerText="Tipo" style="text-align:center;">
-                                <h:outputText value="#{mov.tipo}"
-                                              style="padding:4px 8px; border-radius:4px; font-weight:bold;
-                     background: #{mov.tipo == 'Entrada' ? '#dcfce7' : '#fee2e2'};
-                     color: #{mov.tipo == 'Entrada' ? '#166534' : '#991b1b'}" />
+                                <h:outputText value="#{mov.tipo}" style="font-weight:bold; color: #{mov.tipo == 'Entrada' ? '#22c55e' : '#ef4444'}"/>
                             </p:column>
 
-                            <p:column headerText="Cantidad" style="text-align:right; width:100px;">
-                                <h:outputText value="#{mov.cantidad}"
-                                              style="font-weight:bold; #{mov.tipo == 'Salida' ? 'color:#ef4444;' : 'color:#22c55e;'}" />
+                            <p:column headerText="Cantidad" style="text-align:center;">
+                                <h:outputText value="#{mov.cantidad}" />
                             </p:column>
+
                         </p:dataTable>
+                    </h:panelGroup>
+                </p:tab>
 
-                    </h:form> </p:tab>
             </p:tabView>
         </h:form>
 
