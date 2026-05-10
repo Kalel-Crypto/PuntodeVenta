@@ -384,15 +384,17 @@
                                 <p:inputText value="#{InventarioBean.productoEdit.stock}" disabled="true"/>
 
                                 <p:outputLabel value="ID Proveedor:" />
-                                <p:selectOneMenu id = "proveedorDLG"
+                                <p:selectOneMenu id="proveedorDLG"
                                                  value="#{InventarioBean.productoEdit.idProveedor}"
                                                  style="width: 100%;">
-                                    <f:selectItems value="#{productoBean.listaProveedores}" var = "prov"
+
+                                    <f:selectItem itemLabel="Sin proveedor" itemValue="#{null}" noSelectionOption="true"/>
+
+                                    <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
                                                    itemLabel="#{prov.nombre}"
                                                    itemValue="#{prov.id}"/>
 
                                 </p:selectOneMenu>
-
                             </p:panelGrid>
 
                             <div style="text-align: center; margin-top: 15px;">
@@ -551,7 +553,8 @@
                                              styleClass="btn-green" />
 
                             <p:commandButton value="Refrescar"
-                                             actionListener="#{proveedorBean.cargarProveedores}"
+                                             action="#{proveedorBean.cargarProveedores()}"
+                                             process="@this cargarProveedores"
                                              update="tablaProveedores"
                                              styleClass="btn-blue" />
                         </div>
@@ -585,14 +588,14 @@
                                              style="margin-right: 5px;" />
 
                             <p:commandButton value="Eliminar"
-                                             actionListener="#{proveedorBean.eliminarProveedor(prov)}"
-                                             update="tablaProveedores growl"
+                                             action="#{proveedorBean.eliminarProveedor(prov)}"
+                                             process="@this"
+                                             update=":formInventario:tabsPrincipal:tablaProveedores :formInventario:growl"
                                              styleClass="btn-red">
                                 <p:confirm header="Confirmación"
                                            message="¿Estás seguro de que deseas eliminar permanentemente a este proveedor?"
                                            icon="pi pi-exclamation-triangle" />
                             </p:commandButton>
-
                         </p:column>
                     </p:dataTable>
 
@@ -718,6 +721,11 @@
             </p:tabView>
 
         </h:form>
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350" appendTo="@(body)">
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+            <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" />
+        </p:confirmDialog>
 
     </div>
     <p:confirmDialog widgetVar="confirmDialog" appendTo="@(body)">
