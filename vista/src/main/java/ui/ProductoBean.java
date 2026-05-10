@@ -10,6 +10,7 @@ import mx.puntodeventa.dao.ProductoDAO;
 import mx.puntodeventa.entity.Inventario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
+import mx.puntodeventa.entity.Usuario;
 import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
@@ -27,7 +28,6 @@ public class ProductoBean implements Serializable {
     private SistemaFacade facade;
     private Integer idProveedorSeleccionado;
     private ProductoDAO productoDao;
-
     private int stockInicial;
 
     @PostConstruct
@@ -43,7 +43,7 @@ public class ProductoBean implements Serializable {
         }
     }
 
-    public void registrar() throws Exception {
+    public void registrar(Usuario usuarioLogeado) throws Exception {
         System.out.println("Nombre: " + producto.getNombre());
         System.out.println("Precio del producto: " + producto.getNombre());
         System.out.println("id proveedor: " + idProveedorSeleccionado);
@@ -59,8 +59,6 @@ public class ProductoBean implements Serializable {
             msgWarn("Asegurese que el stock sea un numero positivo");
             return;
         }
-
-
         try {
             facade.registrarProducto(
                     producto.getNombre(),

@@ -1,18 +1,15 @@
 package facade;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 import mx.puntodeventa.dao.MovimientoDAO;
 import mx.puntodeventa.dao.ProveedorDAO;
-import mx.puntodeventa.entity.MovimientoInventario;
-import mx.puntodeventa.entity.Proveedor;
-import mx.puntodeventa.entity.Usuario;
-import mx.puntodeventa.entity.Producto;
+import mx.puntodeventa.entity.*;
 import mx.puntodeventa.dao.InventarioDTO;
 
-import service.ProveedorService;
-import service.UsuarioService;
-import service.ProductoService;
-import service.InventarioService;
+import service.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +19,22 @@ public class SistemaFacade {
     private ProductoService productoService = new ProductoService();
     private InventarioService inventarioService = new InventarioService();
     private ProveedorService proveedorService = new ProveedorService();
+    private CajaService cajaService = new CajaService();
+    private MovimientoInventarioService movimientoInventarioService = new MovimientoInventarioService();
+
+    public boolean existeenVenta(int id) throws SQLException {
+    return movimientoInventarioService.conseguirMovimientoExistente(id);
+    }
+
+
+    public void verificarCajaExistente(String nombre) throws Exception {
+        cajaService.verificarCajaExistente(nombre);
+    }
+
+    public Caja obtenerCajaActual(Usuario u) throws Exception {
+        return cajaService.traerCajaActual(u.getId());
+    }
+
 
     public List<Proveedor> listarProveedores() throws Exception {
         ProveedorDAO proveedorDao = new ProveedorDAO();

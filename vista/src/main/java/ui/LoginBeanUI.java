@@ -8,6 +8,7 @@ package ui;
 import facade.SistemaFacade;
 import helper.LoginHelper;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,8 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import mx.puntodeventa.entity.Venta;
+import service.CajaService;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -26,17 +29,17 @@ import java.io.Serializable;
 @SessionScoped
 public class LoginBeanUI implements Serializable{
     private Usuario usuario;
-    LoginHelper helper;
-    AuditoriaBean auditoriaBean;
+    @Inject
+    private LoginHelper helper;
     private Usuario usuarioLogeado;
+
     private SistemaFacade facade;
+
     @PostConstruct
     public void init(){
-        facade = new SistemaFacade();
         usuarioLogeado = new Usuario();
         usuario= new Usuario();
-        helper = new LoginHelper();
-        auditoriaBean = new AuditoriaBean();
+        facade = new SistemaFacade();
     }
 
 
@@ -53,6 +56,9 @@ public class LoginBeanUI implements Serializable{
             if(usuarioLogeado.getRol().equals(Rol.ADMINISTRADOR)){
                 FacesContext.getCurrentInstance().getExternalContext().redirect("Inventario.xhtml");
             } else {
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .getSessionMap().put("usuario", usuarioLogeado);
+                facade.verificarCajaExistente(usuarioLogeado.getNombre());
                 FacesContext.getCurrentInstance().getExternalContext().redirect("Caja.xhtml");
             }
         } else {

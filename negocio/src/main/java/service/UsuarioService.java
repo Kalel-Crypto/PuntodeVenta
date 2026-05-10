@@ -4,12 +4,23 @@ import mx.puntodeventa.dao.UsuarioDAO;
 import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Rol;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioService {
 
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
+    List<Usuario> lista = new ArrayList<>();
 
+    public Usuario obtenerUsuarioporNombre(String nombre) throws Exception {
+        lista = usuarioDAO.listar();
+        for(Usuario u: lista){
+            if(u.getNombre().equals(nombre)){
+                return u;
+            }
+        }
+        return null;
+    }
 
     public void registrarUsuario(Usuario usuario) throws Exception {
 

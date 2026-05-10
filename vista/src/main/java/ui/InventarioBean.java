@@ -117,11 +117,14 @@ public class InventarioBean implements Serializable {
             msgWarn("La cantidad debe ser mayor a cero.");
             return;
         }
+        if(cantidadOperacion > dto.getStock()){
+            msgWarn("La cantidad de salida supera al Stock actual, ingrese otra cantidad");
+        }
         try{
             Producto p = new Producto();
             p.setId(dto.getIdProducto());
             p.setNombre(dto.getNombreProducto());
-            int nuevoStock = dto.getStock() + cantidadOperacion;
+            int nuevoStock = dto.getStock() - cantidadOperacion;
             facade.actualizarStock(dto.getIdProducto(), nuevoStock);
             facade.registrarMovimientoSeguro(usuarioLogeado,p, "Salida", cantidadOperacion);
             dto.setStock(nuevoStock);
@@ -222,7 +225,7 @@ public class InventarioBean implements Serializable {
     }
 
     public void prepararEliminar() {
-
+        System.out.println("Nombre del producto: " + seleccionado.getNombreProducto());
         if (seleccionado == null) {
             msgWarn("Seleccione un producto primero");
             return;
@@ -232,15 +235,17 @@ public class InventarioBean implements Serializable {
     }
 
     public void eliminarProducto() {
+        System.out.println("Entre al eliminarProducto");
         try {
             if (seleccionado == null || seleccionado.getIdProducto() <= 0) {
                 return;
             }
-
             int idProducto = seleccionado.getIdProducto();
 
-
-
+            if(facade.existeenVenta(idProducto)){
+                msgWarn("El producto no se puede eliminar, ya que esta ligado a una o mas ventas");
+                return;
+            }
             facade.eliminarRegistroInventario(idProducto);
             facade.eliminarProducto(idProducto);
             seleccionado = null;

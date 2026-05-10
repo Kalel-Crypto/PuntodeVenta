@@ -126,7 +126,7 @@
             <div>
                 <h:outputText value="Caja: #{ventaBean.cajaActual.idcaja}" class="info"/>
                 <br/>
-                <h:outputText value="Cajero: #{loginUI.usuarioLogeado.nombre}" class="info"/>
+                <h:outputText value="Cajero: #{ventaBean.usuario.nombre}" class="info"/>
             </div>
         </div>
 
@@ -198,8 +198,9 @@
                 </p:dataTable>
 
                 <div style="margin-top:15px;">
-                    <p:commandButton value="Cancelar Venta" styleClass="btn-danger"/>
-                    <p:commandButton value="Nueva Venta" styleClass="btn"/>
+                    <p:commandButton value="Corte de caja" styleClass="btn-danger" action="#{ventaBean.validarCorteCaja()}"
+                                     onclick="PF('dlgCorte').show();"/>
+                    <p:commandButton value="Cancelar Venta" styleClass="btn-danger" action="#{ventaBean.cancelarVenta()}" update="@form"/>
                 </div>
 
             </div>
@@ -218,19 +219,30 @@
                 <br/>
 
                 <p>Dinero recibido</p>
-                <p:inputText value="#{ventaBean.dineroRecibido}" style="width:100%;" />
+
+                <p:inputNumber value="#{ventaBean.dineroRecibido}"
+                               decimalPlaces="2"
+                               style="width:100%;">
+
+                    <p:ajax event="keyup"
+                            listener="#{ventaBean.calcularCambio}"
+                            update="cambioBox"/>
+
+                </p:inputNumber>
 
                 <br/><br/>
 
                 <p>Cambio</p>
-                <div class="box">
+
+                <h:panelGroup id="cambioBox" layout="block" styleClass="box">
+
                     <h:outputText value="#{ventaBean.cambio}">
                         <f:convertNumber type="currency"/>
                     </h:outputText>
-                </div>
+
+                </h:panelGroup>
 
                 <br/>
-
                 <p:commandButton value="Cobrar"
                                  action="#{ventaBean.cobrar}"
                                  update="@form"
@@ -240,7 +252,43 @@
             </div>
 
         </div>
+        <p:dialog
+                header="Validación Administrativa"
+                widgetVar="dlgCorte"
+                modal="true"
+                closable="false"
+                resizable="false"
+                width="400">
 
+            <h:panelGrid columns="1" style="width:100%; gap:10px;">
+
+                <p:outputLabel value="Nombre del administrador"/>
+
+                <p:inputText
+                        value="#{ventaBean.adminNombre}"
+                        style="width:100%;" />
+
+                <p:outputLabel value="Contraseña"/>
+
+                <p:password
+                        value="#{ventaBean.adminPassword}"
+                        feedback="false"
+                        style="width:100%;" />
+
+                <p:commandButton
+                        value="Aceptar"
+                        action="#{ventaBean.validarCorteCaja}"
+                        update="@form mensajes"
+                        ajax="false"
+                        styleClass="btn"/>
+
+                <h:outputText
+                        value="Una vez aceptado se cerrará la sesión actual y se redireccionará al inicio de sesión."
+                        style="font-size:12px; color:#cbd5e1;"/>
+
+            </h:panelGrid>
+
+        </p:dialog>
     </h:form>
 
 </h:body>

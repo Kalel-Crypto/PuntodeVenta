@@ -5,6 +5,8 @@ import java.sql.*;
 
 public class CajaDAO {
 
+
+
     public void abrirCaja(Caja c) throws Exception {
         String sql = "INSERT INTO caja(idUsuario) VALUES(?)";
 
@@ -22,13 +24,13 @@ public class CajaDAO {
         }
     }
 
-    public Caja obtenerCajaPorId(int idcaja) throws Exception {
-        String sql = "SELECT idcaja, idUsuario FROM caja WHERE idcaja = ?";
+    public Caja obtenerCajaPorId(int idUsuario) throws Exception {
+        String sql = "SELECT idcaja, idUsuario FROM caja WHERE idUsuario = ?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, idcaja);
+            ps.setInt(1, idUsuario);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
