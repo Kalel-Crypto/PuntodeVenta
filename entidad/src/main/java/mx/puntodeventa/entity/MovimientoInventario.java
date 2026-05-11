@@ -7,6 +7,7 @@ import java.util.Date;
 @Entity
 @Table(name = "inventariomovimientos")
 public class MovimientoInventario implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idinventarioMovimientos")
@@ -19,6 +20,9 @@ public class MovimientoInventario implements Serializable {
     private Date fecha;
 
 
+    @Column(name = "cantidad")
+    private int cantidad;
+
     @ManyToOne
     @JoinColumn(name = "idProducto")
     private Producto producto;
@@ -27,49 +31,22 @@ public class MovimientoInventario implements Serializable {
     @JoinColumn(name = "idusuario")
     private Usuario usuario;
 
-    @Column(name = "tipoMovimiento", nullable = false)
-    private tipoMovimiento movimiento;
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 
-    public String getTipo() {
-        return tipo;
-    }
+    public Date getFecha() { return fecha; }
+    public void setFecha(Date fecha) { this.fecha = fecha; }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+    public int getCantidad() { return cantidad; }
+    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
 
-    public Date getFecha() {
-        return fecha;
-    }
+    public Producto getProducto() { return producto; }
+    public void setProducto(Producto producto) { this.producto = producto; }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-
-
-    }
-
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 }

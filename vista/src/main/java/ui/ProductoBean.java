@@ -6,9 +6,11 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.annotation.PostConstruct;
 import facade.SistemaFacade;
+import mx.puntodeventa.dao.ProductoDAO;
 import mx.puntodeventa.entity.Inventario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
+import mx.puntodeventa.entity.Usuario;
 import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
@@ -25,12 +27,12 @@ public class ProductoBean implements Serializable {
     private List<Proveedor> listaProveedores;
     private SistemaFacade facade;
     private Integer idProveedorSeleccionado;
-
-
+    private ProductoDAO productoDao;
     private int stockInicial;
 
     @PostConstruct
     public void init() {
+        productoDao = new ProductoDAO();
         facade = new SistemaFacade();
         producto = new Producto();
 
@@ -41,12 +43,14 @@ public class ProductoBean implements Serializable {
         }
     }
 
-    public void registrar() {
+    public void registrar(Usuario usuarioLogeado) throws Exception {
         System.out.println("Nombre: " + producto.getNombre());
         System.out.println("Precio del producto: " + producto.getNombre());
         System.out.println("id proveedor: " + idProveedorSeleccionado);
         System.out.println("Stock: " + stockInicial);
-
+        if(productoDao.existeProductoPorNombre(producto.getNombre())){
+            msgWarn("Ya hay un producto con el mismo nombre, ingrese otro nombre");
+        }
         if(producto.getPrecio() <= 0){
             msgWarn("Asegurese de que el precio sea un numero positivo");
             return;
@@ -55,8 +59,6 @@ public class ProductoBean implements Serializable {
             msgWarn("Asegurese que el stock sea un numero positivo");
             return;
         }
-
-
         try {
             facade.registrarProducto(
                     producto.getNombre(),

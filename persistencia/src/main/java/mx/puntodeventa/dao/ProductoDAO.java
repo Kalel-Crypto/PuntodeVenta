@@ -5,8 +5,7 @@ import mx.puntodeventa.entity.Proveedor;
 
 import java.sql.*;
 import java.util.*;
-
-import static mx.puntodeventa.entity.DetalleVenta_.idProducto;
+//import static mx.puntodeventa.entity.DetalleVenta_.idProducto;
 
 public class ProductoDAO {
 
@@ -43,6 +42,25 @@ public class ProductoDAO {
             }
         }
     }
+
+    public boolean existeProductoPorNombre(String nombre) throws Exception {
+        String sql = "SELECT COUNT(*) FROM producto WHERE nombre = ?";
+        boolean existe = false;
+
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    existe = rs.getInt(1) > 0;
+                }
+            }
+        }
+        return existe;
+    }
+
 
     public void actualizar(Producto p) throws Exception {
         String sql = "UPDATE producto SET nombre=?, precioUnitario=?, idProveedor=? WHERE idProducto=?";
@@ -88,7 +106,7 @@ public class ProductoDAO {
 
     public List<Producto> listar() throws Exception {
         List<Producto> lista = new ArrayList<>();
-        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor, stock, fechaCaducidad FROM producto";
+        String sql = "SELECT idProducto, nombre, precioUnitario, idProveedor FROM producto";
 
         try (Connection con = ConnectionManager.getConnection();
              Statement st = con.createStatement();
@@ -130,7 +148,7 @@ public class ProductoDAO {
                     psP.executeUpdate();
 
                 }
-                con.commit(); // Confirmamos el borrado en el inventario y el producto
+                con.commit();
                 System.out.println("Eliminacion exitosa de producto e inventario ID: " + id);
             } catch (Exception e) {
                 con.rollback();

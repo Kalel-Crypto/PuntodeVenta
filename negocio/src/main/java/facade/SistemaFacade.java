@@ -1,15 +1,16 @@
 package facade;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+import mx.puntodeventa.dao.MovimientoDAO;
 import mx.puntodeventa.dao.ProveedorDAO;
-import mx.puntodeventa.entity.Proveedor;
-import mx.puntodeventa.entity.Usuario;
-import mx.puntodeventa.entity.Producto;
+import mx.puntodeventa.entity.*;
 import mx.puntodeventa.dao.InventarioDTO;
 
-import service.UsuarioService;
-import service.ProductoService;
-import service.InventarioService;
+import service.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SistemaFacade {
@@ -17,6 +18,23 @@ public class SistemaFacade {
     private UsuarioService usuarioService = new UsuarioService();
     private ProductoService productoService = new ProductoService();
     private InventarioService inventarioService = new InventarioService();
+    private ProveedorService proveedorService = new ProveedorService();
+    private CajaService cajaService = new CajaService();
+    private MovimientoInventarioService movimientoInventarioService = new MovimientoInventarioService();
+
+    public boolean existeenVenta(int id) throws SQLException {
+    return movimientoInventarioService.conseguirMovimientoExistente(id);
+    }
+
+
+    public void verificarCajaExistente(String nombre) throws Exception {
+        cajaService.verificarCajaExistente(nombre);
+    }
+
+    public Caja obtenerCajaActual(Usuario u) throws Exception {
+        return cajaService.traerCajaActual(u.getId());
+    }
+
 
     public List<Proveedor> listarProveedores() throws Exception {
         ProveedorDAO proveedorDao = new ProveedorDAO();
@@ -38,7 +56,61 @@ public class SistemaFacade {
     public void eliminarUsuario(int id) throws Exception {
         usuarioService.eliminarUsuario(id);
     }
+    public void registrarProveedor(String nombre, String numero) throws Exception {
+        proveedorService.registrar(nombre, numero);
+    }
 
+    public void registrarMovimientoSeguro(Usuario usuario, Producto producto, String tipo, int cantidad) {
+        try {
+            System.out.println("Nombre del usuario: " + usuario.getNombre() +
+                    "\n" + "ID: " + usuario.getId());
+            MovimientoDAO dao = new MovimientoDAO();
+            MovimientoInventario m = new MovimientoInventario();
+            m.setFecha(new java.util.Date());
+            m.setUsuario(usuario);
+            m.setProducto(producto);
+            m.setTipo(tipo);
+            m.setCantidad(cantidad);
+
+            dao.insertar(m);
+        } catch (Exception e) {
+            System.err.println("CRÍTICO: Falló el registro de auditoría: " + e.getMessage());
+        }
+    }
+
+    public List<Producto> buscarProductosPorFiltro(String query) throws Exception {
+
+        List<Producto> todosLosProductos = productoService.listarProductos();
+        List<Producto> resultados = new ArrayList<>();
+
+        if (query == null || query.trim().isEmpty()) {
+            return resultados;
+        }
+
+        try {
+
+            int idBusqueda = Integer.parseInt(query.trim());
+
+            for (Producto p : todosLosProductos) {
+                if (p.getId() == idBusqueda) {
+                    resultados.add(p);
+                    break;
+                }
+            }
+
+        } catch (NumberFormatException e) {
+
+            String textoBusqueda = query.toLowerCase().trim();
+
+            for (Producto p : todosLosProductos) {
+                if (p.getNombre() != null && p.getNombre().toLowerCase().contains(textoBusqueda)) {
+                    resultados.add(p);
+                }
+            }
+        }
+
+        return resultados;
+    }
 
 
     public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {
@@ -57,11 +129,25 @@ public class SistemaFacade {
         return productoService.listarProductos();
     }
 
+    public void modificarProveedor(Proveedor p) throws Exception {
+        ProveedorDAO dao = new ProveedorDAO();
+        dao.actualizar(p);
+    }
 
+    public void eliminarProveedor(int id) throws Exception {
+        ProveedorDAO dao = new ProveedorDAO();
+        dao.eliminar(id);
+    }
+
+    public List<Proveedor> buscarProveedores(String busqueda) throws Exception {
+        ProveedorDAO dao = new ProveedorDAO();
+        return dao.buscar(busqueda);
+    }
 
     public List<InventarioDTO> listarInventario() throws Exception {
         return inventarioService.listarInventario();
     }
+
 
     public List<InventarioDTO> buscarInventarioPorNombre(String nombre) throws Exception {
         return inventarioService.buscarPorNombre(nombre);
@@ -73,6 +159,11 @@ public class SistemaFacade {
 
     public List<InventarioDTO> buscarInventarioExacto(int idProducto, String nombre) throws Exception {
         return inventarioService.buscarExacto(idProducto, nombre);
+    }
+
+    public List<MovimientoInventario> listarTodosLosMovimientos() throws Exception {
+        MovimientoDAO movimientoDAO = new MovimientoDAO();
+        return movimientoDAO.listarTodos();
     }
 
     public void actualizarStock(int idProducto, int nuevoStock) throws Exception {

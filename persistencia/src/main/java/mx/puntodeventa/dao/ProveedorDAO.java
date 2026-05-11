@@ -44,6 +44,37 @@ public class ProveedorDAO {
         return lista;
     }
 
+    public void actualizar(Proveedor p) throws Exception {
+        String sql = "UPDATE proveedor SET nombre=?, contacto=? WHERE idproveedor=?";
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getContacto());
+            ps.setInt(3, p.getId());
+            ps.executeUpdate();
+        }
+    }
+
+    public List<Proveedor> buscar(String parametro) throws Exception {
+        List<Proveedor> lista = new ArrayList<>();
+        String sql = "SELECT idproveedor, nombre, contacto FROM proveedor WHERE nombre LIKE ? OR CAST(idproveedor AS CHAR) = ?";
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "%" + parametro + "%");
+            ps.setString(2, parametro);
+            try (ResultSet rs = ps.executeQuery()) {
+                while(rs.next()){
+                    Proveedor p = new Proveedor();
+                    p.setId(rs.getInt("idproveedor"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setContacto(rs.getString("contacto"));
+                    lista.add(p);
+                }
+            }
+        }
+        return lista;
+    }
+
     public void eliminar(int id) throws Exception {
         String sql = "DELETE FROM proveedor WHERE idproveedor=?";
 

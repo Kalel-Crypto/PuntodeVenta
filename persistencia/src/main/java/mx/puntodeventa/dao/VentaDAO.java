@@ -2,7 +2,6 @@ package mx.puntodeventa.dao;
 
 import mx.puntodeventa.entity.DetalleVenta;
 import mx.puntodeventa.entity.Venta;
-
 import java.sql.*;
 import java.util.List;
 
@@ -12,11 +11,13 @@ public class VentaDAO {
 
         String sqlVenta = "INSERT INTO venta(idCaja, total) VALUES(?,?)";
         String sqlDetalle = "INSERT INTO detalleventa(cantidad, precioUnitario, idVenta, idProducto) VALUES(?,?,?,?)";
-
+        String sqlActualizarStock = "UPDATE inventario SET stock = stock - ? WHERE idProducto = ? AND stock >= ?";
+        String sqlAuditoria = "INSERT INTO inventariomovimientos (idProducto, cantidad, tipoMovimiento, fecha, idusuario) VALUES (?, ?, 'SALIDA', NOW(), ?)";
         Connection con = ConnectionManager.getConnection();
 
         try {
             con.setAutoCommit(false);
+
 
             PreparedStatement psVenta = con.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS);
             psVenta.setInt(1, v.getIdCaja());
@@ -27,25 +28,79 @@ public class VentaDAO {
             rs.next();
             int ventaId = rs.getInt(1);
 
+
             PreparedStatement psDetalle = con.prepareStatement(sqlDetalle);
+            PreparedStatement psStock = con.prepareStatement(sqlActualizarStock);
+            PreparedStatement psAudit = con.prepareStatement(sqlAuditoria);
 
             for (DetalleVenta d : detalles) {
+
                 psDetalle.setInt(1, d.getCantidad());
                 psDetalle.setDouble(2, d.getPrecioUnitario());
                 psDetalle.setInt(3, ventaId);
-                psDetalle.setInt(4, d.getIdProducto());
+                psDetalle.setInt(4, d.getProducto().getId());
                 psDetalle.addBatch();
+
+
+                psStock.setInt(1, d.getCantidad());
+                psStock.setInt(2, d.getProducto().getId());
+                psStock.setInt(3, d.getCantidad());
+                int filasAfectadas = psStock.executeUpdate();
+
+                if (filasAfectadas == 0) {
+                    throw new Exception("Stock insuficiente para el producto: " + d.getProducto().getNombre());
+                }
+
+                psAudit.setInt(1, d.getProducto().getId());
+                psAudit.setInt(2, d.getCantidad());
+                psAudit.setInt(3, 1);
+                psAudit.addBatch();
             }
 
             psDetalle.executeBatch();
+            psAudit.executeBatch();
 
             con.commit();
 
         } catch (Exception e) {
-            con.rollback();
+            if (con != null) con.rollback();
             throw e;
         } finally {
-            con.close();
+            if (con != null) con.close();
         }
     }
+
+    public DetalleVenta conseguirRegistro(int idProducto) throws SQLException {
+        String sql = "SELECT iddetalleVenta, idVenta, idProducto, precioUnitario, cantidad " +
+                "FROM detalleventa WHERE idProducto = ? LIMIT 1";
+
+        Connection con = ConnectionManager.getConnection();
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idProducto);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                DetalleVenta d = new DetalleVenta();
+
+                d.setCantidad(rs.getInt("cantidad"));
+                d.setPrecioUnitario(rs.getDouble("precioUnitario"));
+                mx.puntodeventa.entity.Producto p = new mx.puntodeventa.entity.Producto();
+                p.setId(rs.getInt("idProducto"));
+
+                d.setProducto(p);
+
+                return d;
+            }
+
+            return null;
+
+        } finally {
+            if (con != null) con.close();
+        }
+    }
+
 }

@@ -2,11 +2,15 @@ package ui;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
+import mx.puntodeventa.entity.MovimientoInventario;
+import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
+import mx.puntodeventa.entity.Usuario;
 import org.primefaces.PrimeFaces;
 
 import facade.SistemaFacade;
@@ -21,20 +25,29 @@ import java.util.List;
 public class InventarioBean implements Serializable {
 
     private List<InventarioDTO> listaInventario;
+    private List<MovimientoInventario> listaMovimientos;
+
     private InventarioDTO seleccionado;
     private InventarioDTO productoEdit;
+
     private SistemaFacade facade;
     private String busqueda;
-
+    private int cantidadOperacion;
     private String nombre;
     private int ID;
+    AuditoriaBean auditoriaBean;
+
+
     @PostConstruct
-    public void inicio() {
+    public void inicio(){
         facade = new SistemaFacade();
         listaInventario = new ArrayList<>();
         productoEdit = new InventarioDTO();
+        auditoriaBean = new AuditoriaBean();
         cargarLista();
     }
+    @Inject
+    private UsuarioBean usuarioBean;
 
     public void refrescar(){
         this.busqueda = null;
@@ -59,7 +72,10 @@ public class InventarioBean implements Serializable {
                 cargarLista();
             }
             Id = Integer.parseInt(busqueda);
+            long inicio = System.currentTimeMillis();
            listaInventario = facade.buscarInventarioPorId(Id);
+            long fin = System.currentTimeMillis();
+            System.out.println("Tiempo: " + (fin - inicio));
         }catch (NumberFormatException msg){
             try {
                 listaInventario = facade.buscarInventarioPorNombre(busqueda);
@@ -70,20 +86,57 @@ public class InventarioBean implements Serializable {
             throw new RuntimeException(e);
         }
 
+    }
 
-        /*try {
-            if ((nombre == null || nombre.trim().isEmpty()) && ID <= 0) {
-                cargarLista();
-            } else if (ID > 0 && (nombre != null && !nombre.trim().isEmpty())) {
-                listaInventario = facade.buscarInventarioExacto(ID, nombre);
-            } else if (nombre != null && !nombre.trim().isEmpty()) {
-                listaInventario = facade.buscarInventarioPorNombre(nombre);
-            } else if (ID > 0) {
-                listaInventario = facade.buscarInventarioPorId(ID);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+    public void registrarEntrada(InventarioDTO dto, Usuario usuarioLogeado) {
+        if (cantidadOperacion <= 0) {
+            msgWarn("La cantidad debe ser mayor a cero.");
+            return;
+        }
+        try{
+            Producto p = new Producto();
+            p.setId(dto.getIdProducto());
+            p.setNombre(dto.getNombreProducto());
+            int nuevoStock = dto.getStock() + cantidadOperacion;
+            facade.actualizarStock(dto.getIdProducto(), nuevoStock);
+            facade.registrarMovimientoSeguro(usuarioLogeado,p, "Entrada", cantidadOperacion);
+            dto.setStock(nuevoStock);
+            msgInfo("Entrada registrada. Nuevo stock: " + nuevoStock);
+            cantidadOperacion = 0;
+
+            cargarLista();
+
+        }catch (Exception msg){
+            msgWarn("Error al procesar la entrada.");
+            msg.printStackTrace();
+        }
+    }
+
+    public void registrarSalida(InventarioDTO dto, Usuario usuarioLogeado) {
+        if (cantidadOperacion <= 0) {
+            msgWarn("La cantidad debe ser mayor a cero.");
+            return;
+        }
+        if(cantidadOperacion > dto.getStock()){
+            msgWarn("La cantidad de salida supera al Stock actual, ingrese otra cantidad");
+        }
+        try{
+            Producto p = new Producto();
+            p.setId(dto.getIdProducto());
+            p.setNombre(dto.getNombreProducto());
+            int nuevoStock = dto.getStock() - cantidadOperacion;
+            facade.actualizarStock(dto.getIdProducto(), nuevoStock);
+            facade.registrarMovimientoSeguro(usuarioLogeado,p, "Salida", cantidadOperacion);
+            dto.setStock(nuevoStock);
+            msgInfo("Entrada registrada. Nuevo stock: " + nuevoStock);
+            cantidadOperacion = 0;
+
+            cargarLista();
+
+        }catch (Exception msg){
+            msgWarn("Error al procesar la entrada.");
+            msg.printStackTrace();
+        }
     }
 
     //AQUI TE PREPARO LA MODIFICACION
@@ -106,21 +159,28 @@ public class InventarioBean implements Serializable {
         productoEdit.setIdProveedor(seleccionado.getIdProveedor());
 
 
-
-
         PrimeFaces.current().ajax().update("formModificar");
         PrimeFaces.current().executeScript("PF('dlgModificar').show()");
     }
     //AQUI PERMITE MODIFICAR EL PRODUCTO ENTERO NO SOLO EL STOCK
     public void modificarProducto() {
-
+        System.out.println(">>> ENTRANDO A modificarProducto() <<<");
         try {
-            if (productoEdit == null) {
+            if (productoEdit == null || seleccionado == null) {
                 msgWarn("Seleccione un producto primero");
                 return;
             }
 
-            System.out.println("ID Proveedor a guardar: " + productoEdit.getIdProveedor());
+            int stockAnterior = seleccionado.getStock();
+            int stockNuevo = productoEdit.getStock();
+            int diferencia = stockNuevo - stockAnterior;
+
+            String tipoMovimiento = "";
+            if (diferencia > 0) {
+                tipoMovimiento = "Entrada";
+            } else if (diferencia < 0) {
+                tipoMovimiento = "Salida";
+            }
 
             facade.actualizarProducto(
                     productoEdit.getIdProducto(),
@@ -134,22 +194,38 @@ public class InventarioBean implements Serializable {
                     productoEdit.getStock()
             );
 
-            cargarLista();
+            if (!tipoMovimiento.isEmpty()) {
+                try {
+                    mx.puntodeventa.entity.Producto p = new mx.puntodeventa.entity.Producto();
+                    p.setId(productoEdit.getIdProducto());
+                    p.setNombre(productoEdit.getNombreProducto());
 
+                    facade.registrarMovimientoSeguro(
+                            usuarioBean.getUsuario(),
+                            p,
+                            tipoMovimiento,
+                            Math.abs(diferencia)
+                    );
+                } catch (Exception e) {
+                    System.err.println("Error no crítico en auditoría: " + e.getMessage());
+                }
+            }
+
+            cargarLista();
             seleccionado = null;
             productoEdit = new InventarioDTO();
 
             msgInfo("Producto modificado correctamente");
 
         } catch(Exception e) {
-            System.out.println("ERROR EN MODIFICAR: " + e.getMessage());
+            msgWarn("Error al modificar: Intentelo de nuevo");
+            System.out.println("ERROR CRÍTICO EN MODIFICAR PRODUCTO:");
             e.printStackTrace();
-            msgWarn("Error al modificar: " + e.getMessage());
         }
     }
 
     public void prepararEliminar() {
-
+        System.out.println("Nombre del producto: " + seleccionado.getNombreProducto());
         if (seleccionado == null) {
             msgWarn("Seleccione un producto primero");
             return;
@@ -159,15 +235,17 @@ public class InventarioBean implements Serializable {
     }
 
     public void eliminarProducto() {
+        System.out.println("Entre al eliminarProducto");
         try {
             if (seleccionado == null || seleccionado.getIdProducto() <= 0) {
                 return;
             }
-
             int idProducto = seleccionado.getIdProducto();
 
-
-
+            if(facade.existeenVenta(idProducto)){
+                msgWarn("El producto no se puede eliminar, ya que esta ligado a una o mas ventas");
+                return;
+            }
             facade.eliminarRegistroInventario(idProducto);
             facade.eliminarProducto(idProducto);
             seleccionado = null;
@@ -201,6 +279,14 @@ public class InventarioBean implements Serializable {
 
     public InventarioDTO getProductoEdit() { return productoEdit; }
     public void setProductoEdit(InventarioDTO productoEdit) { this.productoEdit = productoEdit; }
+
+    public int getCantidadOperacion() {
+        return cantidadOperacion;
+    }
+
+    public void setCantidadOperacion(int cantidadOperacion) {
+        this.cantidadOperacion = cantidadOperacion;
+    }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }

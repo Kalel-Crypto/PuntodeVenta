@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
     <title>Inventario</title>
 
     <style>
         body {
-            font-family: Arial;
-            background: #f2f2f2;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #eef4fb;
         }
+
 
         .contenedor {
             width: 90%;
             margin: 30px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
+
 
         .barra-superior {
             display: flex;
@@ -35,28 +38,221 @@
         }
 
         .btn-blue {
-            background: #3b82f6 !important;
+            background: #2563eb !important;
             color: white !important;
-            font-weight: bold !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
             border: none !important;
             padding: 8px 15px;
+            transition: 0.3s;
         }
 
-        .btn-red {
-            background: #f87171 !important;
-            color: white !important;
-            font-weight: bold !important;
-            border: none !important;
-            padding: 8px 15px;
+        .btn-blue:hover {
+            background: #1e40af !important;
         }
 
         .btn-green {
-            background: #4ade80 !important;
+            background: #3b82f6 !important;
             color: white !important;
-            font-weight: bold !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
             border: none !important;
             padding: 8px 15px;
+            transition: 0.3s;
         }
+
+        .btn-green:hover {
+            background: #1d4ed8 !important;
+        }
+
+        .btn-red {
+            background: #ef4444 !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            border: none !important;
+            padding: 8px 15px;
+            transition: 0.3s;
+        }
+
+        .btn-red:hover {
+            background: #b91c1c !important;
+        }
+
+
+        .header-azul {
+            background: linear-gradient(90deg, #2563eb, #1e3a8a);
+            color: white;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+
+        .ui-inputfield {
+            border-radius: 6px !important;
+            border: 1px solid #cbd5f5 !important;
+        }
+
+
+        .ui-datatable {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ui-datatable thead th {
+            background: #1e3a8a !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .ui-datatable tbody tr:nth-child(even) {
+            background: #f1f5ff;
+        }
+
+        .ui-datatable tbody tr:hover {
+            background: #dbeafe !important;
+        }
+
+
+        .ui-panelgrid {
+            background: #f8fbff;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+
+        .ui-tabs .ui-tabs-nav {
+            background: #1e3a8a;
+            border-radius: 8px;
+        }
+
+        .ui-tabs .ui-tabs-nav li a {
+            color: white !important;
+            font-weight: 500;
+        }
+
+        .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+            background: #2563eb !important;
+            border-radius: 6px;
+        }
+
+
+        .ui-dialog {
+            border-radius: 12px !important;
+        }
+
+        .ui-dialog-titlebar {
+            background: #1e3a8a !important;
+            color: white !important;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .ui-tabs .ui-tabs-nav {
+            background: #1e3a8a !important;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .ui-tabs .ui-tabs-nav li {
+            background: transparent !important;
+            border: none !important;
+            margin-right: 5px;
+        }
+
+
+        .ui-tabs .ui-tabs-nav li a {
+            color: #c7d2fe !important;
+            font-weight: 500;
+        }
+
+
+        .ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+            background: #2563eb !important;
+            border-radius: 6px;
+        }
+
+        .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+            color: white !important;
+        }
+
+
+        .ui-tabs .ui-tabs-nav li:hover {
+            background: #1d4ed8 !important;
+            border-radius: 6px;
+        }
+
+        .ui-tabs .ui-tabs-panels {
+            border: none !important;
+        }
+
+        .btn-logout {
+            background: #dc2626 !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+        }
+
+        .btn-logout:hover {
+            background: #991b1b !important;
+        }
+
+
+        .btn-refresh {
+            background: #1d4ed8 !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+        }
+
+        .btn-refresh:hover {
+            background: #1e3a8a !important;
+        }
+
+        .ui-selectonemenu {
+            border-radius: 6px !important;
+            border: 1px solid #93c5fd !important;
+        }
+
+
+        .ui-selectonemenu-label {
+            color: #1e3a8a !important;
+        }
+
+
+        .ui-selectonemenu-trigger {
+            background: #2563eb !important;
+            border: none !important;
+        }
+
+
+        .ui-selectonemenu-panel {
+            border-radius: 8px !important;
+        }
+
+
+        .ui-selectonemenu-item:hover {
+            background: #dbeafe !important;
+        }
+        .barra-global {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #1e3a8a, #2563eb);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .texto-sesion {
+            color: #e0e7ff;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+
     </style>
 </h:head>
 
@@ -67,23 +263,34 @@
         <h:form id="formInventario">
 
             <p:growl id="growl" showDetail="true" life="3000"/>
+            <div class="barra-global">
 
-            <p:tabView>
+                <p:commandButton value="Cerrar sesión"
+                                 action="#{loginUI.logout}"
+                                 immediate="true"
+                                 ajax="false"
+                                 styleClass="btn-logout"
+                                 icon="pi pi-sign-out"/>
 
-                <!-- La tabla inventario  -->
+                <h:outputText value="Sesion iniciada: #{loginUI.usuarioLogeado.nombre}"
+                              styleClass="texto-sesion"/>
+
+            </div>
+
+
+
+            <p:tabView id="tabsPrincipal">
+
                 <p:tab title="Inventario">
 
                     <div class="barra-superior">
 
-                        <p:commandButton value="Regresar"
-                                         styleClass="btn-blue"
-                                         action="#"/>
 
                         <div class="busqueda">
 
                             <p:inputText id="busqueda"
                                          value="#{InventarioBean.busqueda}"
-                                         placeholder="ingrese su nombre o ID..." />
+                                         placeholder="Ingrese su nombre o ID..." />
 
                             <p:commandButton value="Buscar"
                                              action="#{InventarioBean.buscarProducto}"
@@ -92,12 +299,10 @@
                                              styleClass="btn-green"/>
 
                             <p:commandButton value="Refrescar"
-                                             id="Refrescar"
                                              action="#{InventarioBean.refrescar()}"
                                              process="@this"
                                              update="tablaInventario"
-                                             var="producto"/>
-
+                                             styleClass="btn-refresh"/>
 
                         </div>
                     </div>
@@ -114,14 +319,25 @@
 
                         <p:column headerText="ID">#{producto.idProducto}</p:column>
                         <p:column headerText="Nombre">#{producto.nombreProducto}</p:column>
+
                         <p:column headerText="Stock">
-                            <h:outputText value="#{producto.stock} unidades"></h:outputText>
+                            <h:outputText value="#{producto.stock} unidades"/>
                         </p:column>
+
                         <p:column headerText="Precio">
                             <h:outputText value="#{producto.precio}">
-                                <f:convertNumber type="currency" />
+                                <f:convertNumber type="currency"/>
                             </h:outputText>
                         </p:column>
+
+
+
+                        <p:column headerText="Total Valor">
+                            <h:outputText value="#{producto.stock * producto.precio}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </p:column>
+
                         <p:column headerText="Proveedor">#{producto.proveedor}</p:column>
 
                     </p:dataTable>
@@ -129,7 +345,7 @@
                     <div style="text-align:center; margin-top:15px;">
 
                         <p:commandButton value="Eliminar"
-                                         action="#{InventarioBean.prepararEliminar}"
+                                         action="#{InventarioBean.prepararEliminar()}"
                                          process="@this"
                                          update="formInventario growl"
                                          disabled="#{empty InventarioBean.seleccionado}"
@@ -145,129 +361,388 @@
 
                     </div>
 
+                    <p:dialog header="Modificar Producto"
+                              widgetVar="dlgModificar"
+                              modal="true"
+                              showEffect="fade"
+                              hideEffect="fade"
+                              resizable="false">
+
+                        <p:outputPanel id="formModificar">
+
+                            <p:panelGrid columns="2"
+                                         rendered="#{not empty InventarioBean.productoEdit}"
+                                         styleClass="ui-noborder">
+
+                                <p:outputLabel value="Nombre del Producto:" />
+                                <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" required="true" requiredMessage="No deje el campo del nombre vacio" />
+
+                                <p:outputLabel value="Precio:" />
+                                <p:inputText value="#{InventarioBean.productoEdit.precio}" required="true"  requiredMessage="No deje el campo del precio vacio"/>
+
+                               <p:outputLabel value="Stock:" />
+                                <p:inputText value="#{InventarioBean.productoEdit.stock}" disabled="true"/>
+
+                                <p:outputLabel value="ID Proveedor:" />
+                                <p:selectOneMenu id="proveedorDLG"
+                                                 value="#{InventarioBean.productoEdit.idProveedor}"
+                                                 style="width: 100%;">
+
+                                    <f:selectItem itemLabel="Sin proveedor" itemValue="#{null}" noSelectionOption="true"/>
+
+                                    <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
+                                                   itemLabel="#{prov.nombre}"
+                                                   itemValue="#{prov.id}"/>
+
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+
+                            <div style="text-align: center; margin-top: 15px;">
+                                <p:commandButton value="Guardar Cambios"
+                                                 action="#{InventarioBean.modificarProducto}"
+                                                 process="formModificar"
+                                                 update=":formInventario:tabsPrincipal:tablaInventario :formInventario:growl"
+                                                 oncomplete="if (!args.validationFailed) PF('dlgModificar').hide()"
+                                                 styleClass="btn-blue" />
+                            </div>
+
+                        </p:outputPanel>
+                    </p:dialog>
                 </p:tab>
 
-                <!-- Alta de producto -->
+                <p:tab title="Movimientos">
+                    <div class="header-azul">Gestión de Carga y Descarga de Stock</div>
+
+                    <p:dataTable id="tablaMovimientos"
+                                 value="#{InventarioBean.listaInventario}"
+                                 var="p" rows="10" paginator="true" paginatorPosition="bottom">
+
+                        <p:column headerText="Producto">#{p.nombreProducto}</p:column>
+
+                        <p:column headerText="Stock Actual" style="text-align:center;">
+                            <h:outputText value="#{p.stock}" style="font-weight:bold;"/>
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <p:spinner id="cantOp" value="#{InventarioBean.cantidadOperacion}" min="1" style="width:100%"/>
+                        </p:column>
+
+                        <p:column headerText="Acciones" style="text-align:center;">
+                            <p:commandButton value="Entrada" icon="pi pi-plus"
+                                             action="#{InventarioBean.registrarEntrada(p,loginUI.usuarioLogeado)}"
+                                             process="@this cantOp"
+                                             update=":formInventario:growl :formInventario:tabsPrincipal:tablaMovimientos :formInventario:tabsPrincipal:tablaInventario"
+                                             styleClass="btn-green" style="margin-right:5px;"/>
+
+                            <p:commandButton value="Salida" icon="pi pi-minus"
+                                             action="#{InventarioBean.registrarSalida(p,loginUI.usuarioLogeado)}"
+                                             process="@this cantOp"
+                                             update=":formInventario:growl :formInventario:tabsPrincipal:tablaMovimientos :formInventario:tabsPrincipal:tablaInventario"
+                                             styleClass="btn-red"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+
                 <p:tab title="Altas">
+
                     <p:tabView>
 
                         <p:tab title="Registrar Producto">
 
-                            <p:growl id="msgs" showDetail="true" />
+                            <p:growl id="msgs" showDetail="true"/>
 
                             <div class="header-azul">Registro de productos</div>
 
                             <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
 
                                 <p:outputLabel for="nombre" value="Nombre *"/>
-                                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true" requiredMessage="Ingrese un nombre"/>
+                                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
 
                                 <p:outputLabel for="precio" value="Precio *"/>
-                                <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true" requiredMessage="Ingrese un precio"/>
+                                <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true" requiredMessage="Asegurese de ingresar un precio"/>
 
                                 <p:outputLabel for="proveedor" value="Proveedor *"/>
-                                <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true" requiredMessage="Seleccione un proveedor" style="width: 100%;">
-                                    <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
+                                <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true" requiredMessage="Seleccione un proveedor">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                                   itemLabel="#{prov.nombre}" itemValue="#{prov.id}" />
+                                                   itemLabel="#{prov.nombre}" itemValue="#{prov.id}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="stock" value="Stock *"/>
-                                <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true" requiredMessage="Ingrese un precio"/>
+                                <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true" requiredMessage="No deje el Stock vacio"/>
 
-                                <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
-                                    <p:commandButton value="Cancelar" process="@this" />
+                                <h:panelGrid columns="2" style="margin-top:20px;">
+
 
                                     <p:commandButton value="Registrar"
-                                                     action="#{productoBean.registrar}"
-                                                     process="@form"
+                                                     action="#{productoBean.registrar(loginUI.usuarioLogeado)}"
+                                                     process="@this nombre precio proveedor stock"
                                                      update="msgs"
-                                                     styleClass="btn-green" />
+                                                     styleClass="btn-green"/>
                                 </h:panelGrid>
 
                             </p:panelGrid>
 
                         </p:tab>
 
-                        <!-- Alta de proveedor -->
                         <p:tab title="Registrar Proveedor">
 
-                            <p:growl id="msgsProveedor" showDetail="true" />
+                            <p:growl id="msgsProveedor"/>
 
-                            <div class="header-azul">Registro de proveedores</div>
+                            <p:panelGrid columns="1">
 
-                            <!--   <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
+                                <p:outputLabel value="Nombre del proveedor *"/>
+                                <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
+                                <p:outputLabel value="Numero del proveedor *"/>
+                                <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.contacto}" required="true" requiredMessage="Asegurese de ingresar un numero de celular"/>
 
-                              <p:outputLabel for="nombreProv" value="Nombre *"/>
-                                  <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true"/>
+                                <p:commandButton value="Registrar"
+                                                 action="#{proveedorBean.registrar}"
+                                                 process="@this nombreProv telefonoProv"
+                                                 update="msgsProveedor"
+                                                 styleClass="btn-green"/>
 
-                                  <p:outputLabel for="telefonoProv" value="Teléfono *"/>
-                                  <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.telefono}" required="true"/>
+                            </p:panelGrid>
 
+                        </p:tab>
 
-                                  <h:panelGrid columns="2" style="width: 100%; margin-top: 20px;">
+                        <p:tab title="Registrar Usuario">
 
-                                      <p:commandButton value="Registrar"
-                                                       action="#{proveedorBean.registrar}"
-                                                       process="@form"
-                                                       update="formInventario msgsProveedor"
-                                                       styleClass="btn-green" /> -
-                                  </h:panelGrid>
+                            <p:growl id="msgsUsuario"/>
 
-                              </p:panelGrid> -->
+                            <p:panelGrid columns="1">
+
+                                <p:outputLabel value="Nombre de usuario *"/>
+                                <p:inputText id="nombreUsuario" value="#{usuarioBean.usuario.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
+                                <p:outputLabel value="Constraseña *"/>
+                                <p:password id="passwordUsuario" value="#{usuarioBean.usuario.password}" required="true" requiredMessage="Asegurese de ingresar una contraseña"/>
+                                <p:outputLabel value="Rol del usuario" />
+                                <p:selectOneMenu id="rolUsuario" value="#{usuarioBean.usuario.rol}" required="true" requiredMessage="Seleccione un rol">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usuarioBean.roles}" var="rol"
+                                                   itemLabel="#{rol}" itemValue="#{rol}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Registrar"
+                                                 action="#{usuarioBean.registrar}"
+                                                 process="@this nombreUsuario passwordUsuario rolUsuario"
+                                                 update="msgsUsuario"
+                                                 styleClass="btn-green"/>
+
+                            </p:panelGrid>
 
                         </p:tab>
 
                     </p:tabView>
+
                 </p:tab>
+
+                <p:tab title="Proveedores">
+
+                    <div class="controls-container barra-superior">
+
+                        <div class="busqueda">
+                            <p:inputText id="busquedaProveedor"
+                                         value="#{proveedorBean.busqueda}"
+                                         placeholder="Ingrese nombre o ID..." />
+
+                            <p:commandButton value="Buscar"
+                                             action="#{proveedorBean.buscarProveedor}"
+                                             process="@this busquedaProveedor"
+                                             update="tablaProveedores"
+                                             styleClass="btn-green" />
+
+                            <p:commandButton value="Refrescar"
+                                             action="#{proveedorBean.cargarProveedores()}"
+                                             process="@this cargarProveedores"
+                                             update="tablaProveedores"
+                                             styleClass="btn-blue" />
+                        </div>
+                    </div>
+
+                    <p:dataTable id="tablaProveedores"
+                                 value="#{proveedorBean.listaProveedores}"
+                                 var="prov"
+                                 emptyMessage="No se encontraron proveedores"
+                                 style="margin-top:20px;">
+
+                        <p:column headerText="ID Proveedor">
+                            <h:outputText value="#{prov.id}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{prov.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Contacto">
+                            <h:outputText value="#{prov.contacto}" />
+                        </p:column>
+
+                        <p:column headerText="Acciones" style="text-align: center;">
+
+                            <p:commandButton value="Modificar"
+                                             action="#{proveedorBean.prepararModificacion(prov)}"
+                                             process="@this"  update=":formInventario:tabsPrincipal:panelModificarProv"
+                                             oncomplete="PF('dlgModProv').show()"
+                                             styleClass="btn-green"
+                                             style="margin-right: 5px;" />
+
+                            <p:commandButton value="Eliminar"
+                                             action="#{proveedorBean.eliminarProveedor(prov)}"
+                                             process="@this"
+                                             update=":formInventario:tabsPrincipal:tablaProveedores :formInventario:growl"
+                                             styleClass="btn-red">
+                                <p:confirm header="Confirmación"
+                                           message="¿Estás seguro de que deseas eliminar permanentemente a este proveedor?"
+                                           icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                                     responsive="true" width="350">
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no ui-button-flat"/>
+                        <p:commandButton value="Sí" type="button"
+                                         styleClass="ui-confirmdialog-yes" />
+                    </p:confirmDialog>
+
+                    <p:dialog header="Modificar Proveedor"
+                              widgetVar="dlgModProv"
+                              modal="true"
+                              showEffect="fade"
+                              hideEffect="fade"
+                              resizable="false">
+
+                        <p:outputPanel id="panelModificarProv">
+
+                            <p:panelGrid columns="2"
+                                         rendered="#{not empty proveedorBean.proveedorSeleccionado}"
+                                         styleClass="ui-noborder">
+
+                                <p:outputLabel value="Nombre:" />
+                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.nombre}" required="true" requiredMessage="No deje el campo de nombre vacio"/>
+
+                                <p:outputLabel value="Contacto:" />
+                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.contacto}" required="true" requiredMessage="No deje el campo del numero telefonico vacio"/>
+
+                            </p:panelGrid>
+
+                            <div style="text-align: center; margin-top: 15px;">
+                                <p:commandButton value="Guardar Cambios"
+                                                 action="#{proveedorBean.guardarModificacion}"
+                                                 process="panelModificarProv"
+                                                 update=":formInventario:tabsPrincipal:tablaProveedores :formInventario:growl"
+                                                 oncomplete="if (!args.validationFailed) PF('dlgModProv').hide()"
+                                                 styleClass="btn-blue" />
+                            </div>
+
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </p:tab>
+
+                <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
+
+
+
+                        <div class="header-azul" style="background: #3b82f6; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                            Historial de Movimientos y Reporte Mensual
+                        </div>
+
+                    <h:panelGrid columns="1" style="margin-bottom:15px; width:100%;">
+                        <h:panelGroup>
+                            <h:outputText value="Filtrar por Usuario: " style="font-weight:bold; color:#1e3a8a; display:block; margin-bottom:5px;"/>
+                            <p:selectOneMenu value="#{AuditoriaBean.idUsuarioFiltro}" style="min-width: 180px;">
+                                <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{AuditoriaBean.listaUsuarios}" var="usr"
+                                               itemLabel="#{usr.nombre}" itemValue="#{usr.id}"/>
+                                <p:ajax process="@this" listener="#{AuditoriaBean.aplicarFiltros}" update="areaResultados" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </h:panelGrid>
+
+                    <h:panelGroup id="areaResultados" layout="block">
+
+                        <h:panelGrid columns="3" id="panelTotales" style="margin-bottom:15px; background:#f8fafc; padding:15px; border: 1px solid #e2e8f0; border-radius:8px; width:100%;">
+                            <h:panelGroup>
+                                <h:outputText value="TOTAL ENTRADAS: " style="font-weight:bold; color:#64748b; display:block;"/>
+                                <h:outputText value="#{AuditoriaBean.totalEntradas} unidades" style="color:#22c55e; font-weight:bold; font-size:1.2em;"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup>
+                                <h:outputText value="TOTAL SALIDAS: " style="font-weight:bold; color:#64748b; display:block;"/>
+                                <h:outputText value="#{AuditoriaBean.totalSalidas} unidades" style="color:#ef4444; font-weight:bold; font-size:1.2em;"/>
+                            </h:panelGroup>
+
+                            <p:commandButton value="Actualizar Reporte"
+                                             action="#{AuditoriaBean.cargarTodosLosMovimientos()}"
+                                             process="@this"
+                                             update="areaResultados"
+                                             icon="pi pi-refresh"
+                                             styleClass="btn-blue" />
+                        </h:panelGrid>
+
+                        <p:dataTable id="tablaAuditoria"
+                                     value="#{AuditoriaBean.listaFiltrada}"
+                                     var="mov"
+                                     emptyMessage="No hay movimientos registrados"
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     style="margin-top:10px;">
+
+                            <p:column headerText="Fecha" style="width:150px; text-align:center;">
+                                <h:outputText value="#{mov.fecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Usuario" style="text-align:center;">
+                                <h:outputText value="#{mov.usuario != null ? mov.usuario.nombre : 'Sistema'}" />
+                            </p:column>
+
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{mov.producto != null ? mov.producto.nombre : 'N/A'}" />
+                            </p:column>
+
+                            <p:column headerText="Tipo" style="text-align:center;">
+                                <h:outputText value="#{mov.tipo}" style="font-weight:bold; color: #{mov.tipo == 'Entrada' ? '#22c55e' : '#ef4444'}"/>
+                            </p:column>
+
+                            <p:column headerText="Cantidad" style="text-align:center;">
+                                <h:outputText value="#{mov.cantidad}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:panelGroup>
+                </p:tab>
+
             </p:tabView>
 
         </h:form>
 
-        <p:dialog header="Modificar Producto" widgetVar="dlgModificar" modal="true" width="400" appendTo="@(body)">
-            <h:form id="formModificar">
-                <p:messages id="mensajesDialogo" showDetail="true" closable="true" />
-
-
-
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="Nombre:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" readonly="true" />
-
-                    <h:outputLabel value="Stock:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.stock}" />
-
-                    <h:outputLabel value="Precio:" />
-                    <p:inputText value="#{InventarioBean.productoEdit.precio}" readonly="true" />
-
-                    <h:outputLabel value="Proveedor:" />
-                    <p:inputText value="#{InventarioBean.seleccionado.proveedor}" readonly="true" />
-                </h:panelGrid>
-
-                <br/>
-
-                <p:commandButton value="Guardar Cambios"
-                                 action="#{InventarioBean.modificarProducto}"
-                                 process="@form"
-                                 update="@form :formInventario:tablaInventario :formInventario:growl"
-                                 oncomplete="if (!args.validationFailed) PF('dlgModificar').hide();" />
-            </h:form>
-        </p:dialog>
-
-        <p:confirmDialog widgetVar="confirmDialog" appendTo="@(body)"> <h:outputText value="Quieres eliminar este producto?" />
-            <br/><br/>
-
-            <h:form>
-                <p:commandButton value="Sí"
-                                 action="#{InventarioBean.eliminarProducto}"
-                                 process="@this"
-                                 update=":formInventario:tablaInventario :formInventario:growl"
-                                 oncomplete="PF('confirmDialog').hide()"/>
-
-                <p:commandButton value="No"
-                                 onclick="PF('confirmDialog').hide(); return false;"/>
-            </h:form>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350" appendTo="@(body)">
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+            <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" />
         </p:confirmDialog>
 
-    </div> </h:body>
+    </div>
+    <p:confirmDialog widgetVar="confirmDialog" appendTo="@(body)">
+
+        <h:outputText value="Quieres eliminar este producto?" />
+
+        <p:commandButton value="Sí"
+                         action="#{InventarioBean.eliminarProducto}"
+                         process="@this"
+                         update=":formInventario:tablaInventario :formInventario:growl"
+                         oncomplete="PF('confirmDialog').hide()" />
+
+        <p:commandButton value="No"
+                         type="button"
+                         onclick="PF('confirmDialog').hide();" />
+
+    </p:confirmDialog>
+
+</h:body>
 </html>
