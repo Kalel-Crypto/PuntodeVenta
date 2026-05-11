@@ -7,7 +7,7 @@ import java.util.List;
 
 public class VentaDAO {
 
-    public void registrarVenta(Venta v, List<DetalleVenta> detalles) throws Exception {
+    public void registrarVenta(Venta v, List<DetalleVenta> detalles, int idUsuario) throws Exception {
 
         String sqlVenta = "INSERT INTO venta(idCaja, total) VALUES(?,?)";
         String sqlDetalle = "INSERT INTO detalleventa(cantidad, precioUnitario, idVenta, idProducto) VALUES(?,?,?,?)";
@@ -53,7 +53,7 @@ public class VentaDAO {
 
                 psAudit.setInt(1, d.getProducto().getId());
                 psAudit.setInt(2, d.getCantidad());
-                psAudit.setInt(3, 1);
+                psAudit.setInt(3, idUsuario);
                 psAudit.addBatch();
             }
 

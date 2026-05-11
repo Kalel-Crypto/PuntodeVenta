@@ -206,18 +206,24 @@ public class VentaBean implements Serializable {
             nuevaVenta.setTotal(total);
 
             VentaDAO dao = new VentaDAO();
-            dao.registrarVenta(nuevaVenta, listaDetalle);
+            int idReal = (usuario != null) ? usuario.getId() : (loginUI != null ? loginUI.getUsuarioLogeado().getId() : 0);
+
+            if (idReal == 0) {
+                throw new Exception("No se pudo identificar al usuario de la sesión.");
+            }
+            dao.registrarVenta(nuevaVenta, listaDetalle, idReal);
             RespaldoHelper.guardarVenta(nuevaVenta, listaDetalle,usuario);
 
             Usuario cajero = null;
             if (loginUI != null && loginUI.getUsuarioLogeado() != null) {
                 cajero = loginUI.getUsuarioLogeado();
             }
-
+            //Este ciclo no es necesario ya que hay otro para insertar en el ventaDAO
+            /*
             for (DetalleVenta detalle : listaDetalle) {
                 facade.registrarMovimientoSeguro(cajero, detalle.getProducto(), "salida", detalle.getCantidad());
             }
-
+            */
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Venta procesada y stock actualizado."));
 
