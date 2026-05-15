@@ -6,7 +6,7 @@
       xmlns:f="jakarta.faces.core">
 
 <h:head>
-    <title>Punto de Venta</title>
+    <title>Refresqueria EVA</title>
 
     <style>
         body {
@@ -200,7 +200,7 @@
                 <div style="margin-top:15px;">
                     <p:commandButton value="Corte de caja" styleClass="btn-danger" action="#{ventaBean.validarCorteCaja()}"
                                      onclick="PF('dlgCorte').show();"/>
-                    <p:commandButton value="Cancelar Venta" styleClass="btn-danger" action="#{ventaBean.cancelarVenta()}" update="@form"/>
+                    <p:commandButton value="Cancelar Venta" styleClass="btn-danger" onclick="PF('dlgConf').show();" type="button" update="@form"/>
                 </div>
 
             </div>
@@ -258,36 +258,48 @@
                 modal="true"
                 closable="false"
                 resizable="false"
-                width="400">
-
+                width="400"
+                closeOnEscape="true">
             <h:panelGrid columns="1" style="width:100%; gap:10px;">
-
                 <p:outputLabel value="Nombre del administrador"/>
-
                 <p:inputText
                         value="#{ventaBean.adminNombre}"
                         style="width:100%;" />
-
                 <p:outputLabel value="Contraseña"/>
-
                 <p:password
                         value="#{ventaBean.adminPassword}"
                         feedback="false"
                         style="width:100%;" />
-
                 <p:commandButton
                         value="Aceptar"
                         action="#{ventaBean.validarCorteCaja}"
                         update="@form mensajes"
                         ajax="false"
                         styleClass="btn"/>
-
                 <h:outputText
                         value="Una vez aceptado se cerrará la sesión actual y se redireccionará al inicio de sesión."
                         style="font-size:12px; color:#cbd5e1;"/>
+            </h:panelGrid>
+        </p:dialog>
+        <p:dialog
+        header="Confirmacion de operacion"
+        widgetVar="dlgConf"
+        modal="true"
+        closable="false"
+        minimizable="false"
+        closeOnEscape="true"
+        width="300">
+            <h:panelGrid columns="1" style="width:100%; gap:10px;">
+            <p:outputLabel value="¿Desea cancelar la operacion?"/>
+                <p:commandButton
+                    value="Aceptar"
+                    action="#{ventaBean.cancelarVenta()}"
+                    update="@form mensajes"
+                ajax="false"
+                styleClass="btn"/>
+
 
             </h:panelGrid>
-
         </p:dialog>
     </h:form>
 

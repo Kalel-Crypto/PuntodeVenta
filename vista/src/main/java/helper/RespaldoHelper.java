@@ -12,6 +12,12 @@ import java.util.List;
 
 public class RespaldoHelper {
     private static final String RUTA = "C:\\RespaldosPOS\\";
+    private  static double VENTAFINAL = 0;
+
+    public static double getVENTAFINAL(){
+        return VENTAFINAL;
+    }
+
 
     public static void guardarVenta(Venta venta, List<DetalleVenta> detalles, Usuario u) {
         try {
@@ -25,8 +31,10 @@ public class RespaldoHelper {
             FileWriter fw = new FileWriter(nombreArchivo, true);
 
             BufferedWriter bw = new BufferedWriter(fw);
-
+            bw.write("Caja,Fecha,Usuario,Producto,Cantidad,Preciounitario,Total de venta");
+            bw.newLine();
             for (DetalleVenta d : detalles) {
+
                 String linea =
                         venta.getIdCaja() + "," +
                                 LocalDateTime.now() + "," +
@@ -35,6 +43,7 @@ public class RespaldoHelper {
                                 d.getCantidad() + " Unidades," +
                                 d.getPrecioUnitario() + "," +
                                 (d.getCantidad() * d.getPrecioUnitario());
+                VENTAFINAL = VENTAFINAL + (d.getCantidad() * d.getPrecioUnitario());
                 bw.write(linea);
                 bw.newLine();
             }
@@ -42,5 +51,8 @@ public class RespaldoHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
     }
 }

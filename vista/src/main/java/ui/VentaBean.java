@@ -1,5 +1,4 @@
 package ui;
-
 import facade.SistemaFacade;
 import helper.RespaldoHelper;
 import jakarta.annotation.PostConstruct;
@@ -16,8 +15,7 @@ import mx.puntodeventa.entity.Usuario;
 import mx.puntodeventa.entity.Venta;
 import mx.puntodeventa.dao.InventarioDTO;
 
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +51,6 @@ public class VentaBean implements Serializable {
         cargarCajaUsuario();
 
     }
-
     public void validarCorteCaja(){
         try {
 
@@ -254,6 +251,13 @@ public class VentaBean implements Serializable {
 
             System.out.println("ARCHIVO RENOMBRADO");
 
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoNuevo, true))) {
+                System.out.println(RespaldoHelper.getVENTAFINAL());
+                bw.newLine();
+                bw.write("Total vendido," + RespaldoHelper.getVENTAFINAL()+"$");
+            } catch (IOException e) {
+                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"ERROR","Error al realizar el corte de caja, intentelo de nuevo"));
+            }
 
             FacesContext.getCurrentInstance()
                     .getExternalContext()
