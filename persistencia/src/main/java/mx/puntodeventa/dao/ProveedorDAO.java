@@ -8,13 +8,14 @@ import java.util.*;
 public class ProveedorDAO {
 
     public void insertar(Proveedor p) throws Exception {
-        String sql = "INSERT INTO proveedor(nombre, contacto) VALUES(?,?)";
+        String sql = "INSERT INTO proveedor(nombre, contacto, marca) VALUES(?,?,?)";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, p.getNombre());
             ps.setString(2, p.getContacto());
+            ps.setString(3,p.getMarca());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -27,7 +28,7 @@ public class ProveedorDAO {
 
     public List<Proveedor> listar() throws Exception {
         List<Proveedor> lista = new ArrayList<>();
-        String sql = "SELECT idproveedor, nombre, contacto FROM proveedor";
+        String sql = "SELECT idproveedor, nombre, contacto, marca FROM proveedor";
 
         try (Connection con = ConnectionManager.getConnection();
              Statement st = con.createStatement();
@@ -38,6 +39,7 @@ public class ProveedorDAO {
                 p.setId(rs.getInt("idproveedor"));
                 p.setNombre(rs.getString("nombre"));
                 p.setContacto(rs.getString("contacto"));
+                p.setMarca(rs.getString("marca"));
                 lista.add(p);
             }
         }
@@ -45,12 +47,13 @@ public class ProveedorDAO {
     }
 
     public void actualizar(Proveedor p) throws Exception {
-        String sql = "UPDATE proveedor SET nombre=?, contacto=? WHERE idproveedor=?";
+        String sql = "UPDATE proveedor SET nombre=?, contacto=?, marca=? WHERE idproveedor=?";
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, p.getNombre());
             ps.setString(2, p.getContacto());
-            ps.setInt(3, p.getId());
+            ps.setString(3, p.getMarca());
+            ps.setInt(4, p.getId());
             ps.executeUpdate();
         }
     }

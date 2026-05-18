@@ -18,7 +18,8 @@ public class Proveedor{
 
     @Column(name = "contacto", nullable = false)
     private String contacto;
-
+    @Column(name = "marca", nullable = true)
+    private String marca;
 
     public int getId() {
         return id;
@@ -42,5 +43,13 @@ public class Proveedor{
 
     public void setContacto(String contacto) {
         this.contacto = contacto;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
     }
 }

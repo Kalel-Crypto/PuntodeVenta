@@ -18,7 +18,7 @@ public class InventarioDAO {
                 i.stock,
                 p.precioUnitario,
                 p.idProveedor,
-                pr.nombre AS proveedor
+                pr.marca AS proveedor
             FROM producto p
             LEFT JOIN inventario i ON p.idProducto = i.idProducto
             LEFT JOIN proveedor pr ON p.idProveedor = pr.idProveedor

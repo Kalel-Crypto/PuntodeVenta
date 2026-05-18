@@ -59,6 +59,7 @@ public class ProductoBean implements Serializable {
             msgWarn("Asegurese que el stock sea un numero positivo");
             return;
         }
+
         try {
             facade.registrarProducto(
                     producto.getNombre(),
@@ -67,7 +68,11 @@ public class ProductoBean implements Serializable {
                     stockInicial
 
             );
-
+            if(stockInicial > 0){
+                Usuario user = facade.obtenerUsuario(usuarioLogeado.getNombre());
+                Producto p = facade.obtenerProducto(producto.getNombre());
+                facade.registrarMovimientoSeguro(user,p,"Entrada",stockInicial);
+            }
             System.out.println("Producto registrado: " + producto.getNombre());
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto registrado correctamente"));

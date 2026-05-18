@@ -22,6 +22,10 @@ public class SistemaFacade {
     private CajaService cajaService = new CajaService();
     private MovimientoInventarioService movimientoInventarioService = new MovimientoInventarioService();
 
+    public Usuario obtenerUsuario(String nombre) throws Exception {
+        return usuarioService.obtenerUsuarioporNombre(nombre);
+    }
+
     public boolean existeenVenta(int id) throws SQLException {
     return movimientoInventarioService.conseguirMovimientoExistente(id);
     }
@@ -56,8 +60,8 @@ public class SistemaFacade {
     public void eliminarUsuario(int id) throws Exception {
         usuarioService.eliminarUsuario(id);
     }
-    public void registrarProveedor(String nombre, String numero) throws Exception {
-        proveedorService.registrar(nombre, numero);
+    public void registrarProveedor(String nombre, String numero, String marca) throws Exception {
+        proveedorService.registrar(nombre, numero, marca);
     }
 
     public void registrarMovimientoSeguro(Usuario usuario, Producto producto, String tipo, int cantidad) {
@@ -125,6 +129,16 @@ public class SistemaFacade {
         productoService.eliminarProducto(idProducto);
     }
 
+    public Producto obtenerProducto(String nombre) throws Exception {
+        List<Producto> lista = productoService.listarProductos();
+        for(Producto p: lista){
+            if(p.getNombre().equalsIgnoreCase(nombre)){
+                return p;
+            }
+        }
+        return null;
+    }
+
     public List<Producto> listarProductos() throws Exception {
         return productoService.listarProductos();
     }
@@ -147,7 +161,6 @@ public class SistemaFacade {
     public List<InventarioDTO> listarInventario() throws Exception {
         return inventarioService.listarInventario();
     }
-
 
     public List<InventarioDTO> buscarInventarioPorNombre(String nombre) throws Exception {
         return inventarioService.buscarPorNombre(nombre);

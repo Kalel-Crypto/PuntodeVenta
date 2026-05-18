@@ -2,6 +2,7 @@ package service;
 
 import mx.puntodeventa.dao.InventarioDTO;
 import mx.puntodeventa.dao.InventarioDAO;
+import mx.puntodeventa.entity.Producto;
 
 
 import java.util.List;

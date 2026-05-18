@@ -7,7 +7,7 @@ public class ProveedorService {
     ProveedorDAO dao = new ProveedorDAO();
 
 
-    public void registrar(String nombre, String numero) throws Exception {
+    public void registrar(String nombre, String numero, String marca) throws Exception {
 
         if(nombre.trim().isEmpty()){
             throw new Exception("No Deje espacios vacios");
@@ -16,9 +16,13 @@ public class ProveedorService {
         if(!numero.matches("^686\\d{7}$")){
             throw new Exception("El espacio esta vacio o no se respeta el formato");
         }
+        if(marca.trim().isEmpty()){
+            throw new Exception("No deje espacios vacios");
+        }
         Proveedor provedor = new Proveedor();
         provedor.setNombre(nombre);
         provedor.setContacto(numero);
+        provedor.setMarca(marca);
         dao.insertar(provedor);
     }
 }

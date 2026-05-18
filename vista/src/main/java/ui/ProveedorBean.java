@@ -41,9 +41,12 @@ public class ProveedorBean implements Serializable {
             msgWarn("Ingrese un número de teléfono válido.");
             return;
         }
+        if(proveedor.getMarca() == null){
+            msgWarn("Ingrese la marca del proveedor");
+        }
 
         try{
-            facade.registrarProveedor(proveedor.getNombre(), proveedor.getContacto());
+            facade.registrarProveedor(proveedor.getNombre(), proveedor.getContacto(), proveedor.getMarca());
             msgInfo("Proveedor registrado correctamente.");
             this.proveedor = new Proveedor();
             cargarProveedores();

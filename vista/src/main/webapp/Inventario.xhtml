@@ -383,7 +383,7 @@
                                <p:outputLabel value="Stock:" />
                                 <p:inputText value="#{InventarioBean.productoEdit.stock}" disabled="true"/>
 
-                                <p:outputLabel value="ID Proveedor:" />
+                                <p:outputLabel value="Proveedor:" />
                                 <p:selectOneMenu id="proveedorDLG"
                                                  value="#{InventarioBean.productoEdit.idProveedor}"
                                                  style="width: 100%;">
@@ -391,7 +391,7 @@
                                     <f:selectItem itemLabel="Sin proveedor" itemValue="#{null}" noSelectionOption="true"/>
 
                                     <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                                   itemLabel="#{prov.nombre}"
+                                                   itemLabel="#{prov.marca}"
                                                    itemValue="#{prov.id}"/>
 
                                 </p:selectOneMenu>
@@ -465,7 +465,7 @@
                                 <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}" required="true" requiredMessage="Seleccione un proveedor">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                                   itemLabel="#{prov.nombre}" itemValue="#{prov.id}"/>
+                                                   itemLabel="#{prov.marca}" itemValue="#{prov.id}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="stock" value="Stock *"/>
@@ -491,6 +491,8 @@
 
                             <p:panelGrid columns="1">
 
+                                <p:outputLabel value="Marca del proveedor * "/>
+                                <p:inputText id="marcaProv" value="#{proveedorBean.proveedor.marca}"/>
                                 <p:outputLabel value="Nombre del proveedor *"/>
                                 <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true" requiredMessage="Asegurese de ingresar un nombre"/>
                                 <p:outputLabel value="Numero del proveedor *"/>
@@ -498,7 +500,7 @@
 
                                 <p:commandButton value="Registrar"
                                                  action="#{proveedorBean.registrar}"
-                                                 process="@this nombreProv telefonoProv"
+                                                 process="@this nombreProv telefonoProv marcaProv"
                                                  update="msgsProveedor"
                                                  styleClass="btn-green"/>
 
@@ -570,6 +572,10 @@
                             <h:outputText value="#{prov.id}" />
                         </p:column>
 
+                        <p:column headerText="Marca del proveedor">
+                            <h:outputText value="#{prov.marca}" />
+                        </p:column>
+
                         <p:column headerText="Nombre">
                             <h:outputText value="#{prov.nombre}" />
                         </p:column>
@@ -623,6 +629,8 @@
                                 <p:outputLabel value="Nombre:" />
                                 <p:inputText value="#{proveedorBean.proveedorSeleccionado.nombre}" required="true" requiredMessage="No deje el campo de nombre vacio"/>
 
+                                <p:outputLabel value="Marca del proveedor" />
+                                <p:inputText value="#{proveedorBean.proveedorSeleccionado.marca}" required="true" requiredMessage="No deje espacios vacios" />
                                 <p:outputLabel value="Contacto:" />
                                 <p:inputText value="#{proveedorBean.proveedorSeleccionado.contacto}" required="true" requiredMessage="No deje el campo del numero telefonico vacio"/>
 
