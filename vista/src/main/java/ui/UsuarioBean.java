@@ -8,34 +8,25 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import mx.puntodeventa.entity.Rol;
 import mx.puntodeventa.entity.Usuario;
 
 @Named("usuarioBean")
-@SessionScoped
+@ViewScoped
 public class UsuarioBean implements Serializable {
     private Usuario usuario;
     private SistemaFacade facade;
     private List<Usuario> listaUsuarios;
+    private Usuario usuarioSeleccionado;
+    private String busqueda;
     @PostConstruct
-    public void inicio(){
+    public void inicio() {
         facade = new SistemaFacade();
         usuario = new Usuario();
-        /*try {
-            usuario = facade.login("tu_nombre_usuario", "1234567");
-        } catch(Exception e) {
-
-            usuario = new Usuario();
-            usuario.setId(1);
-            usuario.setNombre("Admin Temporal");
-        }
-        try {
-            listaUsuarios = facade.listarUsuarios();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }*/
+        cargarUsuarios();
     }
     public void registrar(){
         System.out.println("Nombre del usuario: " + usuario.getNombre());
@@ -62,12 +53,64 @@ public class UsuarioBean implements Serializable {
                 new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", mensaje));
     }
 
+    public void cargarUsuarios() {
+        try {
+            this.listaUsuarios = facade.listarUsuarios();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void buscarUsuario() {
+        if(busqueda == null || busqueda.trim().isEmpty()){
+            cargarUsuarios();
+            return;
+        }
+        try {
+
+            this.listaUsuarios = facade.buscarUsuarios(busqueda);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void prepararModificacion(Usuario user) {
+        this.usuarioSeleccionado = user;
+    }
+
+    public void guardarModificacion() {
+        try {
+            facade.modificarUsuario(usuarioSeleccionado);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Usuario modificado."));
+            cargarUsuarios();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void eliminarUsuario(Usuario user) {
+        try {
+            facade.eliminarUsuario(user.getId());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Usuario eliminado."));
+            cargarUsuarios();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public Rol[] getRoles() {
         return Rol.values();
     }
     public Usuario getUsuario() {
         return usuario;
     }
+
+    public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) { this.usuarioSeleccionado = usuarioSeleccionado; }
+    public Usuario getUsuarioSeleccionado() {
+        return usuarioSeleccionado;
+    }
+    public String getBusqueda() { return busqueda; }
+    public void setBusqueda(String busqueda) { this.busqueda = busqueda; }
 
     public List<Usuario> getListaUsuarios() {
         return listaUsuarios;

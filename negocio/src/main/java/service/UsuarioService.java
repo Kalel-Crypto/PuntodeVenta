@@ -73,6 +73,43 @@ public class UsuarioService {
         return usuario;
     }
 
+    public void modificarUsuario(Usuario usuario) throws Exception {
+        if (usuario == null || usuario.getId() <= 0) {
+            throw new Exception("Usuario no válido para modificar");
+        }
+        if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
+            throw new Exception("El nombre es obligatorio");
+        }
+        if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+            throw new Exception("La contraseña es obligatoria");
+        }
+        if (usuario.getRol() == null) {
+            throw new Exception("El rol es obligatorio");
+        }
+
+        usuarioDAO.actualizar(usuario);
+    }
+
+    public List<Usuario> buscarUsuarios(String busqueda) throws Exception {
+        List<Usuario> todos = usuarioDAO.listar();
+        List<Usuario> resultados = new ArrayList<>();
+
+        if (busqueda == null || busqueda.trim().isEmpty()) {
+            return todos;
+        }
+
+        String query = busqueda.toLowerCase().trim();
+
+        for (Usuario u : todos) {
+            if ((u.getNombre() != null && u.getNombre().toLowerCase().contains(query)) ||
+                    String.valueOf(u.getId()).equals(query)) {
+                resultados.add(u);
+            }
+        }
+
+        return resultados;
+    }
+
 
     public List<Usuario> listarUsuarios() throws Exception {
         return usuarioDAO.listar();

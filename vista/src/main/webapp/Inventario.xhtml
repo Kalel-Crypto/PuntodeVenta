@@ -650,6 +650,115 @@
 
                 </p:tab>
 
+                <p:tab title="Usuarios">
+
+                    <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; justify-content: center;">
+                        <p:commandButton value="Refrescar"
+                                         action="#{usuarioBean.cargarUsuarios}"
+                                         update=":formInventario:tabsPrincipal:tablaUsuarios"
+                                         styleClass="btn-blue" />
+
+                        <p:inputText value="#{usuarioBean.busqueda}"
+                                     placeholder="Ingresa el nombre o el id"
+                                     style="width: 300px;" />
+
+                        <p:commandButton value="Buscar"
+                                         action="#{usuarioBean.buscarUsuario}"
+                                         update=":formInventario:tabsPrincipal:tablaUsuarios"
+                                         styleClass="btn-blue" />
+                    </div>
+
+                    <p:dataTable id="tablaUsuarios"
+                                 value="#{usuarioBean.listaUsuarios}"
+                                 var="user"
+                                 emptyMessage="No se encontraron usuarios"
+                                 style="margin-top:20px;">
+
+                        <p:column headerText="ID Usuario">
+                            <h:outputText value="#{user.id}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{user.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Contraseña">
+                            <h:outputText value="#{user.password}" />
+                        </p:column>
+
+                        <p:column headerText="Rol de usuario">
+                            <h:outputText value="#{user.rol}" />
+                        </p:column>
+
+                        <p:column headerText="Acciones" style="text-align: center;">
+                            <p:commandButton value="Modificar"
+                                             action="#{usuarioBean.prepararModificacion(user)}"
+                                             process="@this"
+                                             update=":formInventario:tabsPrincipal:panelModificarUser"
+                                             oncomplete="PF('dlgModUser').show()"
+                                             styleClass="btn-green"
+                                             style="margin-right: 5px;" />
+
+                            <p:commandButton value="Eliminar"
+                                             action="#{usuarioBean.eliminarUsuario(user)}"
+                                             process="@this"
+                                             update=":formInventario:tabsPrincipal:tablaUsuarios :formInventario:growl"
+                                             styleClass="btn-red">
+                                <p:confirm header="Confirmación"
+                                           message="¿Estás seguro de que deseas eliminar permanentemente a este usuario?"
+                                           icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                                     responsive="true" width="350">
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no ui-button-flat"/>
+                        <p:commandButton value="Sí" type="button"
+                                         styleClass="ui-confirmdialog-yes" />
+                    </p:confirmDialog>
+
+                    <p:dialog header="Modificar Usuario"
+                              widgetVar="dlgModUser"
+                              modal="true"
+                              showEffect="fade"
+                              hideEffect="fade"
+                              resizable="false">
+
+                        <p:outputPanel id="panelModificarUser">
+                            <p:panelGrid columns="2"
+                                         rendered="#{not empty usuarioBean.usuarioSeleccionado}"
+                                         styleClass="ui-noborder">
+
+                                <p:outputLabel value="Nombre:" />
+                                <p:inputText value="#{usuarioBean.usuarioSeleccionado.nombre}" required="true" requiredMessage="No deje el campo de nombre vacío"/>
+
+                                <p:outputLabel value="Contraseña:" />
+                                <p:inputText value="#{usuarioBean.usuarioSeleccionado.password}" required="true" requiredMessage="No deje la contraseña vacía" />
+
+                                <p:outputLabel value="Rol:" />
+                                <p:selectOneMenu value="#{usuarioBean.usuarioSeleccionado.rol}">
+                                    <f:selectItems value="#{usuarioBean.roles}" />
+                                </p:selectOneMenu>
+
+                            </p:panelGrid>
+
+                            <div style="text-align: center; margin-top: 15px;">
+                                <p:commandButton value="Guardar Cambios"
+                                                 action="#{usuarioBean.guardarModificacion}"
+                                                 process="panelModificarUser"
+                                                 update=":formInventario:tabsPrincipal:tablaUsuarios :formInventario:growl"
+                                                 oncomplete="if (!args.validationFailed) PF('dlgModUser').hide()"
+                                                 styleClass="btn-blue" />
+                            </div>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </p:tab>
+
+
+
                 <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
 
 

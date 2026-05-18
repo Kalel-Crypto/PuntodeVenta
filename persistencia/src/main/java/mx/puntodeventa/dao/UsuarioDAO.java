@@ -80,4 +80,18 @@ public class UsuarioDAO {
             ps.executeUpdate();
         }
     }
+    public void actualizar(Usuario u) throws Exception {
+        String sql = "UPDATE usuario SET nombre=?, password=?, rol=? WHERE idusuario=?";
+
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getPassword());
+            ps.setString(3, u.getRol().name());
+            ps.setInt(4, u.getId());
+
+            ps.executeUpdate();
+        }
+    }
 }

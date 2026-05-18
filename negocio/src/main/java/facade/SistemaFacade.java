@@ -22,9 +22,19 @@ public class SistemaFacade {
     private CajaService cajaService = new CajaService();
     private MovimientoInventarioService movimientoInventarioService = new MovimientoInventarioService();
 
+    public List<Usuario> buscarUsuarios(String busqueda) throws Exception {
+        return usuarioService.buscarUsuarios(busqueda);
+    }
+
+    public void modificarUsuario(Usuario usuario) throws Exception {
+        usuarioService.modificarUsuario(usuario);
+    }
+
+
     public Usuario obtenerUsuario(String nombre) throws Exception {
         return usuarioService.obtenerUsuarioporNombre(nombre);
     }
+
 
     public boolean existeenVenta(int id) throws SQLException {
     return movimientoInventarioService.conseguirMovimientoExistente(id);
