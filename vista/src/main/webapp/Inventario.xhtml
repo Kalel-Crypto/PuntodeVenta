@@ -599,7 +599,8 @@
                                              update=":formInventario:tabsPrincipal:tablaProveedores :formInventario:growl"
                                              styleClass="btn-red">
                                 <p:confirm header="Confirmación"
-                                           message="¿Estás seguro de que deseas eliminar permanentemente a este proveedor?"
+                                           message="¿Estás seguro de que deseas eliminar permanentemente a este proveedor?
+                                                    Esta accion es irreversible"
                                            icon="pi pi-exclamation-triangle" />
                             </p:commandButton>
                         </p:column>
@@ -705,7 +706,8 @@
                                              update=":formInventario:tabsPrincipal:tablaUsuarios :formInventario:growl"
                                              styleClass="btn-red">
                                 <p:confirm header="Confirmación"
-                                           message="¿Estás seguro de que deseas eliminar permanentemente a este usuario?"
+                                           message="¿Estás seguro de que deseas eliminar permanentemente a este usuario?
+                                                    Esta accion es irreversible"
                                            icon="pi pi-exclamation-triangle" />
                             </p:commandButton>
                         </p:column>
@@ -847,7 +849,9 @@
     </div>
     <p:confirmDialog widgetVar="confirmDialog" appendTo="@(body)">
 
-        <h:outputText value="Quieres eliminar este producto?" />
+        <h:outputText value="Quieres eliminar este producto?
+                             Esta accion es irreversible"
+        title="Confirmacion"/>
 
         <p:commandButton value="Sí"
                          action="#{InventarioBean.eliminarProducto}"
