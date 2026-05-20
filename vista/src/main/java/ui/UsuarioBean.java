@@ -55,6 +55,7 @@ public class UsuarioBean implements Serializable {
 
     public void cargarUsuarios() {
         try {
+            this.busqueda = "";
             this.listaUsuarios = facade.listarUsuarios();
         } catch (Exception e) {
             e.printStackTrace();

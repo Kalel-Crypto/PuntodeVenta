@@ -653,18 +653,22 @@
 
                 <p:tab title="Usuarios">
 
-                    <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; justify-content: center;">
+                    <div id="zonaBusqueda" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; justify-content: center;">
+
                         <p:commandButton value="Refrescar"
                                          action="#{usuarioBean.cargarUsuarios}"
-                                         update=":formInventario:tabsPrincipal:tablaUsuarios"
+                                         process="@this"
+                                         update=":formInventario:tabsPrincipal:tablaUsuarios txtBusqueda"
                                          styleClass="btn-blue" />
 
-                        <p:inputText value="#{usuarioBean.busqueda}"
+                        <p:inputText id="txtBusqueda"
+                                     value="#{usuarioBean.busqueda}"
                                      placeholder="Ingresa el nombre o el id"
                                      style="width: 300px;" />
 
                         <p:commandButton value="Buscar"
                                          action="#{usuarioBean.buscarUsuario}"
+                                         process="txtBusqueda @this"
                                          update=":formInventario:tabsPrincipal:tablaUsuarios"
                                          styleClass="btn-blue" />
                     </div>

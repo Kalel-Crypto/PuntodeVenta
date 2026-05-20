@@ -28,7 +28,7 @@ public class UsuarioDAO {
     }
 
     public Usuario login(String nombre, String password) throws Exception {
-        String sql = "SELECT idusuario, nombre, password, rol FROM usuario WHERE nombre=? AND password=?";
+        String sql = "SELECT idusuario, nombre, password, rol FROM usuario WHERE nombre=? AND password=? AND activo = 1";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -52,7 +52,7 @@ public class UsuarioDAO {
 
     public List<Usuario> listar() throws Exception {
         List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT idusuario, nombre, password, rol FROM usuario";
+        String sql = "SELECT idusuario, nombre, password, rol FROM usuario WHERE activo = 1";
 
         try (Connection con = ConnectionManager.getConnection();
              Statement st = con.createStatement();
@@ -71,7 +71,7 @@ public class UsuarioDAO {
     }
 
     public void eliminar(int id) throws Exception {
-        String sql = "DELETE FROM usuario WHERE idusuario=?";
+        String sql = "UPDATE usuario SET activo = 0 WHERE idusuario=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -80,6 +80,7 @@ public class UsuarioDAO {
             ps.executeUpdate();
         }
     }
+
     public void actualizar(Usuario u) throws Exception {
         String sql = "UPDATE usuario SET nombre=?, password=?, rol=? WHERE idusuario=?";
 
