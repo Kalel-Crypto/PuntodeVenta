@@ -7,6 +7,7 @@ import jakarta.inject.Named;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
+import mx.puntodeventa.dao.ProductoDAO;
 import mx.puntodeventa.entity.MovimientoInventario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
@@ -36,10 +37,12 @@ public class InventarioBean implements Serializable {
     private String nombre;
     private int ID;
     AuditoriaBean auditoriaBean;
+    private ProductoDAO productoDAO;
 
 
     @PostConstruct
     public void inicio(){
+        productoDAO = new ProductoDAO();
         facade = new SistemaFacade();
         listaInventario = new ArrayList<>();
         productoEdit = new InventarioDTO();
@@ -171,6 +174,12 @@ public class InventarioBean implements Serializable {
                 return;
             }
 
+            if(productoDAO.existeProductoPorNombre(productoEdit.getNombreProducto())){
+                msgWarn("Ya existe un producto con ese mismo nombre");
+                return;
+            }
+
+
             int stockAnterior = seleccionado.getStock();
             int stockNuevo = productoEdit.getStock();
             int diferencia = stockNuevo - stockAnterior;
@@ -181,6 +190,8 @@ public class InventarioBean implements Serializable {
             } else if (diferencia < 0) {
                 tipoMovimiento = "Salida";
             }
+
+
 
             facade.actualizarProducto(
                     productoEdit.getIdProducto(),

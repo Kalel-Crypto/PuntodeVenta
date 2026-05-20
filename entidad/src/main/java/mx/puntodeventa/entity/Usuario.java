@@ -19,7 +19,6 @@ public class Usuario {
     @Column(name = "rol", nullable = false)
     private Rol rol;
 
-    private boolean activo = true;
 
     public int getId() {
         return id;
@@ -53,11 +52,4 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
 }
