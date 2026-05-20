@@ -12,7 +12,7 @@ public class VentaDAO {
         String sqlVenta = "INSERT INTO venta(idCaja, total) VALUES(?,?)";
         String sqlDetalle = "INSERT INTO detalleventa(cantidad, precioUnitario, idVenta, idProducto) VALUES(?,?,?,?)";
         String sqlActualizarStock = "UPDATE inventario SET stock = stock - ? WHERE idProducto = ? AND stock >= ?";
-        String sqlAuditoria = "INSERT INTO inventariomovimientos (idProducto, cantidad, tipoMovimiento, fecha, idusuario) VALUES (?, ?, 'SALIDA', NOW(), ?)";
+       // String sqlAuditoria = "INSERT INTO inventariomovimientos (idProducto, cantidad, tipoMovimiento, fecha, idusuario) VALUES (?, ?, 'SALIDA', NOW(), ?)";
         Connection con = ConnectionManager.getConnection();
 
         try {
@@ -31,7 +31,7 @@ public class VentaDAO {
 
             PreparedStatement psDetalle = con.prepareStatement(sqlDetalle);
             PreparedStatement psStock = con.prepareStatement(sqlActualizarStock);
-            PreparedStatement psAudit = con.prepareStatement(sqlAuditoria);
+           // PreparedStatement psAudit = con.prepareStatement(sqlAuditoria);
 
             for (DetalleVenta d : detalles) {
 
@@ -51,14 +51,14 @@ public class VentaDAO {
                     throw new Exception("Stock insuficiente para el producto: " + d.getProducto().getNombre());
                 }
 
-                psAudit.setInt(1, d.getProducto().getId());
-                psAudit.setInt(2, d.getCantidad());
-                psAudit.setInt(3, 1);
-                psAudit.addBatch();
+              // psAudit.setInt(1, d.getProducto().getId());
+                //psAudit.setInt(2, d.getCantidad());
+                //psAudit.setInt(3, 1);
+                //psAudit.addBatch();
             }
 
             psDetalle.executeBatch();
-            psAudit.executeBatch();
+            //psAudit.executeBatch();*/
 
             con.commit();
 

@@ -183,6 +183,7 @@ public class VentaBean implements Serializable {
     }
 
     public void cobrar() {
+        System.out.println("COBRAR EJECUTADO");
         if (listaDetalle == null || listaDetalle.isEmpty() || total <= 0) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se han agregado productos"));
@@ -210,10 +211,12 @@ public class VentaBean implements Serializable {
             if (loginUI != null && loginUI.getUsuarioLogeado() != null) {
                 cajero = loginUI.getUsuarioLogeado();
             }
-
+            System.out.println("USUARIO: " + cajero.getNombre());
             for (DetalleVenta detalle : listaDetalle) {
+
                 facade.registrarMovimientoSeguro(cajero, detalle.getProducto(), "salida", detalle.getCantidad());
             }
+
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Venta procesada y stock actualizado."));
