@@ -7,6 +7,7 @@ import jakarta.inject.Named;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 
+import mx.puntodeventa.dao.MovimientoDAO;
 import mx.puntodeventa.entity.MovimientoInventario;
 import mx.puntodeventa.entity.Producto;
 import mx.puntodeventa.entity.Proveedor;
@@ -29,7 +30,7 @@ public class InventarioBean implements Serializable {
 
     private InventarioDTO seleccionado;
     private InventarioDTO productoEdit;
-
+    private List<MovimientoInventario> historialProducto;
     private SistemaFacade facade;
     private String busqueda;
     private int cantidadOperacion;
@@ -269,6 +270,60 @@ public class InventarioBean implements Serializable {
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", msg));
     }
 
+    public void verHistorialProducto(InventarioDTO dto) {
+        try {
+            MovimientoDAO dao = new MovimientoDAO();
+            historialProducto = dao.listarPorProducto(dto.getIdProducto());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            historialProducto = new ArrayList<>();
+        }
+    }
+
+    public int obtenerEntradas(int idProducto) {
+        int total = 0;
+
+        try {
+            List<MovimientoInventario> lista =
+                    facade.listarTodosLosMovimientos();
+
+            for (MovimientoInventario m : lista) {
+                if (m.getProducto().getId() == idProducto) {
+                    if (m.getTipo().equalsIgnoreCase("Entrada")) {
+                        total += m.getCantidad();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return total;
+    }
+
+    public int obtenerSalidas(int idProducto) {
+        int total = 0;
+
+        try {
+            List<MovimientoInventario> lista =
+                    facade.listarTodosLosMovimientos();
+
+            for (MovimientoInventario m : lista) {
+                if (m.getProducto().getId() == idProducto) {
+                    if (m.getTipo().equalsIgnoreCase("salida")) {
+                        total += m.getCantidad();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return total;
+    }
 
 
     public List<InventarioDTO> getListaInventario() { return listaInventario; }
@@ -301,5 +356,13 @@ public class InventarioBean implements Serializable {
 
     public void setBusqueda(String busqueda) {
         this.busqueda = busqueda;
+    }
+
+    public List<MovimientoInventario> getHistorialProducto() {
+        return historialProducto;
+    }
+
+    public void setHistorialProducto(List<MovimientoInventario> historialProducto) {
+        this.historialProducto = historialProducto;
     }
 }

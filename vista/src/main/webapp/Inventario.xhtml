@@ -285,7 +285,6 @@
 
                     <div class="barra-superior">
 
-
                         <div class="busqueda">
 
                             <p:inputText id="busqueda"
@@ -317,28 +316,48 @@
                         <p:ajax event="rowSelect" update="formInventario"/>
                         <p:ajax event="rowUnselect" update="formInventario"/>
 
-                        <p:column headerText="ID">#{producto.idProducto}</p:column>
-                        <p:column headerText="Nombre">#{producto.nombreProducto}</p:column>
+
+                        <p:column headerText="ID">
+                            #{producto.idProducto}
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            #{producto.nombreProducto}
+                        </p:column>
 
                         <p:column headerText="Stock">
                             <h:outputText value="#{producto.stock} unidades"/>
                         </p:column>
 
+                        <p:column headerText="Entradas">
+                            <h:outputText value="#{InventarioBean.obtenerEntradas(producto.idProducto)}"
+                                          style="color:green;font-weight:bold;"/>
+                        </p:column>
+
+                        <p:column headerText="Salidas">
+                            <h:outputText value="#{InventarioBean.obtenerSalidas(producto.idProducto)}"
+                                          style="color:red;font-weight:bold;"/>
+                        </p:column>
+
                         <p:column headerText="Precio">
+
                             <h:outputText value="#{producto.precio}">
                                 <f:convertNumber type="currency"/>
                             </h:outputText>
+
                         </p:column>
 
-
-
                         <p:column headerText="Total Valor">
+
                             <h:outputText value="#{producto.stock * producto.precio}">
                                 <f:convertNumber type="currency"/>
                             </h:outputText>
+
                         </p:column>
 
-                        <p:column headerText="Proveedor">#{producto.proveedor}</p:column>
+                        <p:column headerText="Proveedor">
+                            #{producto.proveedor}
+                        </p:column>
 
                     </p:dataTable>
 
@@ -361,53 +380,6 @@
 
                     </div>
 
-                    <p:dialog header="Modificar Producto"
-                              widgetVar="dlgModificar"
-                              modal="true"
-                              showEffect="fade"
-                              hideEffect="fade"
-                              resizable="false">
-
-                        <p:outputPanel id="formModificar">
-
-                            <p:panelGrid columns="2"
-                                         rendered="#{not empty InventarioBean.productoEdit}"
-                                         styleClass="ui-noborder">
-
-                                <p:outputLabel value="Nombre del Producto:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.nombreProducto}" required="true" requiredMessage="No deje el campo del nombre vacio" />
-
-                                <p:outputLabel value="Precio:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.precio}" required="true"  requiredMessage="No deje el campo del precio vacio"/>
-
-                               <p:outputLabel value="Stock:" />
-                                <p:inputText value="#{InventarioBean.productoEdit.stock}" disabled="true"/>
-
-                                <p:outputLabel value="Proveedor:" />
-                                <p:selectOneMenu id="proveedorDLG"
-                                                 value="#{InventarioBean.productoEdit.idProveedor}"
-                                                 style="width: 100%;">
-
-                                    <f:selectItem itemLabel="Sin proveedor" itemValue="#{null}" noSelectionOption="true"/>
-
-                                    <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                                   itemLabel="#{prov.marca}"
-                                                   itemValue="#{prov.id}"/>
-
-                                </p:selectOneMenu>
-                            </p:panelGrid>
-
-                            <div style="text-align: center; margin-top: 15px;">
-                                <p:commandButton value="Guardar Cambios"
-                                                 action="#{InventarioBean.modificarProducto}"
-                                                 process="formModificar"
-                                                 update=":formInventario:tabsPrincipal:tablaInventario :formInventario:growl"
-                                                 oncomplete="if (!args.validationFailed) PF('dlgModificar').hide()"
-                                                 styleClass="btn-blue" />
-                            </div>
-
-                        </p:outputPanel>
-                    </p:dialog>
                 </p:tab>
 
                 <p:tab title="Movimientos">

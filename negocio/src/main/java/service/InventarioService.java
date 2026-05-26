@@ -14,7 +14,7 @@ public class InventarioService {
 
 
     public List<InventarioDTO> listarInventario() throws Exception {
-        return inventarioDAO.listar(); // si está vacío → lista vacía ✔
+        return inventarioDAO.listar();
     }
 
 

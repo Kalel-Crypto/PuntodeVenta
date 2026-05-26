@@ -28,7 +28,7 @@ public class UsuarioDAO {
     }
 
     public Usuario login(String nombre, String password) throws Exception {
-        String sql = "SELECT idusuario, nombre, password, rol FROM usuario WHERE nombre=? AND password=? AND activo = 1";
+        String sql = "SELECT idusuario, nombre, password, rol FROM usuario WHERE nombre=? AND password=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -50,9 +50,25 @@ public class UsuarioDAO {
         return null;
     }
 
+    public void actualizar(Usuario u) throws Exception {
+
+        String sql = "UPDATE usuario SET nombre=?, password=?, rol=? WHERE idusuario=?";
+
+        try (Connection con = ConnectionManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getPassword());
+            ps.setString(3, u.getRol().name());
+            ps.setInt(4, u.getId());
+
+            ps.executeUpdate();
+        }
+    }
+
     public List<Usuario> listar() throws Exception {
         List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT idusuario, nombre, password, rol FROM usuario WHERE activo = 1";
+        String sql = "SELECT idusuario, nombre, password, rol FROM usuario";
 
         try (Connection con = ConnectionManager.getConnection();
              Statement st = con.createStatement();
@@ -71,27 +87,12 @@ public class UsuarioDAO {
     }
 
     public void eliminar(int id) throws Exception {
-        String sql = "UPDATE usuario SET activo = 0 WHERE idusuario=?";
+        String sql = "DELETE FROM usuario WHERE idusuario=?";
 
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
-            ps.executeUpdate();
-        }
-    }
-
-    public void actualizar(Usuario u) throws Exception {
-        String sql = "UPDATE usuario SET nombre=?, password=?, rol=? WHERE idusuario=?";
-
-        try (Connection con = ConnectionManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, u.getNombre());
-            ps.setString(2, u.getPassword());
-            ps.setString(3, u.getRol().name());
-            ps.setInt(4, u.getId());
-
             ps.executeUpdate();
         }
     }
