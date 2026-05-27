@@ -66,6 +66,49 @@ public class InventarioBean implements Serializable {
         }
 
     }
+    public int obtenerEntradas(int idProducto) {
+        int total = 0;
+
+        try {
+            List<MovimientoInventario> lista =
+                    facade.listarTodosLosMovimientos();
+
+            for (MovimientoInventario m : lista) {
+                if (m.getProducto().getId() == idProducto) {
+                    if (m.getTipo().equalsIgnoreCase("Entrada")) {
+                        total += m.getCantidad();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return total;
+    }
+    public int obtenerSalidas(int idProducto) {
+        int total = 0;
+
+        try {
+            List<MovimientoInventario> lista =
+                    facade.listarTodosLosMovimientos();
+
+            for (MovimientoInventario m : lista) {
+                if (m.getProducto().getId() == idProducto) {
+                    if (m.getTipo().equalsIgnoreCase("salida")) {
+                        total += m.getCantidad();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return total;
+    }
+
 
     public void buscarProducto() {
         int Id;

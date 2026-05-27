@@ -60,7 +60,7 @@ public class ProveedorDAO {
 
     public List<Proveedor> buscar(String parametro) throws Exception {
         List<Proveedor> lista = new ArrayList<>();
-        String sql = "SELECT idproveedor, nombre, contacto FROM proveedor WHERE nombre LIKE ? OR CAST(idproveedor AS CHAR) = ?";
+        String sql = "SELECT idproveedor, nombre,marca, contacto FROM proveedor WHERE nombre LIKE ? OR CAST(idproveedor AS CHAR) = ?";
         try (Connection con = ConnectionManager.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, "%" + parametro + "%");
@@ -70,6 +70,7 @@ public class ProveedorDAO {
                     Proveedor p = new Proveedor();
                     p.setId(rs.getInt("idproveedor"));
                     p.setNombre(rs.getString("nombre"));
+                    p.setMarca(rs.getString("marca"));
                     p.setContacto(rs.getString("contacto"));
                     lista.add(p);
                 }

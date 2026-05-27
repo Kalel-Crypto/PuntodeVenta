@@ -32,7 +32,7 @@ public class ProveedorBean implements Serializable {
         cargarProveedores();
     }
 
-    public void registrar() {
+    public void registrar() throws Exception {
         if(proveedor.getNombre() == null || proveedor.getNombre().trim().isEmpty()){
             msgWarn("Asegúrese de ingresar un nombre.");
             return;
@@ -43,6 +43,11 @@ public class ProveedorBean implements Serializable {
         }
         if(proveedor.getMarca() == null){
             msgWarn("Ingrese la marca del proveedor");
+            return;
+        }
+        if(!facade.existeMarca(proveedor)){
+            msgWarn("La marca ya esta registrada");
+            return;
         }
 
         try{
@@ -86,13 +91,17 @@ public class ProveedorBean implements Serializable {
         this.proveedorSeleccionado = prov;
     }
 
-    public void guardarModificacion() {
+    public void guardarModificacion() throws Exception {
         if(proveedorSeleccionado == null || proveedorSeleccionado.getNombre() == null || proveedorSeleccionado.getNombre().trim().isEmpty()){
             msgWarn("El nombre no puede estar vacío.");
             return;
         }
         if(!proveedorSeleccionado.getContacto().matches("^686\\d{7}$")){
             msgWarn("El campo contacto debe cumplir con el formato establecido.");
+            return;
+        }
+        if(!facade.existeMarca(proveedorSeleccionado)){
+            msgWarn("Ya hay una marca registrada con ese nombre");
             return;
         }
 

@@ -324,6 +324,16 @@
                             <h:outputText value="#{producto.stock} unidades"/>
                         </p:column>
 
+                        <p:column headerText="Entradas">
+                            <h:outputText value="#{InventarioBean.obtenerEntradas(producto.idProducto)}"
+                                          style="color:green;font-weight:bold;"/>
+                        </p:column>
+
+                        <p:column headerText="Salidas">
+                            <h:outputText value="#{InventarioBean.obtenerSalidas(producto.idProducto)}"
+                                          style="color:red;font-weight:bold;"/>
+                        </p:column>
+
                         <p:column headerText="Precio">
                             <h:outputText value="#{producto.precio}">
                                 <f:convertNumber type="currency"/>
@@ -765,7 +775,7 @@
 
 
 
-                <p:tab title="Auditoría" rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
+                <p:tab title="Historial de movimientos" rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
 
 
 

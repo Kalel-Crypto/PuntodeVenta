@@ -22,6 +22,17 @@ public class SistemaFacade {
     private CajaService cajaService = new CajaService();
     private MovimientoInventarioService movimientoInventarioService = new MovimientoInventarioService();
 
+    public boolean existeMarca(Proveedor p) throws Exception {
+        for(Proveedor prov: proveedorService.obtenerProveedores()){
+            if(prov.getMarca().equalsIgnoreCase(p.getMarca())){
+                return true;
+            } else {
+                return false;
+            }
+        }
+            return false;
+    }
+
     public List<Usuario> buscarUsuarios(String busqueda) throws Exception {
         return usuarioService.buscarUsuarios(busqueda);
     }

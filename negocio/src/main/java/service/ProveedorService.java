@@ -3,9 +3,15 @@ package service;
 import mx.puntodeventa.dao.ProveedorDAO;
 import mx.puntodeventa.entity.Proveedor;
 
+import java.util.List;
+
 public class ProveedorService {
     ProveedorDAO dao = new ProveedorDAO();
 
+
+    public List<Proveedor> obtenerProveedores() throws Exception {
+        return dao.listar();
+    }
 
     public void registrar(String nombre, String numero, String marca) throws Exception {
 
