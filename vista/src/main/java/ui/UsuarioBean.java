@@ -44,6 +44,8 @@ public class UsuarioBean implements Serializable {
         try {
             facade.registrarUsuario(usuario);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Exito","Usuario registrado con exito"));
+            this.usuario = new Usuario();
+            cargarUsuarios();
         }catch (Exception msg){
             msg.printStackTrace();
         }

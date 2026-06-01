@@ -21,7 +21,9 @@ public class Proveedor{
     @Column(name = "marca", nullable = true)
     private String marca;
 
-    public int getId() {
+    public int getId() {if (id == null) {
+        return 0;
+    }
         return id;
     }
 

@@ -43,10 +43,12 @@ public class ProveedorBean implements Serializable {
         }
         if(proveedor.getMarca() == null || proveedor.getMarca().trim().isEmpty()){
             msgWarn("Ingrese la marca del proveedor");
+            FacesContext.getCurrentInstance().validationFailed();
             return;
         }
         if(facade.existeMarca(proveedor)){
             msgWarn("La marca ya esta registrada");
+            FacesContext.getCurrentInstance().validationFailed();
             return;
         }
 

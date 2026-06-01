@@ -331,7 +331,7 @@
 
                         <p:column headerText="Salidas">
                             <h:outputText value="#{InventarioBean.obtenerSalidas(producto.idProducto)}"
-                                          style="color:blue;font-weight:bold;"/>
+                                          style="color:orange;font-weight:bold;"/>
                         </p:column>
 
                         <p:column headerText="Precio">
@@ -457,109 +457,18 @@
                 </p:tab>
 
                 <p:tab title="Altas">
-
-                    <p:tabView>
-
-                        <p:tab title="Registrar Producto">
-
-                            <p:growl id="msgs" showDetail="true"/>
-
-                            <div class="header-azul">Registro de productos</div>
-
-                            <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder panel-contenedor">
-
-                                <p:outputLabel for="nombre" value="Nombre *"/>
-                                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true"
-                                             requiredMessage="Asegurese de ingresar un nombre"/>
-
-                                <p:outputLabel for="precio" value="Precio *"/>
-                                <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true"
-                                             requiredMessage="Asegurese de ingresar un precio"/>
-
-                                <p:outputLabel for="proveedor" value="Proveedor *"/>
-                                <p:selectOneMenu id="proveedor" value="#{productoBean.idProveedorSeleccionado}"
-                                                 required="true" requiredMessage="Seleccione un proveedor">
-                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                    <f:selectItems value="#{productoBean.listaProveedores}" var="prov"
-                                                   itemLabel="#{prov.marca}" itemValue="#{prov.id}"/>
-                                </p:selectOneMenu>
-
-                                <p:outputLabel for="stock" value="Stock *"/>
-                                <p:inputText id="stock" value="#{productoBean.stockInicial}" required="true"
-                                             requiredMessage="No deje el Stock vacio"/>
-
-                                <h:panelGrid columns="2" style="margin-top:20px;">
-
-
-                                    <p:commandButton value="Registrar"
-                                                     action="#{productoBean.registrar(loginUI.usuarioLogeado)}"
-                                                     process="@this nombre precio proveedor stock"
-                                                     update="msgs"
-                                                     styleClass="btn-green"/>
-                                </h:panelGrid>
-
-                            </p:panelGrid>
-
-                        </p:tab>
-
-                        <p:tab title="Registrar Proveedor">
-
-                            <p:growl id="msgsProveedor"/>
-
-                            <p:panelGrid columns="1">
-
-                                <p:outputLabel value="Marca del proveedor * "/>
-                                <p:inputText id="marcaProv" value="#{proveedorBean.proveedor.marca}"/>
-                                <p:outputLabel value="Nombre del proveedor *"/>
-                                <p:inputText id="nombreProv" value="#{proveedorBean.proveedor.nombre}" required="true"
-                                             requiredMessage="Asegurese de ingresar un nombre"/>
-                                <p:outputLabel value="Numero del proveedor *"/>
-                                <p:inputText id="telefonoProv" value="#{proveedorBean.proveedor.contacto}"
-                                             required="true"
-                                             requiredMessage="Asegurese de ingresar un numero de celular"/>
-
-                                <p:commandButton value="Registrar"
-                                                 action="#{proveedorBean.registrar}"
-                                                 process="@this nombreProv telefonoProv marcaProv"
-                                                 update="msgsProveedor"
-                                                 styleClass="btn-green"/>
-
-                            </p:panelGrid>
-
-                        </p:tab>
-
-                        <p:tab title="Registrar Usuario">
-
-                            <p:growl id="msgsUsuario"/>
-
-                            <p:panelGrid columns="1">
-
-                                <p:outputLabel value="Nombre de usuario *"/>
-                                <p:inputText id="nombreUsuario" value="#{usuarioBean.usuario.nombre}" required="true"
-                                             requiredMessage="Asegurese de ingresar un nombre"/>
-                                <p:outputLabel value="Constraseña *"/>
-                                <p:password id="passwordUsuario" value="#{usuarioBean.usuario.password}" required="true"
-                                            requiredMessage="Asegurese de ingresar una contraseña"/>
-                                <p:outputLabel value="Rol del usuario"/>
-                                <p:selectOneMenu id="rolUsuario" value="#{usuarioBean.usuario.rol}" required="true"
-                                                 requiredMessage="Seleccione un rol">
-                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
-                                    <f:selectItems value="#{usuarioBean.roles}" var="rol"
-                                                   itemLabel="#{rol}" itemValue="#{rol}"/>
-                                </p:selectOneMenu>
-
-                                <p:commandButton value="Registrar"
-                                                 action="#{usuarioBean.registrar}"
-                                                 process="@this nombreUsuario passwordUsuario rolUsuario"
-                                                 update="msgsUsuario"
-                                                 styleClass="btn-green"/>
-
-                            </p:panelGrid>
-
-                        </p:tab>
-
-                    </p:tabView>
-
+                    <div style="text-align: center; padding: 30px; background: #f8fbff; border-radius: 8px;">
+                        <h:outputText value="Seleccione el registro que desea realizar:"
+                                      style="display: block; margin-bottom: 15px; font-size: 15px; font-weight: bold; color: #1e3a8a"/>
+                        <p:menuButton value="Opciones de alta" buttonStyleClass="btn-blue" icon="pi pi-list">
+                            <p:menuitem value="Registrar producto" icon="pi pi-box"
+                                        onclick="PF('dlgProducto').show(); return false;"/>
+                            <p:menuitem value="Registrar proveedor" icon="pi pi-truck"
+                                        onclick="PF('dlgProveedor').show(); return false;"/>
+                            <p:menuitem value="Registrar usuairo" icon="pi pi-user-plus"
+                                        onclick="PF('dlgUsuario').show(); return false;"/>
+                        </p:menuButton>
+                    </div>
                 </p:tab>
 
                 <p:tab title="Proveedores">
@@ -832,7 +741,7 @@
                                 <h:outputText value="TOTAL SALIDAS: "
                                               style="font-weight:bold; color:#64748b; display:block;"/>
                                 <h:outputText value="#{AuditoriaBean.totalSalidas} unidades"
-                                              style="color:#3b82f6; font-weight:bold; font-size:1.2em;"/>
+                                              style="color:#f59e0b; font-weight:bold; font-size:1.2em;"/>
                             </h:panelGroup>
 
                             <p:commandButton value="Actualizar Reporte"
@@ -868,7 +777,7 @@
 
                             <p:column headerText="Tipo" style="text-align:center;">
                                 <h:outputText value="#{mov.tipo}"
-                                              style="font-weight:bold; color: #{mov.tipo == 'Entrada' ? '#22c55e' : '#ef4444'}"/>
+                                              style="font-weight:bold; color: #{mov.tipo == 'entrada' ? '#22c55e' : '#f59e0b'}"/>
                             </p:column>
 
                             <p:column headerText="Cantidad" style="text-align:center;">
@@ -908,12 +817,14 @@
 
     </p:confirmDialog>
     <p:dialog header="Registro de productos" widgetVar="dlgProducto" modal="true" showEffect="fade" hideEffect="fade"
-              resizable="false">
+              resizable="false" onHide="document.getElementById('formAltaProducto').reset();">
+        <p:ajax event="close" resetValues="true" update="formAltaProducto"/>
         <h:form id="formAltaProducto">
             <p:growl id="msgsProd" showSummary="true"/>
             <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder">
-                <p:outputLabel for="name" value="Nombre *"/>
-                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" requiredMessage="Ingrese un nombre"/>
+                <p:outputLabel for="nombre" value="Nombre *"/>
+                <p:inputText id="nombre" value="#{productoBean.producto.nombre}" required="true"
+                             requiredMessage="Ingrese un nombre"/>
                 <p:outputLabel for="precio" value="Precio *"/>
                 <p:inputText id="precio" value="#{productoBean.producto.precio}" required="true"
                              requiredMessage="Asegurese de ingresar un precio"/>
@@ -930,15 +841,17 @@
                              requiredMessage="No deje el Stock vacio"/>
 
                 <p:commandButton value="Registrar" action="#{productoBean.registrar(loginUI.usuarioLogeado)}"
-                                 process="@form" update="msgsProd :formInventario:tabsPrincipal:tablaInventario"
+                                 process="@form" update="msgsProd :formInventario:tabsPrincipal:tablaInventario @form"
                                  styleClass="btn-green"
                                  oncomplete="if (!args.validationFailed) PF('dlgProducto').hide();"
                                  style="margin-top: 10px;"/>
             </p:panelGrid>
         </h:form>
     </p:dialog>
+
     <p:dialog header="Registro de Proveedor" widgetVar="dlgProveedor" modal="true" showEffect="fade" hideEffect="fade"
-              resizable="false">
+              resizable="false" onHide="document.getElementById('formAltaProveedor').reset();">
+        <p:ajax event="close" resetValues="true" update="formAltaProveedor"/>
         <h:form id="formAltaProveedor">
             <p:growl id="msgsProv" showDetail="true"/>
             <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder">
@@ -954,15 +867,17 @@
                              requiredMessage="Asegurese de ingresar un numero de celular"/>
 
                 <p:commandButton value="Registrar" action="#{proveedorBean.registrar}"
-                                 process="@form" update="msgsProv :formInventario:tabsPrincipal:tablaProveedores"
+                                 process="@form" update="msgsProv :formInventario:tabsPrincipal:tablaProveedores @form"
                                  styleClass="btn-green"
                                  oncomplete="if (!args.validationFailed) PF('dlgProveedor').hide();"
                                  style="margin-top: 10px;"/>
             </p:panelGrid>
         </h:form>
     </p:dialog>
+
     <p:dialog header="Registro de Usuario" widgetVar="dlgUsuario" modal="true" showEffect="fade" hideEffect="fade"
-              resizable="false">
+              resizable="false" onHide="document.getElementById('formAltaUsuario').reset();">
+        <p:ajax event="close" resetValues="true" update="formAltaUsuario"/>
         <h:form id="formAltaUsuario">
             <p:growl id="msgsUsu" showDetail="true"/>
             <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder">
@@ -982,7 +897,7 @@
                 </p:selectOneMenu>
 
                 <p:commandButton value="Registrar" action="#{usuarioBean.registrar}"
-                                 process="@form" update="msgsUsu :formInventario:tabsPrincipal:tablaUsuarios"
+                                 process="@form" update="msgsUsu :formInventario:tabsPrincipal:tablaUsuarios @form"
                                  styleClass="btn-green"
                                  oncomplete="if (!args.validationFailed) PF('dlgUsuario').hide();"
                                  style="margin-top: 10px;"/>
