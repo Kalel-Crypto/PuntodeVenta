@@ -23,11 +23,15 @@ public class SistemaFacade {
     private MovimientoInventarioService movimientoInventarioService = new MovimientoInventarioService();
 
     public boolean existeMarca(Proveedor p) throws Exception {
+        if (p.getMarca() == null || p.getMarca().trim().isEmpty()){
+            return false;
+        } //Para validar que la marca buscada no sea nula
         for(Proveedor prov: proveedorService.obtenerProveedores()){
-            if(prov.getMarca().equalsIgnoreCase(p.getMarca())){
+            if(prov.getMarca() != null && prov.getMarca().equalsIgnoreCase(p.getMarca())){
+                if (p.getId() != 0 && p.getId() == prov.getId()) {
+                    continue;
+                }
                 return true;
-            } else {
-                return false;
             }
         }
             return false;
