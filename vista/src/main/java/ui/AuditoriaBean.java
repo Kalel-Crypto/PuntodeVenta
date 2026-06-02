@@ -5,6 +5,8 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import facade.SistemaFacade;
@@ -19,6 +21,8 @@ public class AuditoriaBean implements Serializable {
     private List<MovimientoInventario> listaFiltrada;
     private List<Usuario> listaUsuarios;
     private Integer idUsuarioFiltro;
+    private Date fechaInicio;
+    private Date fechaFin;
 
     private SistemaFacade facade;
 
@@ -70,7 +74,24 @@ public class AuditoriaBean implements Serializable {
             boolean pasaFiltroUsuario = (idUsuarioFiltro == null || idUsuarioFiltro == 0) ||
                     (mov.getUsuario() != null && mov.getUsuario().getId() == idUsuarioFiltro);
 
-            if (pasaFiltroUsuario) {
+            boolean pasaFiltroFecha = true;
+            if (mov.getFecha() !=null) {
+                if(fechaInicio != null && mov.getFecha().before(fechaInicio)) {
+                    pasaFiltroFecha = false;
+                }
+                if (fechaFin != null){
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(fechaFin);
+                    cal.set(Calendar.HOUR_OF_DAY, 23);
+                    cal.set(Calendar.MINUTE, 59);
+                    cal.set(Calendar.SECOND, 59);
+
+                    if (mov.getFecha().after(cal.getTime())) {
+                        pasaFiltroFecha = false;
+                    }
+                }
+            }
+            if (pasaFiltroUsuario && pasaFiltroFecha) {
                 listaFiltrada.add(mov);
 
 
@@ -81,6 +102,12 @@ public class AuditoriaBean implements Serializable {
                 }
             }
         }
+    }
+    public void limpiarFiltros(){
+        this.idUsuarioFiltro = null;
+        this.fechaInicio = null;
+        this.fechaFin = null;
+        aplicarFiltros();
     }
 
     public boolean puedeVerAuditoria(Usuario usuarioLogeado) {
@@ -111,4 +138,12 @@ public class AuditoriaBean implements Serializable {
 
     public Usuario getUsuarioLogeado() { return usuarioLogeado; }
     public void setUsuarioLogeado(Usuario usuarioLogeado) { this.usuarioLogeado = usuarioLogeado; }
+
+    public Date getFechaInicio(){ return fechaInicio;}
+    public void setFechaInicio(Date fechaInicio){this.fechaInicio = fechaInicio;}
+
+    public Date getFechaFin() { return fechaFin; }
+    public void setFechaFin(Date fechaFin) { this.fechaFin = fechaFin; }
+
+
 }

@@ -711,20 +711,44 @@
                         Historial de Movimientos y Reporte Mensual
                     </div>
 
-                    <h:panelGrid columns="1" style="margin-bottom:15px; width:100%;">
-                        <h:panelGroup>
-                            <h:outputText value="Filtrar por Usuario: "
-                                          style="font-weight:bold; color:#1e3a8a; display:block; margin-bottom:5px;"/>
-                            <p:selectOneMenu value="#{AuditoriaBean.idUsuarioFiltro}" style="min-width: 180px;">
-                                <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}"
-                                              noSelectionOption="true"/>
-                                <f:selectItems value="#{AuditoriaBean.listaUsuarios}" var="usr"
-                                               itemLabel="#{usr.nombre}" itemValue="#{usr.id}"/>
-                                <p:ajax process="@this" listener="#{AuditoriaBean.aplicarFiltros}"
-                                        update="areaResultados"/>
+                    <p:outputPanel id="cajaFiltros" layout="block" style="display: flex; flex-direction: row; justify-content: flex-start; align-items: flex-end; gap: 20px; background: #f8fbff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e2e8f0; width: 100%;">
+
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Filtrar por Usuario:" style="font-weight:bold; color:#1e3a8a; display:block; margin-bottom:5px;"/>
+                            <p:selectOneMenu id="usuarioFiltro" value="#{AuditoriaBean.idUsuarioFiltro}" style="min-width: 180px;">
+                                <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{AuditoriaBean.listaUsuarios}" var="usr" itemLabel="#{usr.nombre}" itemValue="#{usr.id}"/>
                             </p:selectOneMenu>
                         </h:panelGroup>
-                    </h:panelGrid>
+
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Desde:" style="font-weight:bold; color:#1e3a8a; display:block; margin-bottom:5px;"/>
+                            <p:datePicker id="fechaDesde" value="#{AuditoriaBean.fechaInicio}" pattern="dd/MM/yyyy" showIcon="true" placeholder="Fecha inicio" />
+                        </h:panelGroup>
+
+                        <h:panelGroup layout="block">
+                            <h:outputText value="Hasta:" style="font-weight:bold; color:#1e3a8a; display:block; margin-bottom:5px;"/>
+                            <p:datePicker id="fechaHasta" value="#{AuditoriaBean.fechaFin}" pattern="dd/MM/yyyy" showIcon="true" placeholder="Fecha fin" />
+                        </h:panelGroup>
+
+                        <h:panelGroup layout="block" style="display: flex; gap: 10px;">
+
+                            <p:commandButton value="Filtrar"
+                                             action="#{AuditoriaBean.aplicarFiltros}"
+                                             process="@this usuarioFiltro fechaDesde fechaHasta"
+                                             update="areaResultados msgFiltros"
+                                             styleClass="btn-green"
+                                             icon="pi pi-filter" />
+
+                            <p:commandButton value="Limpiar Filtros"
+                                             action="#{AuditoriaBean.limpiarFiltros}"
+                                             process="@this"
+                                             update=":formInventario:tabsPrincipal:cajaFiltros :formInventario:tabsPrincipal:areaResultados"
+                                             styleClass="btn-blue"
+                                             icon="pi pi-filter-slash" />
+                        </h:panelGroup>
+
+                    </p:outputPanel>
 
                     <h:panelGroup id="areaResultados" layout="block">
 
