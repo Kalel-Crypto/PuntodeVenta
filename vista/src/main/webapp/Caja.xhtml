@@ -122,11 +122,16 @@
 
         <div class="barra-top">
             <span class="titulo">Punto de Venta</span>
-
-            <div>
-                <h:outputText value="Caja: #{ventaBean.cajaActual.idcaja}" class="info"/>
-                <br/>
-                <h:outputText value="Cajero: #{ventaBean.usuario.nombre}" class="info"/>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="display: flex; gap: 10px;">
+                    <p:commandButton value="Corte de caja" styleClass="btn-danger" action="#{ventaBean.validarCorteCaja()}" onclick="PF('dlgCorte').show();"/>
+                    <p:commandButton value="Cancelar Venta" styleClass="btn-danger" onclick="PF('dlgConf').show();" type="button" update="@form"/>
+                </div>
+                <div style="text-align: right; border-left: 2px solid rgba(255,255,255,0.2); padding-left: 15px;">
+                    <h:outputText value="Caja: #{ventaBean.cajaActual.idcaja}" class="info"/>
+                    <br/>
+                    <h:outputText value="Cajero: #{ventaBean.usuario.nombre}" class="info"/>
+                </div>
             </div>
         </div>
 
@@ -197,12 +202,6 @@
 
                 </p:dataTable>
 
-                <div style="margin-top:15px;">
-                    <p:commandButton value="Corte de caja" styleClass="btn-danger" action="#{ventaBean.validarCorteCaja()}"
-                                     onclick="PF('dlgCorte').show();"/>
-                    <p:commandButton value="Cancelar Venta" styleClass="btn-danger" onclick="PF('dlgConf').show();" type="button" update="@form"/>
-                </div>
-
             </div>
 
             <div class="panel-der">
@@ -270,17 +269,25 @@
                         value="#{ventaBean.adminPassword}"
                         feedback="false"
                         style="width:100%;" />
-                <p:commandButton
-                        value="Aceptar"
-                        action="#{ventaBean.validarCorteCaja}"
-                        update="@form mensajes"
-                        ajax="false"
-                        styleClass="btn"/>
+               <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                   <p:commandButton
+                       value="Cancelar"
+                       type="button"
+                       onclick="PF('dlgCorte').hide();"
+                       styleClass="btn-danger"/>
+                   <p:commandButton
+                           value="Aceptar"
+                           action="#{ventaBean.validarCorteCaja}"
+                           update="@form mensajes"
+                           ajax="false"
+                           styleClass="btn"/>
+               </div>
                 <h:outputText
                         value="Una vez aceptado se cerrará la sesión actual y se redireccionará al inicio de sesión."
                         style="font-size:12px; color:#cbd5e1;"/>
             </h:panelGrid>
         </p:dialog>
+
         <p:dialog
         header="Confirmacion de operacion"
         widgetVar="dlgConf"
@@ -291,12 +298,19 @@
         width="300">
             <h:panelGrid columns="1" style="width:100%; gap:10px;">
             <p:outputLabel value="¿Desea cancelar la operacion?"/>
-                <p:commandButton
-                    value="Aceptar"
-                    action="#{ventaBean.cancelarVenta()}"
-                    update="@form mensajes"
-                ajax="false"
-                styleClass="btn"/>
+                <div style="display: flex; justify-content: center; gap:10px;margin-top: 10px;">
+                    <p:commandButton
+                            value="Regresar"
+                            type="button"
+                            onclick="PF('dlgConf').hide();"
+                            styleClass="btn"/>
+                    <p:commandButton
+                            value="Aceptar"
+                            action="#{ventaBean.cancelarVenta()}"
+                            update="@form mensajes"
+                            ajax="false"
+                            styleClass="btn"/>
+                </div>
 
 
             </h:panelGrid>
