@@ -183,8 +183,10 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Cantidad">
-                        #{item.cantidad}
+                    <p:column headerText="Cantidad" style="width: 120px; text-align: center">
+                        <p:spinner value="#{item.cantidad}" min="1" max="#{item.producto.stock}" style="width: 80px">
+                            <p:ajax process="@this" update="@form" listener="#{ventaBean.recalcularTotal}"/>
+                        </p:spinner>
                     </p:column>
 
                     <p:column headerText="Subtotal">

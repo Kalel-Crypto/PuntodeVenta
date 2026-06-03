@@ -51,6 +51,20 @@ public class VentaBean implements Serializable {
         cargarCajaUsuario();
 
     }
+    private double redondear(double valor) {
+        return Math.round(valor * 10000.0) / 10000.0;
+    }
+    public void recalcularTotal() {
+        this.total = 0.0;
+        if (this.listaDetalle != null) {
+            for (DetalleVenta item : this.listaDetalle) {
+                this.total += (item.getPrecioUnitario() * item.getCantidad());
+            }
+        }
+        this.total = redondear(this.total);
+        calcularCambio();
+    }
+
     public void validarCorteCaja(){
         try {
 
@@ -81,9 +95,9 @@ public class VentaBean implements Serializable {
     public void calcularCambio() {
 
         if (dineroRecibido >= total) {
-            cambio = dineroRecibido - total;
+            cambio = redondear(dineroRecibido - total);
         } else {
-            cambio = 0;
+            cambio = 0.0;
         }
     }
 
@@ -174,8 +188,9 @@ public class VentaBean implements Serializable {
                 listaDetalle.add(nuevoDetalle);
             }
 
-            total += productoBD.getPrecio();
+            total += redondear(total + productoBD.getPrecio());
             this.idProductoSeleccionado = null;
+            calcularCambio();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -287,7 +302,9 @@ public class VentaBean implements Serializable {
     public void eliminar(DetalleVenta item) {
         System.out.println(nombreUsuario);
         listaDetalle.remove(item);
-        total -= (item.getPrecioUnitario() * item.getCantidad());
+        total = redondear(total - (item.getPrecioUnitario() * item.getCantidad()));
+        if (total <0) total =0.0;
+        calcularCambio();
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Removido", "Producto eliminado de la venta"));
     }
