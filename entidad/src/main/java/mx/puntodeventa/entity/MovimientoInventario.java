@@ -16,6 +16,7 @@ public class MovimientoInventario implements Serializable {
     @Column(name = "tipoMovimiento")
     private String tipo;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha")
     private Date fecha;
 

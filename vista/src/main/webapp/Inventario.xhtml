@@ -783,28 +783,30 @@
                                      rows="10"
                                      paginator="true"
                                      paginatorPosition="bottom"
+                                     allowUnsorting="true"
+                                     sortMode="single"
                                      style="margin-top:10px;">
 
-                            <p:column headerText="Fecha" style="width:150px; text-align:center;">
+                            <p:column headerText="Fecha" style="width:150px; text-align:center;" sortBy="#{mov.fecha}" sortOrder="descending">
                                 <h:outputText value="#{mov.fecha}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Tijuana"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Usuario" style="text-align:center;">
+                            <p:column headerText="Usuario" style="text-align:center;" sortBy="#{mov.usuario.nombre}">
                                 <h:outputText value="#{mov.usuario != null ? mov.usuario.nombre : 'Sistema'}"/>
                             </p:column>
 
-                            <p:column headerText="Producto">
+                            <p:column headerText="Producto" sortBy="#{mov.producto.nombre}">
                                 <h:outputText value="#{mov.producto != null ? mov.producto.nombre : 'N/A'}"/>
                             </p:column>
 
-                            <p:column headerText="Tipo" style="text-align:center;">
+                            <p:column headerText="Tipo" style="text-align:center;" sortBy="#{mov.tipo}">
                                 <h:outputText value="#{mov.tipo}"
-                                              style="font-weight:bold; color: #{mov.tipo == 'entrada' ? '#22c55e' : '#f59e0b'}"/>
+                                              style="font-weight:bold; text-transform: uppercase; color: #{mov.tipo == 'entrada' ? '#22c55e' : '#f59e0b'}"/>
                             </p:column>
 
-                            <p:column headerText="Cantidad" style="text-align:center;">
+                            <p:column headerText="Cantidad" style="text-align:center;" sortBy="#{mov.cantidad}">
                                 <h:outputText value="#{mov.cantidad}"/>
                             </p:column>
 
