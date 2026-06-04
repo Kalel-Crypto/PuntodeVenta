@@ -9,13 +9,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 public class RespaldoHelper {
     private static final String RUTA = "C:\\RespaldosPOS\\";
-    private  static double VENTAFINAL = 0;
+    private static double VENTAFINAL = 0;
 
-    public static double getVENTAFINAL(){
+    public static double getVENTAFINAL() {
         return VENTAFINAL;
+    }
+
+    public static void resetVentaFinal() {
+        VENTAFINAL = 0.0;
     }
 
 
@@ -26,15 +31,21 @@ public class RespaldoHelper {
             if (!carpeta.exists()) {
                 carpeta.mkdirs();
             }
-            String nombreArchivo = RUTA + "Caja_" + venta.getIdCaja() + "_ACTIVA.csv";
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("ddMMyyyy");
+            String fechaActual = LocalDateTime.now().format(formato);
+
+            String nombreArchivo = RUTA + "CAJA" + venta.getIdCaja() + "_" + fechaActual + ".csv";
+            File archivo = new File(nombreArchivo);
+            boolean esNuevo = !archivo.exists();
 
             FileWriter fw = new FileWriter(nombreArchivo, true);
-
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write("Caja,Fecha,Usuario,Producto,Cantidad,Preciounitario,Total de venta");
-            bw.newLine();
-            for (DetalleVenta d : detalles) {
 
+            if (esNuevo) {
+                bw.write("Caja,Fecha,Usuario,Producto,Cantidad,Preciounitario,Total de venta");
+                bw.newLine();
+            }
+            for (DetalleVenta d : detalles) {
                 String linea =
                         venta.getIdCaja() + "," +
                                 LocalDateTime.now() + "," +
@@ -51,7 +62,6 @@ public class RespaldoHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
 
     }

@@ -251,8 +251,13 @@ public class VentaBean implements Serializable {
         System.out.println("ENTRE AL METODO DE CORTE");
 
         try {
+            java.time.LocalDateTime ahora = java.time.LocalDateTime.now();
+            java.time.format.DateTimeFormatter formatoFecha = java.time.format.DateTimeFormatter.ofPattern("ddMMyyyy");
+            java.time.format.DateTimeFormatter formatoHora = java.time.format.DateTimeFormatter.ofPattern("HHmmss");
+            String fechaActual = ahora.format(formatoFecha);
+            String horaActual = ahora.format(formatoHora);
 
-            String rutaActual = "C:\\RespaldosPOS\\Caja_" + cajaActual.getIdcaja() + "_ACTIVA.csv";
+            String rutaActual = "C:\\RespaldosPOS\\CAJA" + cajaActual.getIdcaja() + "_" + fechaActual + ".csv";
 
             File archivoActual = new File(rutaActual);
 
@@ -262,7 +267,7 @@ public class VentaBean implements Serializable {
                 return;
             }
 
-            String nuevoNombre = "C:\\RespaldosPOS\\Caja_" + cajaActual.getIdcaja() + "_Corte_" + System.currentTimeMillis() + ".csv";
+            String nuevoNombre = "C:\\RespaldosPOS\\Caja_" + cajaActual.getIdcaja() + "_Corte_" + fechaActual + "_" + horaActual + ".csv";
             File archivoNuevo = new File(nuevoNombre);
 
             java.nio.file.Files.move(archivoActual.toPath(), archivoNuevo.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
@@ -273,6 +278,7 @@ public class VentaBean implements Serializable {
                 System.out.println(RespaldoHelper.getVENTAFINAL());
                 bw.newLine();
                 bw.write("Total vendido," + RespaldoHelper.getVENTAFINAL()+"$");
+                RespaldoHelper.resetVentaFinal();
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"ERROR","Error al realizar el corte de caja, intentelo de nuevo"));
             }
