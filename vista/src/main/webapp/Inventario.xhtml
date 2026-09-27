@@ -772,83 +772,413 @@
                     </p:dialog>
 
                 </p:tab>
-
-
-
-                <p:tab title="Historial de movimientos" rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
-
-
-
-                        <div class="header-azul" style="background: #3b82f6; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
-                            Historial de Movimientos y Reporte Mensual
-                        </div>
-
-                    <h:panelGrid columns="1" style="margin-bottom:15px; width:100%;">
-                        <h:panelGroup>
-                            <h:outputText value="Filtrar por Usuario: " style="font-weight:bold; color:#1e3a8a; display:block; margin-bottom:5px;"/>
-                            <p:selectOneMenu value="#{AuditoriaBean.idUsuarioFiltro}" style="min-width: 180px;">
-                                <f:selectItem itemLabel="Todos los usuarios" itemValue="#{null}" noSelectionOption="true"/>
-                                <f:selectItems value="#{AuditoriaBean.listaUsuarios}" var="usr"
-                                               itemLabel="#{usr.nombre}" itemValue="#{usr.id}"/>
-                                <p:ajax process="@this" listener="#{AuditoriaBean.aplicarFiltros}" update="areaResultados" />
-                            </p:selectOneMenu>
-                        </h:panelGroup>
-                    </h:panelGrid>
+                <p:tab title="Historial de movimientos"
+                       rendered="#{AuditoriaBean.puedeVerAuditoria(loginUI.usuarioLogeado)}">
+                    <div style="
+        background:#3b5bb0;
+        color:white;
+        padding:12px 15px;
+        margin-bottom:20px;
+        border-radius:4px;
+        font-size:18px;
+        font-weight:bold;
+        text-transform:uppercase;">
+                        HISTORIAL DE MOVIMIENTOS
+                    </div>
 
                     <h:panelGroup id="areaResultados" layout="block">
 
-                        <h:panelGrid columns="3" id="panelTotales" style="margin-bottom:15px; background:#f8fafc; padding:15px; border: 1px solid #e2e8f0; border-radius:8px; width:100%;">
-                            <h:panelGroup>
-                                <h:outputText value="TOTAL ENTRADAS: " style="font-weight:bold; color:#64748b; display:block;"/>
-                                <h:outputText value="#{AuditoriaBean.totalEntradas} unidades" style="color:#22c55e; font-weight:bold; font-size:1.2em;"/>
+                        <h:panelGroup layout="block"
+                                      style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:25px;
+                        margin-bottom:20px;
+                        width:100%;">
+
+                            <h:panelGroup layout="block"
+                                          style="
+                            border:1px solid #ddd;
+                            border-radius:6px;
+                            padding:15px;
+                            background:#ffffff;">
+
+                                <h:outputText
+                                        value="TOTAL ENTRADAS:"
+                                        style="
+                        display:block;
+                        font-size:13px;
+                        color:#555;
+                        margin-bottom:7px;
+                        font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{AuditoriaBean.totalEntradas} unidades"
+                                        style="
+                        display:block;
+                        font-size:20px;
+                        color:#22c55e;
+                        font-weight:bold;"/>
+
+                            </h:panelGroup>
+                            <h:panelGroup layout="block"
+                                          style="
+                            border:1px solid #ddd;
+                            border-radius:6px;
+                            padding:15px;
+                            background:#ffffff;">
+
+                                <h:outputText
+                                        value="TOTAL SALIDAS:"
+                                        style="
+                        display:block;
+                        font-size:13px;
+                        color:#555;
+                        margin-bottom:7px;
+                        font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{AuditoriaBean.totalSalidas} unidades"
+                                        style="
+                        display:block;
+                        font-size:20px;
+                        color:#ef4444;
+                        font-weight:bold;"/>
+
                             </h:panelGroup>
 
-                            <h:panelGroup>
-                                <h:outputText value="TOTAL SALIDAS: " style="font-weight:bold; color:#64748b; display:block;"/>
-                                <h:outputText value="#{AuditoriaBean.totalSalidas} unidades" style="color:#ef4444; font-weight:bold; font-size:1.2em;"/>
-                            </h:panelGroup>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block"
+                                      style="
+                        margin-bottom:20px;
+                        padding:15px;
+                        border:1px solid #e5e7eb;
+                        border-radius:6px;
+                        background:#fafafa;">
 
-                            <p:commandButton value="Actualizar Reporte"
-                                             action="#{AuditoriaBean.cargarTodosLosMovimientos()}"
-                                             process="@this"
-                                             update="areaResultados"
-                                             icon="pi pi-refresh"
-                                             styleClass="btn-blue" />
-                        </h:panelGrid>
+                            <h:panelGrid columns="4"
+                                         cellpadding="8"
+                                         style="width:100%;">
+                                <h:panelGroup>
+                                    <h:outputText
+                                            value="Producto:"
+                                            style="
+                            display:block;
+                            font-size:13px;
+                            font-weight:bold;
+                            margin-bottom:5px;
+                            color:#444;"/>
 
-                        <p:dataTable id="tablaAuditoria"
-                                     value="#{AuditoriaBean.listaFiltrada}"
-                                     var="mov"
-                                     emptyMessage="No hay movimientos registrados"
-                                     rows="10"
-                                     paginator="true"
-                                     paginatorPosition="bottom"
-                                     style="margin-top:10px;">
+                                    <p:inputText
+                                            value="#{AuditoriaBean.productoFiltro}"
+                                            placeholder="Código o nombre"
+                                            style="width:100%;">
 
-                            <p:column headerText="Fecha" style="width:150px; text-align:center;">
+                                    </p:inputText>
+
+                                </h:panelGroup>
+                                <h:panelGroup>
+
+                                    <h:outputText
+                                            value="Usuario:"
+                                            style="
+                            display:block;
+                            font-size:13px;
+                            font-weight:bold;
+                            margin-bottom:5px;
+                            color:#444;"/>
+
+                                    <p:selectOneMenu
+                                            value="#{AuditoriaBean.idUsuarioFiltro}"
+                                            style="width:100%;">
+
+                                        <f:selectItem
+                                                itemLabel="Todos los usuarios"
+                                                itemValue="#{null}"
+                                                noSelectionOption="true"/>
+
+                                        <f:selectItems
+                                                value="#{AuditoriaBean.listaUsuarios}"
+                                                var="usr"
+                                                itemLabel="#{usr.nombre}"
+                                                itemValue="#{usr.id}"/>
+
+                                    </p:selectOneMenu>
+
+                                </h:panelGroup>
+                                <h:panelGroup>
+
+                                    <h:outputText
+                                            value="Desde:"
+                                            style="
+                            display:block;
+                            font-size:13px;
+                            font-weight:bold;
+                            margin-bottom:5px;
+                            color:#444;"/>
+
+                                    <p:datePicker
+                                            value="#{AuditoriaBean.fechaDesde}"
+                                            pattern="dd/MM/yyyy"
+                                            showIcon="true"
+                                            style="width:100%;"/>
+
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <h:outputText
+                                            value="Hasta:"
+                                            style="
+                            display:block;
+                            font-size:13px;
+                            font-weight:bold;
+                            margin-bottom:5px;
+                            color:#444;"/>
+
+                                    <p:datePicker
+                                            value="#{AuditoriaBean.fechaHasta}"
+                                            pattern="dd/MM/yyyy"
+                                            showIcon="true"
+                                            style="width:100%;"/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            <div style="
+                display:flex;
+                justify-content:flex-end;
+                gap:10px;
+                margin-top:10px;">
+                                <p:commandButton
+                                        value="Limpiar"
+                                        icon="pi pi-times"
+                                        action="#{AuditoriaBean.limpiarFiltros}"
+                                        process="@this"
+                                        update="areaResultados"
+                                        style="
+                        background:#6b7280;
+                        border:none;
+                        border-radius:5px;
+                        color:white;"/>
+                                <p:commandButton
+                                        value="Actualizar reporte"
+                                        icon="pi pi-refresh"
+                                        action="#{AuditoriaBean.aplicarFiltros}"
+                                        process="@this"
+                                        update="areaResultados"
+                                        style="
+                        background:#4d6fd8;
+                        border:none;
+                        border-radius:5px;
+                        color:white;"/>
+
+                            </div>
+
+                        </h:panelGroup>
+                        <p:dataTable
+                                id="tablaAuditoria"
+                                value="#{AuditoriaBean.listaFiltrada}"
+                                var="mov"
+                                rows="10"
+                                paginator="true"
+                                paginatorPosition="bottom"
+                                emptyMessage="No hay movimientos registrados"
+                                style="width:100%;">
+                            <p:column
+                                    headerText="Fecha y Hora"
+                                    style="text-align:center;">
+
                                 <h:outputText value="#{mov.fecha}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+
+                                    <f:convertDateTime
+                                            pattern="dd/MM/yyyy HH:mm"/>
+
                                 </h:outputText>
-                            </p:column>
 
-                            <p:column headerText="Usuario" style="text-align:center;">
-                                <h:outputText value="#{mov.usuario != null ? mov.usuario.nombre : 'Sistema'}" />
                             </p:column>
+                            <p:column
+                                    headerText="Usuario"
+                                    style="text-align:center;">
 
+                                <h:outputText
+                                        value="#{mov.usuario != null ? mov.usuario.nombre : 'Sistema'}"/>
+
+                            </p:column>
                             <p:column headerText="Producto">
-                                <h:outputText value="#{mov.producto != null ? mov.producto.nombre : 'N/A'}" />
-                            </p:column>
 
-                            <p:column headerText="Tipo" style="text-align:center;">
-                                <h:outputText value="#{mov.tipo}" style="font-weight:bold; color: #{mov.tipo == 'Entrada' ? '#22c55e' : '#ef4444'}"/>
-                            </p:column>
+                                <h:outputText
+                                        value="#{mov.producto != null ? mov.producto.nombre : 'N/A'}"/>
 
-                            <p:column headerText="Cantidad" style="text-align:center;">
-                                <h:outputText value="#{mov.cantidad}" />
+                            </p:column>
+                            <p:column
+                                    headerText="Tipo"
+                                    style="text-align:center;">
+                                <h:outputText
+                                        value="#{mov.tipo}"
+                                        style="
+                        font-weight:bold;
+                        color:#{mov.tipo == 'Entrada'
+                            ? '#22c55e'
+                            : '#ef4444'};"/>
+                            </p:column>
+                            <p:column
+                                    headerText="Cantidad"
+                                    style="text-align:center;">
+
+                                <h:outputText
+                                        value="#{mov.cantidad}"/>
+                            </p:column>
+                            <p:column
+                                    headerText="Valor Total"
+                                    style="text-align:right;">
+
+                                <h:outputText
+                                        value="#{AuditoriaBean.calcularValorTotal(mov)}">
+
+                                    <f:convertNumber
+                                            type="currency"
+                                            currencySymbol="$"
+                                            minFractionDigits="2"/>
+
+                                </h:outputText>
+
+                            </p:column>
+                            <p:column
+                                    headerText="Detalle"
+                                    style="text-align:center; width:80px;">
+
+                                <p:commandButton
+                                        icon="pi pi-search"
+                                        title="Ver detalle"
+                                        action="#{AuditoriaBean.seleccionarMovimiento(mov)}"
+                                        update="dialogDetalle"
+                                        oncomplete="PF('dialogDetalle').show()"
+                                        style="
+                        background:#4d6fd8;
+                        border:none;
+                        border-radius:4px;"/>
+
                             </p:column>
 
                         </p:dataTable>
+
                     </h:panelGroup>
+                    <p:dialog
+                            id="dialogDetalle"
+                            widgetVar="dialogDetalle"
+                            header="Detalle del movimiento"
+                            modal="true"
+                            resizable="false"
+                            width="450">
+
+                        <h:panelGroup
+                                layout="block"
+                                rendered="#{AuditoriaBean.movimientoSeleccionado != null}"
+                                style="padding:10px;">
+
+
+                            <h:panelGrid
+                                    columns="2"
+                                    cellpadding="8"
+                                    style="width:100%;">
+                                <h:outputText
+                                        value="Fecha:"
+                                        style="font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{AuditoriaBean.movimientoSeleccionado.fecha}">
+
+                                    <f:convertDateTime
+                                            pattern="dd/MM/yyyy HH:mm"/>
+
+                                </h:outputText>
+                                <h:outputText
+                                        value="Usuario:"
+                                        style="font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{
+                        AuditoriaBean.movimientoSeleccionado.usuario != null
+                        ? AuditoriaBean.movimientoSeleccionado.usuario.nombre
+                        : 'Sistema'
+                    }"/>
+                                <h:outputText
+                                        value="Producto:"
+                                        style="font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{
+                        AuditoriaBean.movimientoSeleccionado.producto != null
+                        ? AuditoriaBean.movimientoSeleccionado.producto.nombre
+                        : 'N/A'
+                    }"/>
+                                <h:outputText
+                                        value="Código:"
+                                        style="font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{
+                        AuditoriaBean.movimientoSeleccionado.producto != null
+                        ? AuditoriaBean.movimientoSeleccionado.producto.id
+                        : 'N/A'
+                    }"/>
+                                <h:outputText
+                                        value="Tipo:"
+                                        style="font-weight:bold;"/>
+                                <h:outputText
+                                        value="#{AuditoriaBean.movimientoSeleccionado.tipo}"
+                                        style="font-weight:bold;"/>
+                                <h:outputText
+                                        value="Cantidad:"
+                                        style="font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{AuditoriaBean.movimientoSeleccionado.cantidad}"/>
+                                <h:outputText
+                                        value="Precio unitario:"
+                                        style="font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{
+                        AuditoriaBean.movimientoSeleccionado.producto != null
+                        ? AuditoriaBean.movimientoSeleccionado.producto.precio
+                        : 0
+                    }">
+
+                                    <f:convertNumber
+                                            type="currency"
+                                            currencySymbol="$"
+                                            minFractionDigits="2"/>
+
+                                </h:outputText>
+
+
+                                <!-- TOTAL -->
+
+                                <h:outputText
+                                        value="Valor total:"
+                                        style="font-weight:bold;"/>
+
+                                <h:outputText
+                                        value="#{
+                        AuditoriaBean.calcularValorTotal(
+                            AuditoriaBean.movimientoSeleccionado
+                        )
+                    }"
+                                        style="
+                        font-weight:bold;
+                        color:#2563eb;">
+
+                                    <f:convertNumber
+                                            type="currency"
+                                            currencySymbol="$"
+                                            minFractionDigits="2"/>
+
+                                </h:outputText>
+
+                            </h:panelGrid>
+
+                        </h:panelGroup>
+
+                    </p:dialog>
+
                 </p:tab>
 
             </p:tabView>

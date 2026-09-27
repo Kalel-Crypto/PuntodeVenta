@@ -111,9 +111,7 @@ public class SistemaFacade {
         if (query == null || query.trim().isEmpty()) {
             return resultados;
         }
-
         try {
-
             int idBusqueda = Integer.parseInt(query.trim());
 
             for (Producto p : todosLosProductos) {
@@ -122,21 +120,16 @@ public class SistemaFacade {
                     break;
                 }
             }
-
         } catch (NumberFormatException e) {
-
             String textoBusqueda = query.toLowerCase().trim();
-
             for (Producto p : todosLosProductos) {
                 if (p.getNombre() != null && p.getNombre().toLowerCase().contains(textoBusqueda)) {
                     resultados.add(p);
                 }
             }
         }
-
         return resultados;
     }
-
 
     public void registrarProducto(String nombre, double precio, int idProveedor, int stock) throws Exception {
         productoService.registrarProducto(nombre, precio, idProveedor, stock);
@@ -158,10 +151,6 @@ public class SistemaFacade {
             }
         }
         return null;
-    }
-
-    public List<Producto> listarProductos() throws Exception {
-        return productoService.listarProductos();
     }
 
     public void modificarProveedor(Proveedor p) throws Exception {
